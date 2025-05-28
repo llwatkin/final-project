@@ -10,60 +10,56 @@ let camDist;
 let zoom = 0;
 let planet;
 
-function resizeScreen(p) {
+function resizeScreen() {
     let container_rect = canvas_container[0].getBoundingClientRect();
     let container_width = container_rect.width;
     let container_height = container_rect.height;
 
     center_horz = container_width / 2;
     center_vert = container_height / 2;
-    p.resizeCanvas(container_width, container_height);
+    resizeCanvas(container_width, container_height);
 }
 
-let sketch = function (p) {
-    p.setup = function () {
-        // Set up canvas
-        canvas_container = $("#canvas-container");
-        let canvas = p.createCanvas(canvas_container.width(), canvas_container.height(), p.WEBGL);
-        canvas.parent("canvas-container");
-        // Enable full screen
-        $(window).resize(function () {
-            resizeScreen(p);
-        });
+function setup() {
+    // Set up canvas
+    canvas_container = $("#canvas-container");
+    let canvas = createCanvas(canvas_container.width(), canvas_container.height(), WEBGL);
+    canvas.parent("canvas-container");
+    // Enable full screen
+    $(window).resize(function () {
+        resizeScreen();
+    });
 
-        p.frameRate(60);
-        p.angleMode(p.DEGREES);
-        //p.debugMode();
-        cam = p.createCamera();
-        p.setCamera(cam);
-        planet = new Planet(p);
-    };
+    frameRate(60);
+    angleMode(DEGREES);
+    //debugMode();
+    cam = createCamera();
+    setCamera(cam);
+    planet = new Planet();
+}
 
-    p.draw = function () {
-        p.orbitControl();
-        cam.lookAt(0, 0, 0); // Disables movement with the right-click drag
-        p.background(0);
-        p.noStroke();
-        planet.update(p);
-        planet.draw(p);
+function draw() {
+    orbitControl();
+    cam.lookAt(0, 0, 0); // Disables movement with the right-click drag
+    background(0);
+    noStroke();
+    planet.update();
+    planet.draw();
 
-        // Update camera
-        // There's kind of a jumping effect, but I don't think its too big a deal
-        camPos = p.createVector(cam.eyeX, cam.eyeY, cam.eyeZ);
-        camDist = camPos.mag();
-        if (camDist < MAX_CAMERA_DISTANCE && camDist > MIN_CAMERA_DISTANCE) prevCamPos = camPos;
-        else cam.setPosition(prevCamPos.x, prevCamPos.y, prevCamPos.z);
+    // Update camera
+    // There's kind of a jumping effect, but I don't think its too big a deal
+    camPos = createVector(cam.eyeX, cam.eyeY, cam.eyeZ);
+    camDist = camPos.mag();
+    if (camDist < MAX_CAMERA_DISTANCE && camDist > MIN_CAMERA_DISTANCE) prevCamPos = camPos;
+    else cam.setPosition(prevCamPos.x, prevCamPos.y, prevCamPos.z);
 
-        //p.stroke(255); // Debug stroke
-    };
+    //stroke(255); // Debug stroke
+}
 
-    p.mouseWheel = function (event) {
-        // The default Z limits of orbit control are 80-8000, so I changed this above
-        // I mapped the zoom number onto 1-100 so higher numbers would mean more zoom
-        zoom = p.map(camDist, MIN_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE, 100, 1);
-        zoom = p.constrain(zoom, 1, 100);
-        //p.print(zoom);
-    }
-};
-
-let myp5 = new p5(sketch);
+function mouseWheel(event) {
+    // The default Z limits of orbit control are 80-8000, so I changed this above
+    // I mapped the zoom number onto 1-100 so higher numbers would mean more zoom
+    zoom = map(camDist, MIN_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE, 100, 1);
+    zoom = constrain(zoom, 1, 100);
+    //print(zoom);
+}
