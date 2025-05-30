@@ -32,6 +32,7 @@ function setup() {
 
     frameRate(60);
     angleMode(DEGREES);
+    debugMode();
     cam = createCamera();
     setCamera(cam);
     planet = new Planet();
