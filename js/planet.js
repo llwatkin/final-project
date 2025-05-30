@@ -17,12 +17,15 @@ class Planet {
         this.sunAngle = createVector(this.sunAngleXZ.x, this.sunAngle.y, this.sunAngleXZ.y);
     }
 
+    drawTerrain() {
+
+    }
+
     draw() {
         // Planet
         push();
         ambientLight(50);
         directionalLight(color(255), this.sunAngle); // Sun
-        print(this.sunAngle);
         noStroke();
         fill(20, 50, 200);
         sphere(this.rad);

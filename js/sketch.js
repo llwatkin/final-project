@@ -32,7 +32,6 @@ function setup() {
 
     frameRate(60);
     angleMode(DEGREES);
-    //debugMode();
     cam = createCamera();
     setCamera(cam);
     planet = new Planet();
@@ -53,7 +52,7 @@ function draw() {
     if (camDist < MAX_CAMERA_DISTANCE && camDist > MIN_CAMERA_DISTANCE) prevCamPos = camPos;
     else cam.setPosition(prevCamPos.x, prevCamPos.y, prevCamPos.z);
 
-    //stroke(255); // Debug stroke
+    stroke(255); // Debug stroke
 }
 
 function mouseWheel(event) {
@@ -61,5 +60,5 @@ function mouseWheel(event) {
     // I mapped the zoom number onto 1-100 so higher numbers would mean more zoom
     zoom = map(camDist, MIN_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE, 100, 1);
     zoom = constrain(zoom, 1, 100);
-    //print(zoom);
+    console.log(zoom);
 }
