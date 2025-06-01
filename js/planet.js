@@ -23,9 +23,9 @@ class Planet {
         push();
         strokeWeight(10);
         for (let i = 0; i < this.debugVerts.length; i++) {
-            if (i < 4) stroke(250, 0, 0);
-            else if (i < 8) stroke(0, 250, 0);
-            else stroke(0, 0, 250);
+            if (i < 4) stroke(255, 0, 0);
+            else if (i < 8) stroke(0, 255, 0);
+            else stroke(0, 0, 255);
             point(this.debugVerts[i]);
         }
         pop();
@@ -33,7 +33,7 @@ class Planet {
 
     createTerrain() {
         // Free any previous terrain to save memory
-        if (this.terrain) freeGeometry(this.terrain);
+        if (this.terrain) this.clearTerrain();
         this.terrain = new p5.Geometry();
 
         let y = this.rad / 2;
@@ -55,10 +55,7 @@ class Planet {
 
         // Add debug verts and subdivide faces
         for (let vert of this.debugVerts) this.terrain.vertices.push(vert);
-        for (let face of ICOSPHERE_FACES) {
-            //this.terrain.faces.push(face);
-            this.subdivide(face, [], 0, 2);
-        }
+        for (let face of ICOSPHERE_FACES) this.subdivide(face, [], 0, TERRAIN_FIDELITY);
 
         // Vary the terrain vertices using Perlin noise
         this.varyTerrain();
@@ -71,7 +68,7 @@ class Planet {
         let noiseScale = 0.2;
         for (let i = 0; i < this.terrain.vertices.length; i++) {
             let vert = this.terrain.vertices[i];
-            let variation = map(noise(noiseScale * i), 0, 1, vert.mag() - 10, vert.mag() + 20);
+            let variation = map(noise(noiseScale * i), 0, 1, vert.mag() - MIN_TERRAIN_MOD, vert.mag() + MAX_TERRAIN_MOD);
             vert.setMag(variation);
         }
     }

@@ -78,9 +78,9 @@ function draw() {
 }
 
 function mouseWheel(event) {
-    // The default Z limits of orbit control are 80-8000, so I changed this above
-    // I mapped the zoom number onto 1-100 so higher numbers would mean more zoom
+    // The default Z limits of orbit control are 80-8000, so I changed this (new values in the config)
+    // I mapped the zoom number onto 1-100 so higher numbers would mean more zoom (this doesn't do anything yet)
     zoom = map(camDist, MIN_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE, 100, 1);
     zoom = constrain(zoom, 1, 100);
-    console.log(zoom);
+    //console.log(zoom);
 }

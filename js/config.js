@@ -8,7 +8,7 @@ const PLANET_RADIUS = 100;
 const PLANET_ORBIT_TIME = 120; // Seconds it takes to revolve around its sun
 
 const MAX_CAMERA_DISTANCE = PLANET_RADIUS * 10;
-const MIN_CAMERA_DISTANCE = PLANET_RADIUS * 2.3;
+const MIN_CAMERA_DISTANCE = PLANET_RADIUS * 2.2;
 const SUN_DISTANCE = MAX_CAMERA_DISTANCE * 1.25;
 
 const GOLDEN_RATIO = 1.618;
@@ -35,3 +35,6 @@ const ICOSPHERE_FACES =
 		[7, 3, 11],
 		[7, 11, 8]
 	];
+const TERRAIN_FIDELITY = 2;
+const MIN_TERRAIN_MOD = 10;
+const MAX_TERRAIN_MOD = 20;
