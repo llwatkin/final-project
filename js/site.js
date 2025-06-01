@@ -26,5 +26,6 @@ $(document).ready(function () {
 
 	$('#generate').click(function () {
 		console.log("generate clicked");
+		generate();
 	});
 })

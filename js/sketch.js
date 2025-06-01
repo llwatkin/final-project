@@ -2,7 +2,9 @@
 // Author(s): Lyle Watkins
 // Last Updated: 5/22/2025
 
-let canvas_container;
+let canvasContainer;
+let seedDisplay;
+let seedInput;
 let cam;
 let prevCamPos;
 let camPos;
@@ -11,7 +13,7 @@ let zoom = 0;
 let planet;
 
 function resizeScreen() {
-    let container_rect = canvas_container[0].getBoundingClientRect();
+    let container_rect = canvasContainer[0].getBoundingClientRect();
     let container_width = container_rect.width;
     let container_height = container_rect.height;
 
@@ -22,20 +24,38 @@ function resizeScreen() {
 
 function setup() {
     // Set up canvas
-    canvas_container = $("#canvas-container");
-    let canvas = createCanvas(canvas_container.width(), canvas_container.height(), WEBGL);
+    canvasContainer = $("#canvas-container");
+    let canvas = createCanvas(canvasContainer.width(), canvasContainer.height(), WEBGL);
     canvas.parent("canvas-container");
     // Enable full screen
     $(window).resize(function () {
         resizeScreen();
     });
 
-    noiseSeed(123);
+    // Set seed and corresponding HTML elements
+    let seed = round(random(10000));
+    noiseSeed(seed);
+    seedDisplay = document.getElementById("seed-display");
+    seedInput = document.getElementById("seed-input");
+    seedDisplay.textContent = "Seed: " + str(seed);
+    seedInput.value = seed;
+
     frameRate(60);
     angleMode(DEGREES);
     //debugMode();
     cam = createCamera();
     setCamera(cam);
+    generate();
+}
+
+function generate() {
+    // Update seed and display
+    let seed = seedInput.value;
+    noiseSeed(seed);
+    seedDisplay.textContent = "Seed: " + str(seed);
+
+    // Create new planet
+    if (planet) planet.clearTerrain();
     planet = new Planet();
 }
 

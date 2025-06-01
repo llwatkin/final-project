@@ -76,6 +76,10 @@ class Planet {
         }
     }
 
+    clearTerrain() {
+        freeGeometry(this.terrain);
+    }
+
     subdivide(face, faces, level, depth) {
         // Base case
         if (level == depth) {
