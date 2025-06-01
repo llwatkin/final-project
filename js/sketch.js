@@ -30,9 +30,10 @@ function setup() {
         resizeScreen();
     });
 
+    noiseSeed(123);
     frameRate(60);
     angleMode(DEGREES);
-    debugMode();
+    //debugMode();
     cam = createCamera();
     setCamera(cam);
     planet = new Planet();
