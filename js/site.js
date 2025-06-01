@@ -1,6 +1,5 @@
-// site.js - Handles fullscreen button click
-// Author: Your Name
-// Date:
+// site.js - Handles buttons
+// Last Updated: 5/31/2025
 
 // make sure document is ready
 $(document).ready(function () {

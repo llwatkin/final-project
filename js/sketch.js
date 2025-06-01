@@ -1,6 +1,6 @@
-// sketch.js - Uses p5.js in instance mode
+// sketch.js
 // Author(s): Lyle Watkins
-// Last Updated: 5/22/2025
+// Last Updated: 5/31/2025
 
 let canvasContainer;
 let seedDisplay;

@@ -1,6 +1,6 @@
 // util.js - Useful functions
-// Author: Lyle Watkins
-// Last Updated: 5/29/2025
+// Author(s): Lyle Watkins
+// Last Updated: 5/31/2025
 
 // Returns a new vector rotated around the X axis by some given degrees
 function vectorRotateX(v, a) {

@@ -1,6 +1,6 @@
 // planet.js - Planet with a sun it orbits
 // Author(s): Lyle Watkins
-// Last Updated: 5/29/2025
+// Last Updated: 5/31/2025
 
 class Planet {
     constructor() {
