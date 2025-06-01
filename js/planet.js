@@ -30,7 +30,7 @@ class Planet {
         pop();
     }
 
-    createTerrain(depth) {
+    createTerrain() {
         // Free any previous terrain to save memory
         if (this.terrain) freeGeometry(this.terrain);
 
@@ -55,31 +55,45 @@ class Planet {
         this.terrain = new p5.Geometry();
         for (let vert of this.verts) this.terrain.vertices.push(vert);
         for (let face of ICOSPHERE_FACES) {
-            // Get face vertices
-            let v1i = face[0];
-            let v2i = face[1];
-            let v3i = face[2];
-            let v1 = this.verts[v1i];
-            let v2 = this.verts[v2i];
-            let v3 = this.verts[v3i];
-            // Create new slerped vertices, subdividing original face
-            let v4 = p5.Vector.slerp(v1, v2, 0.5);
-            let v5 = p5.Vector.slerp(v2, v3, 0.5);
-            let v6 = p5.Vector.slerp(v3, v1, 0.5);
-            this.terrain.vertices.push(v4, v5, v6);
-            let v4i = this.terrain.vertices.indexOf(v4);
-            let v5i = this.terrain.vertices.indexOf(v5);
-            let v6i = this.terrain.vertices.indexOf(v6);
-            // Add new faces to the mesh
-            this.terrain.faces.push(
-                [v1i, v4i, v6i],
-                [v4i, v5i, v6i],
-                [v5i, v3i, v6i],
-                [v4i, v2i, v5i]
-            );
+            this.subdivide(face, 0, 4);
         }
         // This makes the lighting work
-        this.terrain.computeNormals(SMOOTH);
+        this.terrain.computeNormals(FLAT);
+    }
+
+    subdivide(face, level, depth) {
+        // Base case
+        if (level == depth) return;
+
+        // Get face vertices
+        let v1i = face[0];
+        let v2i = face[1];
+        let v3i = face[2];
+        let v1 = this.terrain.vertices[v1i];
+        let v2 = this.terrain.vertices[v2i];
+        let v3 = this.terrain.vertices[v3i];
+
+        // Create new slerped vertices, subdividing original face
+        let v4 = p5.Vector.slerp(v1, v2, 0.5);
+        let v5 = p5.Vector.slerp(v2, v3, 0.5);
+        let v6 = p5.Vector.slerp(v3, v1, 0.5);
+        this.terrain.vertices.push(v4, v5, v6);
+        let v4i = this.terrain.vertices.indexOf(v4);
+        let v5i = this.terrain.vertices.indexOf(v5);
+        let v6i = this.terrain.vertices.indexOf(v6);
+        let newFaces = [
+            [v1i, v4i, v6i],
+            [v4i, v5i, v6i],
+            [v5i, v3i, v6i],
+            [v4i, v2i, v5i]
+        ];
+
+        for (let face of newFaces) {
+            // Add new faces to the mesh
+            this.terrain.faces.push(face);
+            // Continue subdividing
+            this.subdivide(face, level + 1, depth);
+        }
     }
 
     drawPlanet() {
