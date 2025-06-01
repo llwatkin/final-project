@@ -1,6 +1,6 @@
 // sketch.js
-// Author(s): Lyle Watkins
-// Last Updated: 5/31/2025
+// Author(s): Lyle Watkins, Raven Cruz
+// Last Updated: 6/1/2025
 
 let canvasContainer;
 let seedDisplay;
@@ -22,7 +22,7 @@ function resizeScreen() {
     resizeCanvas(container_width, container_height);
 }
 
-function setup() {
+async function setup() {
     // Set up canvas
     canvasContainer = $("#canvas-container");
     let canvas = createCanvas(canvasContainer.width(), canvasContainer.height(), WEBGL);
@@ -46,6 +46,7 @@ function setup() {
     cam = createCamera();
     setCamera(cam);
     generate();
+    await initLore();
 }
 
 function generate() {
@@ -83,4 +84,12 @@ function mouseWheel(event) {
     zoom = map(camDist, MIN_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE, 100, 1);
     zoom = constrain(zoom, 1, 100);
     //console.log(zoom);
+}
+
+async function initLore() {
+    LORE_GLOBS.LORE_DATA = await fetchLoreKeys(LORE_GLOBS.JSON_PATH);
+    await generateWorld(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS);
+
+    console.log("world lore: ", LORE_GLOBS.WORLD_STATS);
+    console.log("continents lore: ", LORE_GLOBS.CONTINENT_STATS);
 }

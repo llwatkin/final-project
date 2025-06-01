@@ -1,5 +1,3 @@
-import GLOBAL from "./globals.js";
-
 async function loadJSON(filePath) {
     try {
         const response = await fetch(filePath);
@@ -15,15 +13,15 @@ async function loadJSON(filePath) {
 }
 
 // loads choices from specified JSON
-export async function getChoices(data, cat, self){
+async function getChoices(data, cat, self){
     let choices = [];
     if(data[cat].choice_control){
         const controller = data[cat].choice_control;
-        const choiceJSON = await loadJSON(`${GLOBAL.JSON_PATH}/${controller.json}.json`);
+        const choiceJSON = await loadJSON(`${LORE_GLOBS.JSON_PATH}/${controller.json}.json`);
 
         let loc;
         let attr_choices;
-        if(controller.location === "world"){ loc = GLOBAL.WORLD_STATS; }
+        if(controller.location === "world"){ loc = LORE_GLOBS.WORLD_STATS; }
         else if(controller.location === "self"){ loc = self; }
         else {
             console.error(`Unknown control location: ${controller.location}`)
@@ -42,12 +40,8 @@ export async function getChoices(data, cat, self){
     return choices;
 }
 
-export async function fetchLoreKeys(path) {
-    return fetch(`${path}/_loreKeys.json`).then(
-        (response) => response.json()
-    ).then(
-        (json) => {
-            GLOBAL.LORE_DATA = json;
-        }
-    );
+async function fetchLoreKeys(path) {
+    const response = await fetch(`${path}/_loreKeys.json`);
+	const json = await response.json();
+	return json;
 }

@@ -1,34 +1,30 @@
-import GLOBAL from "./globals.js";
-import { fetchLoreKeys } from "./json_utils.js";
-import { generateWorld, genMultipleContinents, trimContinents } from "./lore.js";
-
 const updateNumContinentsButton = document.getElementById("num-continents-button");
 updateNumContinentsButton.addEventListener('click', async function() {
-    const oldNum = GLOBAL.NUM_CONTINENTS;
-    GLOBAL.NUM_CONTINENTS = parseInt(document.getElementById("num-continents").value);
+    const oldNum = LORE_GLOBS.NUM_CONTINENTS;
+    LORE_GLOBS.NUM_CONTINENTS = parseInt(document.getElementById("num-continents").value);
 
-    if(oldNum < GLOBAL.NUM_CONTINENTS){
-        await genMultipleContinents(GLOBAL.LORE_DATA, GLOBAL.NUM_CONTINENTS, oldNum);
+    if(oldNum < LORE_GLOBS.NUM_CONTINENTS){
+        await genMultipleContinents(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS, oldNum);
         printContinents();
-    } else if (oldNum > GLOBAL.NUM_CONTINENTS){
-        trimContinents(oldNum - GLOBAL.NUM_CONTINENTS);
+    } else if (oldNum > LORE_GLOBS.NUM_CONTINENTS){
+        trimContinents(oldNum - LORE_GLOBS.NUM_CONTINENTS);
         printContinents();
     }
 });
 
-if(fetchLoreKeys(GLOBAL.JSON_PATH)){
-    init(GLOBAL.LORE_DATA, GLOBAL.NUM_CONTINENTS);
+if(fetchLoreKeys(LORE_GLOBS.JSON_PATH)){
+    init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS);
 }
 
 // load new lore base
 document.addEventListener('keydown', (e) => {
 	if(e.key.toLowerCase() === "r"){
         document.getElementById(`continent-stats`).innerHTML = "";
-        genMultipleContinents(GLOBAL.LORE_DATA, GLOBAL.NUM_CONTINENTS);
+        genMultipleContinents(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS);
         printContinents();
     }
     if(e.key.toLowerCase() === "w"){
-        init(GLOBAL.LORE_DATA, GLOBAL.NUM_CONTINENTS);
+        init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS);
         printWorld();
 	}
 });
@@ -42,13 +38,13 @@ async function init(loreData, num){
 
 function printWorld(){
     document.getElementById(`world-stats`).innerHTML = "";
-    printLore(GLOBAL.WORLD_STATS, "world");
+    printLore(LORE_GLOBS.WORLD_STATS, "world");
 }
 
 function printContinents(){
     document.getElementById(`continent-stats`).innerHTML = "";
-    for(let continent in GLOBAL.CONTINENT_STATS){
-        printLore(GLOBAL.CONTINENT_STATS[continent], "continent")
+    for(let continent in LORE_GLOBS.CONTINENT_STATS){
+        printLore(LORE_GLOBS.CONTINENT_STATS[continent], "continent")
     }
 }
 

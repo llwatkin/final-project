@@ -1,33 +1,30 @@
-import GLOBAL from "./globals.js";
-import { getChoices } from "./json_utils.js";
-
-export async function generateWorld(loreData, num) {
-    GLOBAL.WORLD_STATS = await generateLore(loreData.world);
+async function generateWorld(loreData, num) {
+    LORE_GLOBS.WORLD_STATS = await generateLore(loreData.world);
     await genMultipleContinents(loreData, num);
 }
 
-export async function genMultipleContinents(loreData, num, from = 0) {
+async function genMultipleContinents(loreData, num, from = 0) {
     num = parseInt(num);
     from = parseInt(from);
 
     for(let i = from; i < num; i++){
         let newContinent = await genContinent(loreData, i);
-        GLOBAL.CONTINENT_STATS[newContinent.name] = newContinent;
+        LORE_GLOBS.CONTINENT_STATS[newContinent.name] = newContinent;
     }
 
     // make relationships between continents
     // TODO: implement smarter relationship generation (maybe based on governments/ideology)
-    for(let c in GLOBAL.CONTINENT_STATS){
-        if(GLOBAL.CONTINENT_STATS[c].government[0] !== "none"){
-            if(GLOBAL.CONTINENT_STATS[c].allies.size === 0){
+    for(let c in LORE_GLOBS.CONTINENT_STATS){
+        if(LORE_GLOBS.CONTINENT_STATS[c].government[0] !== "none"){
+            if(LORE_GLOBS.CONTINENT_STATS[c].allies.size === 0){
                 getRandomAllies(
-                    GLOBAL.CONTINENT_STATS[c], 
+                    LORE_GLOBS.CONTINENT_STATS[c], 
                     Math.floor(Math.random() * num)
                 );
             }
-            if(GLOBAL.CONTINENT_STATS[c].enemies.size === 0){
+            if(LORE_GLOBS.CONTINENT_STATS[c].enemies.size === 0){
                 getRandomEnemies(
-                    GLOBAL.CONTINENT_STATS[c], 
+                    LORE_GLOBS.CONTINENT_STATS[c], 
                     Math.floor(Math.random() * num)
                 );
             }
@@ -37,14 +34,14 @@ export async function genMultipleContinents(loreData, num, from = 0) {
     // DEBUG: console.log(continentStats)
 }
 
-export function trimContinents(num){
+function trimContinents(num){
     // trim the last {num} keys
-    const trimKeys = Object.keys(GLOBAL.CONTINENT_STATS).slice(-num);
+    const trimKeys = Object.keys(LORE_GLOBS.CONTINENT_STATS).slice(-num);
     for(const key of trimKeys){
-        let deleteContinent = GLOBAL.CONTINENT_STATS[key];
+        let deleteContinent = LORE_GLOBS.CONTINENT_STATS[key];
 
-        for(let c in GLOBAL.CONTINENT_STATS){
-            let continent = GLOBAL.CONTINENT_STATS[c];
+        for(let c in LORE_GLOBS.CONTINENT_STATS){
+            let continent = LORE_GLOBS.CONTINENT_STATS[c];
             if(continent.enemies.has(deleteContinent.ID)){
                 continent.enemies.delete(deleteContinent.ID);
             }
@@ -53,17 +50,17 @@ export function trimContinents(num){
             }
         }
 
-        delete GLOBAL.CONTINENT_STATS[key];
+        delete LORE_GLOBS.CONTINENT_STATS[key];
     }
 }
 
 function getRandomAllies(self, num){
     const allies = self.allies;
-    const  cKeys = Object.keys(GLOBAL.CONTINENT_STATS);
+    const  cKeys = Object.keys(LORE_GLOBS.CONTINENT_STATS);
     let randomIndex = Math.floor(Math.random() * cKeys.length);
 
     for(let i = 0; i < num; i++){
-        let potentialAlly = GLOBAL.CONTINENT_STATS[cKeys[randomIndex]]; 
+        let potentialAlly = LORE_GLOBS.CONTINENT_STATS[cKeys[randomIndex]]; 
         if( potentialAlly.ID !== self.ID && 
             potentialAlly.government[0] !== "none" &&
             !self.enemies.has(potentialAlly.ID) &&
@@ -78,11 +75,11 @@ function getRandomAllies(self, num){
 
 function getRandomEnemies(self, num){
     const enemies = self.enemies;
-    const  cKeys = Object.keys(GLOBAL.CONTINENT_STATS);
+    const  cKeys = Object.keys(LORE_GLOBS.CONTINENT_STATS);
     let randomIndex = Math.floor(Math.random() * cKeys.length);
 
     for(let i = 0; i < num; i++){
-        let potentialEnemy = GLOBAL.CONTINENT_STATS[cKeys[randomIndex]]; 
+        let potentialEnemy = LORE_GLOBS.CONTINENT_STATS[cKeys[randomIndex]]; 
         if( potentialEnemy.ID !== self.ID &&
             potentialEnemy.government[0] !== "none" &&
             !self.allies.has(potentialEnemy.ID) &&
