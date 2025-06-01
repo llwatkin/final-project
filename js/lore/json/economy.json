@@ -1,0 +1,16 @@
+{
+    "physical": [
+        "resource", "mineral", "stone", "air", "gem", "soil", 
+        "plant", "animal", "cash", "coin"
+    ],
+    "ephemeral": [
+        "story", "song", "vibes", "smile", "plans", "nothing",
+        "words"
+    ],
+    "hybrid":[
+        "labor", "art", "favor", "promise"
+    ],
+    "none":[
+        "none"
+    ]
+}
