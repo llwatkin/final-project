@@ -23,4 +23,8 @@ $(document).ready(function () {
 			$('body').removeClass('is-fullscreen');
 		}
 	});
+
+	$('#generate').click(function () {
+		console.log("generate clicked");
+	});
 })

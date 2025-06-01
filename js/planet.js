@@ -83,8 +83,6 @@ class Planet {
             return
         }
 
-        console.log(face);
-
         // Get face vertices
         let v1i = face[0];
         let v2i = face[1];
