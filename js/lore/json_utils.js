@@ -1,3 +1,9 @@
+// json_utils.js
+// Author(s): Raven Cruz
+// Last Updated: 6/1/2025
+// helper functions for handling json files
+
+// generic json getter
 async function loadJSON(filePath) {
     try {
         const response = await fetch(filePath);
@@ -12,7 +18,7 @@ async function loadJSON(filePath) {
     }
 }
 
-// loads choices from specified JSON
+// loads choices from specified json
 async function getChoices(data, cat, self){
     let choices = [];
     if(data[cat].choice_control){
@@ -40,6 +46,7 @@ async function getChoices(data, cat, self){
     return choices;
 }
 
+// gets lore key json
 async function fetchLoreKeys(path) {
     const response = await fetch(`${path}/_loreKeys.json`);
 	const json = await response.json();
