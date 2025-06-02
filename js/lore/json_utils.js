@@ -4,7 +4,7 @@
 // helper functions for handling json files
 
 // generic json getter
-async function loadJSON(filePath) {
+async function _loadJSON(filePath) {
     try {
         const response = await fetch(filePath);
         if (!response.ok) {
@@ -23,7 +23,7 @@ async function getChoices(data, cat, self){
     let choices = [];
     if(data[cat].choice_control){
         const controller = data[cat].choice_control;
-        const choiceJSON = await loadJSON(`${LORE_GLOBS.JSON_PATH}/${controller.json}.json`);
+        const choiceJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${controller.json}.json`);
 
         let loc;
         let attr_choices;

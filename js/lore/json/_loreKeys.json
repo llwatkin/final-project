@@ -14,7 +14,8 @@
             "choices": [ 
                  "none", "physical","ephemeral","hybrid"
             ]
-        }
+        },
+        "history": []
     },
     "continent": {
         "name": {},

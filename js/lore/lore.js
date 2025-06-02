@@ -21,17 +21,18 @@ async function genMultipleContinents(loreData, num, from = 0) {
 
     // make relationships between continents
     // TODO: implement smarter relationship generation (maybe based on governments/ideology)
+    LORE_GLOBS.WORLD_STATS.history = [];
     for(let c in LORE_GLOBS.CONTINENT_STATS){
         // if this continent HAS a governmenet....
         if(LORE_GLOBS.CONTINENT_STATS[c].government[0] !== "none"){
             if(LORE_GLOBS.CONTINENT_STATS[c].allies.size === 0){
-                getRandomAllies(
+                await getRandomAllies(
                     LORE_GLOBS.CONTINENT_STATS[c], 
                     Math.floor(Math.random() * num)
                 );
             }
             if(LORE_GLOBS.CONTINENT_STATS[c].enemies.size === 0){
-                getRandomEnemies(
+                await getRandomEnemies(
                     LORE_GLOBS.CONTINENT_STATS[c], 
                     Math.floor(Math.random() * num)
                 );
@@ -43,7 +44,7 @@ async function genMultipleContinents(loreData, num, from = 0) {
 }
 
 // creates up to {num} allyships between {self} continent and randomly selected others
-function getRandomAllies(self, num){
+async function getRandomAllies(self, num){
     const allies = self.allies;
     // array of all continents
     const  cKeys = Object.keys(LORE_GLOBS.CONTINENT_STATS);
@@ -60,7 +61,10 @@ function getRandomAllies(self, num){
             // add as self's ally
             allies.add(potentialAlly.ID);
             // add self to ally's allies 
-            potentialAlly.allies.add(self.ID)           
+            potentialAlly.allies.add(self.ID)    
+            
+            // add allyship origin to history
+            await generateHistory(potentialAlly, self, "ally_origin");
         }   
 
         // update random index for next choice
@@ -69,7 +73,7 @@ function getRandomAllies(self, num){
 }
 
 // creates up to {num} enemyships between {self} continent and randomly selected others
-function getRandomEnemies(self, num){
+async function getRandomEnemies(self, num){
     const enemies = self.enemies;
     // array of all continents
     const  cKeys = Object.keys(LORE_GLOBS.CONTINENT_STATS); 
@@ -86,7 +90,9 @@ function getRandomEnemies(self, num){
             // add as self's enemy
             enemies.add(potentialEnemy.ID);
             // add self to enemy's enemies 
-            potentialEnemy.enemies.add(self.ID)           
+            potentialEnemy.enemies.add(self.ID)  
+            
+            await generateHistory(potentialEnemy, self, "enemy_origin");
         }   
 
         // update random index for next choice
@@ -155,4 +161,24 @@ async function generateLore(data){
     
     //DEBUG: console.log(base);
     return base;
+}
+
+function trimContinents(num){
+    // trim the last {num} keys
+    const trimKeys = Object.keys(GLOBAL.CONTINENT_STATS).slice(-num);
+    for(const key of trimKeys){
+        let deleteContinent = GLOBAL.CONTINENT_STATS[key];
+
+        for(let c in GLOBAL.CONTINENT_STATS){
+            let continent = GLOBAL.CONTINENT_STATS[c];
+            if(continent.enemies.has(deleteContinent.ID)){
+                continent.enemies.delete(deleteContinent.ID);
+            }
+            if(continent.allies.has(deleteContinent.ID)){
+                continent.allies.delete(deleteContinent.ID);
+            }
+        }
+
+        delete GLOBAL.CONTINENT_STATS[key];
+    }
 }

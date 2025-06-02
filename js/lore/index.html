@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lore generator</title>
+
+    <!-- Load jQuery library -->
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"
+    ></script>
+
+    <!-- Load p5.js libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.5/lib/p5.js"></script>
+
+    <script type="text/javascript" src="./json_utils.js" DEFER></script>
+    <script type="text/javascript" src="./grammar_handling.js" DEFER></script>
+    <script type="text/javascript" src="./lore_globals.js" DEFER></script>
+    <script type="text/javascript" src="./lore.js" DEFER></script>
+    <script type="text/javascript" src="./sketch.js" DEFER></script>
+</head>
+<body>
+    <div style="color: rgb(131, 131, 131);">
+        <p><i>press R to generate new continent stats</i></p>
+        <p><i>press W to generate new world stats</i></p>
+        <label for="num-continents">number of continents:</label><br>
+        <input type="text" id="num-continents" value="3">
+        <input type="submit" id="num-continents-button" value="Submit">
+    </div>
+    <div id="world-stats"></div> <!-- print lore to screen -->
+    <div id="continent-stats"></div> <!-- print lore to screen -->
+</body>
+</html>
