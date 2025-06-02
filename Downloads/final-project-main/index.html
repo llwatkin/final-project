@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- This title is used for tabs and bookmarks -->
+		<title>TBD</title>
+
+		<!-- Use UTF character set, a good idea with any webpage -->
+		<meta charset="UTF-8" />
+		<!-- Set viewport so page remains consistently scaled w narrow devices -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- Include CSS file, including a site-wide CSS and for this particular page -->
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+
+		<!-- Load jQuery library -->
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous"
+		></script>
+		<!-- Load p5.js libraries -->
+		<script src="https://cdn.jsdelivr.net/npm/p5@1.11.5/lib/p5.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"
+		></script>
+		<!-- Load XXHash -->
+		<script type="text/javascript" src="./js/xxhash.min.js" DEFER></script>
+
+		<!-- Links to Javascript files -->
+		<script type="text/javascript" src="./js/site.js" DEFER></script>
+		<script type="text/javascript" src="./js/config.js" DEFER></script>
+		<script type="text/javascript" src="./js/util.js" DEFER></script>
+		<script type="text/javascript" src="./js/sketch.js" DEFER></script>
+		<script type="text/javascript" src="./js/planet.js" DEFER></script>
+	</head>
+	<body>
+		<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
+		<main id="content">
+			<section>
+				<h1>Team Project: TBD</h1>
+
+				<div class="minor-section">
+					<div id="canvas-container"></div>
+					<div id="controls">
+						<h3 style="display: inline;" id="seed-display">Seed: 123</h1>
+						<input type="number" id="seed-input" value=123>
+						<button id="generate">Generate</button>
+						<button style="float: right;" id="fullscreen">Fullscreen</button>
+					</div>
+				</div>
+
+				<div class="minor-section">
+					<h2>Description</h2>
+					<p>
+						Description here
+					</p>
+				</div>
+
+				<div class="minor-section">
+					<h2>Technical</h2>
+					<p>
+						Technical details
+					</p>
+				</div>
+
+				<div class="minor-section">
+					<h2>Reflection</h2>
+					<p>
+						Reflection of each group member
+					</p>
+				</div>
+			</section>
+			<nav id="links" class="minor-section">
+				<ul>
+					<a href="../index.html">Home</a>
+				</ul>
+			</nav>
+		</main>
+	</body>
+</html>
