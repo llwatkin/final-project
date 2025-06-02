@@ -31,6 +31,9 @@ class Person {
         rotate(angle1, [0,0,1])
         rotate(angle2 + HALF_PI, [0,1,0])
 
+        ambientLight(50);
+        directionalLight(color(255), planet.sunAngle); // Sun
+
         this.drawInternal();
         pop();
 
