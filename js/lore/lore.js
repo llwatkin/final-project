@@ -6,6 +6,9 @@
 // creates a new world and fills it with {num} countries
 async function generateWorld(loreData, num) {
     LORE_GLOBS.WORLD_STATS = await generateLore(loreData.world);
+
+    LORE_GLOBS.WORLD_STATS.resource_ranking = randomlyRankResources(loreData.country.resource.choices);
+
     await genMultipleCountries(loreData, num);
 }
 
@@ -19,6 +22,12 @@ async function genMultipleCountries(loreData, num, from = 0) {
         LORE_GLOBS.COUNTRY_STATS[newCountry.name] = newCountry;
     }
 
+    generateHistory(num);
+    // DEBUG: console.log(countriestats)
+}
+
+// populate world history with grammar-generated facts
+async function generateHistory(num) {
     // make relationships between countries
     // TODO: implement smarter relationship generation (maybe based on governments/ideology)
     LORE_GLOBS.WORLD_STATS.history = [];
@@ -39,8 +48,6 @@ async function genMultipleCountries(loreData, num, from = 0) {
             }
         }
     }
-
-    // DEBUG: console.log(countriestats)
 }
 
 // creates up to {num} allyships between {self} country and randomly selected others
@@ -64,7 +71,7 @@ async function getRandomAllies(self, num){
             potentialAlly.allies.add(self.ID)    
             
             // add allyship origin to history
-            await generateHistory(potentialAlly, self, "ally_origin");
+            await explainRelationship(potentialAlly, self, "ally_origin");
         }   
 
         // update random index for next choice
@@ -92,7 +99,7 @@ async function getRandomEnemies(self, num){
             // add self to enemy's enemies 
             potentialEnemy.enemies.add(self.ID)  
             
-            await generateHistory(potentialEnemy, self, "enemy_origin");
+            await explainRelationship(potentialEnemy, self, "enemy_origin");
         }   
 
         // update random index for next choice
@@ -105,6 +112,9 @@ async function generateCountry(loreData, i){
     let country = await generateLore(loreData.country);
     country.name = [`country ${i+1}`];  // TODO: better country names
     country.ID = [i+1];
+
+    country.economy_strength = getEconomyStrength(country.resource);
+
     country.allies = new Set();   // empty set for now, will define after all countries have been initialized
     country.enemies = new Set();  // "
 
@@ -163,6 +173,29 @@ async function generateLore(data){
     return base;
 }
 
+// randomly ranks the values in the lore key json under country > resource
+//  from low to high value
+function randomlyRankResources(arr){
+    let result = [...arr];
+    for(let i = result.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i+1));
+        [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+}
+
+// determines a country's economy strength by tallying the values of their resources
+function getEconomyStrength(resources){
+    const ranking = LORE_GLOBS.WORLD_STATS.resource_ranking;
+    let result = 0;
+    for(let resource of resources){
+        let val = ranking.indexOf(resource) + 1;
+        if(val > 0) result += val;
+    }
+    return [result];
+}
+
+// LEGACY/DEBUG
 function trimCountries(num){
     // trim the last {num} keys
     const trimKeys = Object.keys(GLOBAL.COUNTRY_STATS).slice(-num);

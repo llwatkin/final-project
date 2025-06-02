@@ -1,7 +1,7 @@
-async function generateHistory(A, B, history){
+async function explainRelationship(A, B, rel){
     const historyGrammars = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${LORE_GLOBS.HISTORY_GRAMS}.json`);
     
-    const choices = historyGrammars[history];
+    const choices = historyGrammars[rel];
     let randomIndex = Math.floor(Math.random() * choices.length);
     let pick = choices[randomIndex]
 

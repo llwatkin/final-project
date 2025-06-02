@@ -15,6 +15,7 @@
                  "none", "physical","ephemeral","hybrid"
             ]
         },
+        "resource_ranking": [],
         "history": []
     },
     "country": {
@@ -59,10 +60,11 @@
                 "social", "tradition"
             ]
         },
-        "allies": {
-        },
+        "allies": {},
         "enemies": {},
-        "economy_strength": {}
+        "economy_strength": {
+
+        }
     }
 }
 

@@ -10,6 +10,7 @@ generates a world's lore based on time period and main form of government
 First, world stats are generated, excluding history. Each property in `"world"` with a `maxPicks` sub-property will have an array of `choices`, and a random number of choices will be chosen from this array, up to `maxPicks`.
 - `epoch`: one pick, determines what time period the world is in
 - `economy`: one pick, determines the category of currency this world uses (`none`, `physical`, `ephemeral`, or `hybrid`)
+- `resource ranking`: represents the relative values of all of the possible resources in the world. This ranking is achieved by randomly shuffling the resource choices, and the resulting array ranks the resources from low (index `0`) to high (index `n`) value.
 
 > NOTE: `history` *will be added after all continents have been generated (see below)*
 
@@ -23,6 +24,7 @@ Next, continent stats are generated, referring to `world` properties when necess
 - `resource`: randomly selected
 - `culture`: randomly selected
 > NOTE: *the values here refer to cultural touchstones, without further specification*
+- `economy_strength`: tallies the values of each of the country's resources, where the values are determined by the order of world's `resource ranking` array
 
 All of the above stats are generated, leaving `allies` and `enemies` empty until every continent has been generated. Once all have been generated, we then populate their `allies` and `enemies` randomly.
 - `allies`: randomly chooses other continents that aren't already enemies.
