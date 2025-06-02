@@ -12,6 +12,8 @@ let camDist;
 let zoom = 0;
 let planet;
 
+let testPeople;
+
 function resizeScreen() {
     let container_rect = canvasContainer[0].getBoundingClientRect();
     let container_width = container_rect.width;
@@ -46,6 +48,8 @@ function setup() {
     cam = createCamera();
     setCamera(cam);
     generate();
+
+    testPeople = new PeopleManager()
 }
 
 function generate() {
@@ -66,6 +70,9 @@ function draw() {
     noStroke();
     planet.update();
     planet.draw();
+
+    testPeople.update()
+    testPeople.draw(planet)
 
     // Update camera
     // There's kind of a jumping effect, but I don't think its too big a deal

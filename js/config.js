@@ -41,3 +41,5 @@ const MAX_TERRAIN_MOD = 20;
 
 const CITY_CUBE_SIZE = 5;
 const MAX_CITY_STACKS = 3;
+
+const PEOPLE_SPEED = 0.005;
