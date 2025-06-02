@@ -1,48 +1,48 @@
 // ./js.lore.sketch.js
 // demo scene for lore generation 
 
-const updateNumContinentsButton = document.getElementById("num-continents-button");
-updateNumContinentsButton.addEventListener('click', async function() {
-    const oldNum = LORE_GLOBS.NUM_CONTINENTS;
-    LORE_GLOBS.NUM_CONTINENTS = parseInt(document.getElementById("num-continents").value);
+const updateNumCountriesButton = document.getElementById("num-countries-button");
+updateNumCountriesButton.addEventListener('click', async function() {
+    const oldNum = LORE_GLOBS.NUM_COUNTRIES;
+    LORE_GLOBS.NUM_COUNTRIES = parseInt(document.getElementById("num-countries").value);
 
-    if(oldNum < LORE_GLOBS.NUM_CONTINENTS){
-        await genMultipleContinents(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS, oldNum);
+    if(oldNum < LORE_GLOBS.NUM_COUNTRIES){
+        await genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES, oldNum);
         printWorld();
-        printContinents();
-    } else if (oldNum > LORE_GLOBS.NUM_CONTINENTS){
-        trimContinents(oldNum - LORE_GLOBS.NUM_CONTINENTS);
+        printCountries();
+    } else if (oldNum > LORE_GLOBS.NUM_COUNTRIES){
+        trimCountries(oldNum - LORE_GLOBS.NUM_COUNTRIES);
         printWorld();
-        printContinents();
+        printCountries();
     }
 });
 
 // load new lore base
 document.addEventListener('keydown', (e) => {
 	if(e.key.toLowerCase() === "r"){
-        genMultipleContinents(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS);
+        genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
-        document.getElementById(`continent-stats`).innerHTML = "";
+        document.getElementById(`country-stats`).innerHTML = "";
         document.getElementById(`world-stats`).innerHTML = "";
         printWorld();
-        printContinents();
+        printCountries();
     }
     if(e.key.toLowerCase() === "w"){
-        init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS);
+        init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
         printWorld();
 	}
 });
 
 async function setup() {
     LORE_GLOBS.LORE_DATA = await fetchLoreKeys(LORE_GLOBS.JSON_PATH);
-    init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS)
+    init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES)
 }
 
 async function init(loreData, num){
     await generateWorld(loreData, num);
 
     printWorld();
-    printContinents();
+    printCountries();
 }
 
 function printWorld(){
@@ -50,10 +50,10 @@ function printWorld(){
     printLore(LORE_GLOBS.WORLD_STATS, "world");
 }
 
-function printContinents(){
-    document.getElementById(`continent-stats`).innerHTML = "";
-    for(let continent in LORE_GLOBS.CONTINENT_STATS){
-        printLore(LORE_GLOBS.CONTINENT_STATS[continent], "continent")
+function printCountries(){
+    document.getElementById(`country-stats`).innerHTML = "";
+    for(let country in LORE_GLOBS.COUNTRY_STATS){
+        printLore(LORE_GLOBS.COUNTRY_STATS[country], "country")
     }
 }
 
@@ -72,5 +72,22 @@ function printLore(base, level){
         printOut += `<p><b>${b}</b>: ${b_items}`;
     }
     //printOut += `<p><b>${pillar.substring(2)}</b>: ${dat[pillar][randomIndex]}</p>`
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
     printTo.innerHTML += printOut;
 }

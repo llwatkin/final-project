@@ -18,7 +18,7 @@ function handleGrammar(fillers, template){
         slotPattern, 
         (match) => {
             // match replacing function currently assumes that slotPatterns will refer either 
-            //  to the continent names, or an attribute of the second continent
+            //  to the country names, or an attribute of the second country
             // TODO: ^ will need to make this less hard-coded to allow for a wider range or grammars
             if(fillers[match.slice(1)]){
                 return fillers[match.slice(1)].name

@@ -6,8 +6,8 @@
 let LORE_GLOBS = {
     JSON_PATH: "/js/lore/json",
     HISTORY_GRAMS: "history_grammars", // name of history json file
-    NUM_CONTINENTS: 3,
+    NUM_COUNTRIES: 3,
     LORE_DATA: {},
     WORLD_STATS: {},
-    CONTINENT_STATS: {},
+    COUNTRY_STATS: {},
 }
