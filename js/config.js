@@ -38,3 +38,6 @@ const ICOSPHERE_FACES =
 const TERRAIN_FIDELITY = 2;
 const MIN_TERRAIN_MOD = 10;
 const MAX_TERRAIN_MOD = 20;
+
+const CITY_CUBE_SIZE = 5;
+const MAX_CITY_STACKS = 3;
