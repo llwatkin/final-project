@@ -1,0 +1,72 @@
+{
+    "world": {
+        "name": {},
+        "epoch": {
+            "maxPicks": "1",
+            "choices": [
+                "prehistory", "stone age", "bronze age", "iron age", "classical era", 
+                "medieval era", "early modern era", "modern era","near future", "future", 
+                "far furture", "very distant furture", "inconceivably distant furture"
+            ]
+        },
+        "economy": {
+            "maxPicks": "1",
+            "choices": [ 
+                 "none", "physical","ephemeral","hybrid"
+            ]
+        },
+        "resource_ranking": [],
+        "history": []
+    },
+    "country": {
+        "name": {},
+        "ID": {},
+        "currency": {
+            "maxPicks": 1,
+            "choice_control": {
+                "location": "world",
+                "attribute":"economy",
+                "json": "economy"
+            }
+        },
+        "government": {
+            "maxPicks": 1,
+            "choices": [
+                "none", "democracy", "dictatorship","anarchy","communism","monarchy",
+                "authoritarianism","oligarchy","aristocracy","republic","presidency",
+                "plutocracy","theocracy","electocracy","parliament","socialism",
+                "autocracy","confederation","corporatocracy","argatocracy","fascism"
+            ], 
+            "modifiers": {
+                "values": [
+                    "", "total", "partial", "democratic","anarchist","communist","monarchical",
+                    "authoritarian","oligarchical","aristocratic","republican","presidential",
+                    "plutocratic","theocratic","electocratic","parliamentary","socialist",
+                    "autocratic","corporate","argatocratic","fascist"
+                ]
+            }
+        },
+        "resource": {
+            "maxPicks": 3,
+            "choices": [
+                "vegetation", "animal", "energy", "population", "oil", "gas", "minerals",
+                "agriculture", "water", "wind", "solar"
+            ]
+        },
+        "culture": {
+            "maxPicks": 3,
+            "choices": [
+                "music", "holidays", "food", "theater", "film", "tv", "games", "sports",
+                "social", "tradition"
+            ]
+        },
+        "allies": {},
+        "enemies": {},
+        "economy_strength": {
+
+        }
+    }
+}
+
+
+

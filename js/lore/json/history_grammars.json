@@ -1,0 +1,10 @@
+{
+    "enemy_origin": [
+        "$A became enemies with $B when $B invaded $A for $resource",
+        "$A became enemies with $B when $B adopted $government"
+    ],
+    "ally_origin": [
+        "$A allied with $B when $B agreed to give $A $resource",
+        "$A allied with $B when $B adopted $government"
+    ]
+}
