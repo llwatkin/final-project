@@ -88,8 +88,8 @@ function mouseWheel(event) {
 
 async function initLore() {
     LORE_GLOBS.LORE_DATA = await fetchLoreKeys(LORE_GLOBS.JSON_PATH);
-    await generateWorld(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_CONTINENTS);
+    await generateWorld(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
     console.log("world lore: ", LORE_GLOBS.WORLD_STATS);
-    console.log("continents lore: ", LORE_GLOBS.CONTINENT_STATS);
+    console.log("countries lore: ", LORE_GLOBS.COUNTRY_STATS);
 }
