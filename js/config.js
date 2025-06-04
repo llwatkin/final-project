@@ -12,7 +12,7 @@ const MIN_CAMERA_DISTANCE = PLANET_RADIUS * 2.2;
 const SUN_DISTANCE = MAX_CAMERA_DISTANCE * 1.25;
 
 const GOLDEN_RATIO = 1.618;
-const ICOSPHERE_FACES =
+const ICOSAHEDRON_FACES =
 	[
 		[0, 3, 10],
 		[3, 0, 11],
@@ -36,6 +36,7 @@ const ICOSPHERE_FACES =
 		[7, 11, 8]
 	];
 const TERRAIN_FIDELITY = 2;
+const NOISE_SCALE = 0.2;
 const MIN_TERRAIN_MOD = 10;
 const MAX_TERRAIN_MOD = 20;
 

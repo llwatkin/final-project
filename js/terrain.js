@@ -1,23 +1,16 @@
+// terrain.js - Icospheric terrain for planet
+// Author(s): Lyle Watkins
+// Last Updated: 06/03/2025
+
 class Terrain {
 	constructor(rad) {
 		this.rad = rad;
 		this.debugVerts = [];
-		this.createTerrain();
+
+		this.generateMesh();
 	}
 
-	drawDebugVerts() {
-		push();
-		strokeWeight(10);
-		for (let i = 0; i < this.debugVerts.length; i++) {
-			if (i < 4) stroke(255, 0, 0);
-			else if (i < 8) stroke(0, 255, 0);
-			else stroke(0, 0, 255);
-			point(this.debugVerts[i]);
-		}
-		pop();
-	}
-
-	createTerrain() {
+	generateMesh() {
 		// Free any previous terrain to save memory
 		if (this.mesh) this.clearTerrain();
 		this.mesh = new p5.Geometry();
@@ -43,7 +36,7 @@ class Terrain {
 		for (let vert of this.debugVerts) {
 			this.mesh.vertices.push(vert);
 		}
-		for (let face of ICOSPHERE_FACES) {
+		for (let face of ICOSAHEDRON_FACES) {
 			this.subdivide(face, [], 0);
 		}
 
@@ -55,7 +48,7 @@ class Terrain {
 	}
 
 	varyTerrain() {
-		let noiseScale = 0.2;
+		let noiseScale = NOISE_SCALE;
 		for (let i = 0; i < this.mesh.vertices.length; i++) {
 			let vert = this.mesh.vertices[i];
 			let variation = map(
@@ -92,17 +85,27 @@ class Terrain {
 		let v4 = p5.Vector.slerp(v1, v2, 0.5);
 		let v5 = p5.Vector.slerp(v2, v3, 0.5);
 		let v6 = p5.Vector.slerp(v3, v1, 0.5);
+		let v4i = -1;
+		let v5i = -1;
+		let v6i = -1;
 
+		// Check if vertices in these locations already exist before adding new ones
 		for (let vert of this.mesh.vertices) {
-			if (isRoundedVectorEqual(v4, vert)) v4 = vert;
-			if (isRoundedVectorEqual(v5, vert)) v5 = vert;
-			if (isRoundedVectorEqual(v6, vert)) v6 = vert;
+			if (isRoundedVectorEqual(v4, vert)) {
+				v4 = vert;
+				v4i = this.mesh.vertices.indexOf(v4);
+			}
+			else if (isRoundedVectorEqual(v5, vert)) {
+				v5 = vert;
+				v5i = this.mesh.vertices.indexOf(v5);
+			}
+			else if (isRoundedVectorEqual(v6, vert)) {
+				v6 = vert;
+				v6i = this.mesh.vertices.indexOf(v6);
+			}
 		}
 
-		let v4i = this.mesh.vertices.indexOf(v4);
-		let v5i = this.mesh.vertices.indexOf(v5);
-		let v6i = this.mesh.vertices.indexOf(v6);
-
+		// If no existing vertices were found, create new ones
 		if (v4i == -1) {
 			this.mesh.vertices.push(v4);
 			v4i = this.mesh.vertices.indexOf(v4);
@@ -128,6 +131,18 @@ class Terrain {
 		for (let f of newFaces) {
 			this.subdivide(f, newFaces, level + 1);
 		}
+	}
+
+	drawDebugVerts() {
+		push();
+		strokeWeight(10);
+		for (let i = 0; i < this.debugVerts.length; i++) {
+			if (i < 4) stroke(255, 0, 0);
+			else if (i < 8) stroke(0, 255, 0);
+			else stroke(0, 0, 255);
+			point(this.debugVerts[i]);
+		}
+		pop();
 	}
 
 	draw() {
