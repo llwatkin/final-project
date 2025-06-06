@@ -5,28 +5,29 @@ async function explainRelationship(A, B, rel){
     let randomIndex = Math.floor(Math.random() * choices.length);
     let pick = choices[randomIndex]
 
-    LORE_GLOBS.WORLD_STATS.history.push(handleGrammar({"A": A, "B": B}, pick))
+    LORE_GLOBS.WORLD_STATS.history.push(handleCountryGrammar({"A": A, "B": B}, pick))
 
 }
 
 // fills grammar slots with concrete values
-function handleGrammar(fillers, template){
-    const slotPattern = /\$(\w+)/;  // looks for words starting with $
+function handleCountryGrammar(fillers, template){
+    const slotPattern = /\$(\w.\w+)/;  // looks for words starting with $
 
     while (template.match(slotPattern)) {
       template = template.replace(
         slotPattern, 
         (match) => {
-            // match replacing function currently assumes that slotPatterns will refer either 
-            //  to the country names, or an attribute of the second country
-            // TODO: ^ will need to make this less hard-coded to allow for a wider range or grammars
-            if(fillers[match.slice(1)]){
-                return fillers[match.slice(1)].name
-            } else {
-                let randomIndex = Math.floor(Math.random(fillers.B[match.slice(1)].length))
-                let pick = fillers.B[match.slice(1)][randomIndex];
-                return pick
-            }
+            // match should be in the format {country}.{parameter}, fillers should hold references to
+            //      the countries being discussed here.
+            const fillerControl = match.split('.')[0].slice(1);     // remove $
+            const country = fillers[fillerControl];                 // A or B
+            const param = match.split('.')[1];                      // what country param?
+            const property = country[param];
+
+            const randomIndex = Math.floor(Math.random() * property.length)
+            const pick = property[randomIndex];
+            return pick
+
         }
       );
     }
