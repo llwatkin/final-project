@@ -60,7 +60,7 @@ function generate() {
     seedDisplay.textContent = "Seed: " + str(seed);
 
     // Create new planet
-    if (planet) planet.clearTerrain();
+    if (planet) planet.terrain.clearTerrain();
     planet = new Planet();
 }
 
