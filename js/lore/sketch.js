@@ -18,9 +18,9 @@ updateNumCountriesButton.addEventListener('click', async function() {
 });
 
 // load new lore base
-document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', async (e) => {
 	if(e.key.toLowerCase() === "r"){
-        genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
+        await genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
         document.getElementById(`country-stats`).innerHTML = "";
         document.getElementById(`world-stats`).innerHTML = "";

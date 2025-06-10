@@ -16,7 +16,8 @@
             ]
         },
         "resource_ranking": [],
-        "history": []
+        "history": [],
+        "world_powers": []
     },
     "country": {
         "name": {},
@@ -62,9 +63,8 @@
         },
         "allies": {},
         "enemies": {},
-        "economy_strength": {
-
-        }
+        "economy_strength": {},
+        "worries": {}
     }
 }
 

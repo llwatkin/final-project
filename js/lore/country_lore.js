@@ -9,7 +9,9 @@ async function genMultipleCountries(loreData, num, from = 0) {
         LORE_GLOBS.COUNTRY_STATS[newCountry.name] = newCountry;
     }
 
-    generateHistory(num);
+    await generateHistory(num);
+    LORE_GLOBS.WORLD_STATS.world_powers = await establishWorldPowers();
+    await generateWorryKeys(num);
     // DEBUG: console.log(countriestats)
 }
 
@@ -93,4 +95,71 @@ async function getRandomEnemies(self, num){
         // update random index for next choice
         randomIndex = Math.floor(Math.random() * cKeys.length);
     }
+}
+
+async function getWorries() {
+
+}
+
+// give each country a set of worries
+async function generateWorryKeys() {
+    for(let c in LORE_GLOBS.COUNTRY_STATS){
+        const country = LORE_GLOBS.COUNTRY_STATS[c];
+        // does country have enemies?
+        if(country.enemies.size > 0){
+           if(hasPower(country.enemies) === true){
+                country.worries.push("powerful_enemies");
+           } else {
+               country.worries.push("enemies");
+           }
+        }
+
+        // does country have allies?
+        if(country.allies.size === 0){
+           country.worries.push("no_allies");
+        }
+
+        // what is country's economy strength?
+        let powerfulCountries = [
+            LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[0]],
+            LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[1]]
+        ]
+
+        let baselineEcon = powerfulCountries[1].economy_strength[0]; // strength of second larges econ
+        if(country.economy_strength[0] < baselineEcon*0.75){
+            country.worries.push("weak_economy");
+        }
+
+        // war risk?
+        if(powerfulCountries[0].enemies.has(powerfulCountries[1].ID)){
+            country.worries.push("war");
+        }
+
+        // TODO: low-autonomy governments (autocratic, fascist, etc) should be reflected here
+    }
+}
+
+// returns whether any of the IDs listed in arr are included in world_powers
+function hasPower(arr){
+    let powerfulCountries = [
+        LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[0]].ID,
+        LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[1]].ID
+    ]
+    for(let id of arr){
+        if(powerfulCountries.includes(id)){ return true; }
+    }
+    return false;
+}
+
+function getCountryByID(id){
+    for(let c in LORE_GLOBS.COUNTRY_STATS){
+        const country = LORE_GLOBS.COUNTRY_STATS[c];
+
+        if(country.ID === id){
+            return country;
+        }
+    }
+
+    console.error(`ERROR: Country with ID ${id} not found.`);
+    return null;
 }

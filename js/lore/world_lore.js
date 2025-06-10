@@ -41,3 +41,25 @@ async function generateHistory(num) {
         }
     }
 }
+
+// set the two richest countries as world powers
+function establishWorldPowers(){
+    let max1 = { name: null, val: -Infinity};
+    let max2 = { name: null, val: -Infinity};
+    for(let c in LORE_GLOBS.COUNTRY_STATS){
+        let country = LORE_GLOBS.COUNTRY_STATS[c];
+        if(country.economy_strength[0] >= max1.val){
+            max2 = max1;
+            max1 = {
+                name: country.name[0],
+                val: country.economy_strength[0]
+            };
+        } else if(country.economy_strength[0] >= max2.val){
+            max2 = {
+                name: country.name[0],
+                val: country.economy_strength[0]
+            };
+        }
+    }
+    return [max1.name, max2.name];
+}
