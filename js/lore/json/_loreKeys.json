@@ -30,21 +30,21 @@
                 "json": "economy"
             }
         },
-        "government": {
+        "political_compass": {
+            "minPicks": 2,
+            "maxPicks": 2,
+            "choice_control": {
+                "process": "random_grid",
+                "json": "political_compass"
+            }
+        },
+        "government":{
             "maxPicks": 1,
-            "choices": [
-                "none", "democracy", "dictatorship","anarchy","communism","monarchy",
-                "authoritarianism","oligarchy","aristocracy","republic","presidency",
-                "plutocracy","theocracy","electocracy","parliament","socialism",
-                "autocracy","confederation","corporatocracy","argatocracy","fascism"
-            ], 
-            "modifiers": {
-                "values": [
-                    "", "total", "partial", "democratic","anarchist","communist","monarchical",
-                    "authoritarian","oligarchical","aristocratic","republican","presidential",
-                    "plutocratic","theocratic","electocratic","parliamentary","socialist",
-                    "autocratic","corporate","argatocratic","fascist"
-                ]
+            "choice_control": {
+                "location": "self",
+                "attribute":"political_compass",
+                "json": "government",
+                "special": "grid"
             }
         },
         "resource": {

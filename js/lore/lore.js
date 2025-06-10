@@ -15,38 +15,46 @@ async function generateLore(data){
         // create a new set to hold data for this cat(egory)
         base[cat] = new Set();
 
-        // retrieve choices (as defined in json data)
-        let choices;
-        if(data[cat].length !== 0){ 
-            choices = await getChoices(data, cat, base);
-        }
-
-        // pick a choice, {num} times
-        for(let i = 0; i < numPicks; i++){
-            if(choices === null){
-                console.error(`ERROR: unable to load choices for {${cat}}`);
-                break;
+        // check for special handler in choice control
+        let cc = data[cat].choice_control;
+        let sp = cc ? cc.special : undefined;
+        if(sp){
+            let picks = await specialHandler(data[cat], base);
+            picks.forEach(elem => base[cat].add(elem));
+        } else {
+            // retrieve choices (as defined in json data)
+            let choices;
+            if(data[cat].length !== 0){ 
+                choices = await getChoices(data, cat, base);
             }
 
-            // cap numPicks to possible choices (as defined in json data)
-            if(data[cat].length < numPicks){ numPicks = choices.length; }
+            // pick a choice, {num} times
+            for(let i = 0; i < numPicks; i++){
+                if(choices === null){
+                    console.error(`ERROR: unable to load choices for {${cat}}`);
+                    break;
+                }
 
-            // pick randomly from choices
-            const randomIndex = Math.floor(Math.random() * (choices.length));
-            let pick = choices[randomIndex];
+                // cap numPicks to possible choices (as defined in json data)
+                if(data[cat].length < numPicks){ numPicks = choices.length; }
 
-            // add a prefix word (modifier) when possible/necessary
-            if(pick && pick !== "none" && data[cat].modifiers){
-                let mods = data[cat].modifiers.values;
+                // pick randomly from choices
+                const randomIndex = Math.floor(Math.random() * (choices.length));
+                let pick = choices[randomIndex];
 
-                const randomIndex = Math.floor(Math.random() * (mods.length));
-                const modifier = mods[randomIndex];
+                // add a prefix word (modifier) when possible/necessary
+                if(pick && pick !== "none" && data[cat].modifiers){
+                    let mods = data[cat].modifiers.values;
 
-                if(modifier.length > 0){ pick = modifier + " " + pick; }
+                    const randomIndex = Math.floor(Math.random() * (mods.length));
+                    const modifier = mods[randomIndex];
+
+                    if(modifier.length > 0){ pick = modifier + " " + pick; }
+                }
+
+                // add picked choice to set
+                base[cat].add(pick);
             }
-
-            // add picked choice to set
-            base[cat].add(pick);
         }
         base[cat] = [...base[cat]]; // convert set to an array
     }

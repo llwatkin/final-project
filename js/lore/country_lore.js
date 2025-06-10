@@ -97,10 +97,6 @@ async function getRandomEnemies(self, num){
     }
 }
 
-async function getWorries() {
-
-}
-
 // give each country a set of worries
 async function generateWorryKeys() {
     for(let c in LORE_GLOBS.COUNTRY_STATS){

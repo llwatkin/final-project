@@ -3,6 +3,16 @@
 // Last Updated: 6/1/2025
 // helper functions for handling json files
 
+// holds references to processes defined in json file(s)
+const PROCESSES = {
+    random_grid: (grid) => random_grid(grid)
+}
+
+// special choice pickers
+const SPECIAL = {
+    grid: (handling, data, choiceJSON) => cellToText(handling, data, choiceJSON)
+}
+
 // generic json getter
 async function _loadJSON(filePath) {
     try {
@@ -25,18 +35,15 @@ async function getChoices(data, cat, self){
         const controller = data[cat].choice_control;
         const choiceJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${controller.json}.json`);
 
-        let loc;
-        let attr_choices;
-        if(controller.location === "world"){ loc = LORE_GLOBS.WORLD_STATS; }
-        else if(controller.location === "self"){ loc = self; }
-        else {
-            console.error(`Unknown control location: ${controller.location}`)
-            return;
-        }
+        if(controller.location){
+            let attr_choices = await getChoicesByAttribute(controller, self);
+            for(const c in attr_choices){
+                choices = choices.concat(choiceJSON[attr_choices[c]]); 
+            }
 
-        attr_choices = loc[`${controller.attribute}`]; 
-        for(const c in attr_choices){
-            choices = choices.concat(choiceJSON[attr_choices[c]]); 
+        } else if(controller.process){
+            const params = choiceJSON[choiceJSON.params];
+            choices = await PROCESSES[controller.process](params);
         }
     }
     else if(data[cat].choices){
@@ -51,4 +58,55 @@ async function fetchLoreKeys(path) {
     const response = await fetch(`${path}/_loreKeys.json`);
 	const json = await response.json();
 	return json;
+}
+
+async function getChoicesByAttribute(controller, self) {
+    let loc;
+    if(controller.location === "world"){ loc = LORE_GLOBS.WORLD_STATS; }
+    else if(controller.location === "self"){ loc = self; }
+    else {
+        console.error(`Unknown control location: ${controller.location}`)
+        return;
+    }
+
+    return loc[`${controller.attribute}`]; 
+}
+
+async function random_grid(grid) {
+    // start by getting grid dims
+    const w = grid.row_vals.length;
+    const h = grid.col_vals.length;
+
+    // choose a row val and a col val
+    const [row, col] = [
+        Math.floor(Math.random() * w),
+        Math.floor(Math.random() * h),
+    ]
+
+    console.log("RANDO GRID", grid.row_vals[row], grid.col_vals[col]);
+
+    return [
+        `${grid.row_vals[row]}${grid.col_vals[col]}`
+    ]
+}
+
+async function specialHandler(handling, data){
+    const choiceJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${handling.choice_control.json}.json`);
+    return await SPECIAL[handling.choice_control.special](handling, data, choiceJSON);
+}
+
+async function cellToText(handling, data, choiceJSON) {
+    console.log(handling, data, choiceJSON);
+
+    const cell = data[handling.choice_control.attribute][0];
+    const x = cell[1];
+    const y = cell[0];
+
+    const rowChoices = choiceJSON.rows[x];
+    const colChoices = choiceJSON.cols[y];
+
+    const row = rowChoices[Math.floor(Math.random() * rowChoices.length)];
+    const col = colChoices[Math.floor(Math.random() * colChoices.length)];
+
+    return [`${col} ${row}`];
 }
