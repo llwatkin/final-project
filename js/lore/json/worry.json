@@ -33,5 +33,12 @@
         "Diplomats scramble as $A.name and $B.name inch toward open war.",
         "$B.name accuses $A.name of provocation. Conflict seems inevitable.",
         "A declaration of war from $A.name against $B.name may be imminent."
+    ],
+    "freedom": [
+        "The grip of $A.government tightens in $A.name, stifling all dissent.",
+        "Protests erupt in $A.name against the repressive $A.government regime.",
+        "Calls for reform echo across $A.name, where $A.government shows no sign of loosening control.",
+        "$A.name's adoption of $A.government continues to restrict civil liberties and suppress opposition.",
+        "The world watches as $A.name endures the rule of the deeply unpopular $A.government."
     ]
 }

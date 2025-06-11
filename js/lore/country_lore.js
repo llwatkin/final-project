@@ -164,9 +164,17 @@ async function getWorries() {
         }
 
         // TODO: low-autonomy governments (autocratic, fascist, etc) should be reflected here
+        if(await lowAutonomyGovernment(country.political_compass[0])){
+            country.worries.push(
+                new Worry(
+                    "freedom",
+                    {"A": [country]}
+                )
+            );
+        }
 
         // TEMP DEBUG TEST
-        console.log(country.name);
+        console.log(country.name[0]);
         for(let worry of country.worries){
             let testMessage = await getWorryMessage(country, worry);
             console.log(testMessage);
@@ -206,4 +214,17 @@ function getCountryByID(id){
 
     console.error(`ERROR: Country with ID ${id} not found.`);
     return null;
+}
+
+async function lowAutonomyGovernment(pc){
+    const gridJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/political_compass.json`);
+    const grid = gridJSON.grid;
+
+    let coords = gridCellToCoords(pc);
+    console.log(pc, coords)
+
+    if(coords.x < (grid.row_vals.length/2)){ return true; }
+    if(coords.y < (grid.col_vals.length/2)){ return true; }
+
+    return false;
 }

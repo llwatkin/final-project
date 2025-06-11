@@ -125,16 +125,18 @@ async function getMaxGridDistance(json) {
 // convert political_compass cells to euclidian coordinates 
 //  and get the distance bewteen the cells
 async function getGridDistance(cell1, cell2) {
-    const p1 = {
-        x: cell1[0].toLowerCase().charCodeAt(0) - ('a'.charCodeAt(0) - 1),  // [A, H] --> [0, 8]
-        y: parseInt(cell1[1])              
-    }
-    const p2 = {
-        x: cell2[0].toLowerCase().charCodeAt(0) - ('a'.charCodeAt(0) - 1),  // [A, H] --> [0, 8]
-        y: parseInt(cell2[1])
-    }
+    const p1 = gridCellToCoords(cell1);
+    const p2 = gridCellToCoords(cell2);
 
     const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
 
     return dist;
+}
+
+// cell is cell in grid, form of '{ALPHA}{NUM}'
+function gridCellToCoords(cell){
+    return {
+        x: cell[0].toLowerCase().charCodeAt(0) - ('a'.charCodeAt(0) - 1),  // [A, H] --> [0, 8]
+        y: parseInt(cell[1])              
+    }
 }
