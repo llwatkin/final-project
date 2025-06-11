@@ -221,9 +221,8 @@ async function lowAutonomyGovernment(pc){
     const grid = gridJSON.grid;
 
     let coords = gridCellToCoords(pc);
-    console.log(pc, coords)
 
-    if(coords.x < (grid.row_vals.length/2)){ return true; }
+    if(coords.x < (grid.row_vals.length/4)){ return true; }
     if(coords.y < (grid.col_vals.length/2)){ return true; }
 
     return false;

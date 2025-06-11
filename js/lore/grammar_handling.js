@@ -5,12 +5,12 @@ async function handleGrammar(fillers, n, json){
     let randomIndex = myRandom(choices.length);
     let pick = choices[randomIndex]
 
-    return fillGrammarTemplate(fillers, pick);
+    return await fillGrammarTemplate(fillers, pick);
 
 }
 
 // fills grammar slots with concrete values
-function fillGrammarTemplate(fillers, template){
+async function fillGrammarTemplate(fillers, template){
     const slotPattern = /\$(\w.\w+)/;  // looks for words starting with $
 
     while (template.match(slotPattern)) {

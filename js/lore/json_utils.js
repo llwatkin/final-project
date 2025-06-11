@@ -104,7 +104,11 @@ async function cellToText(handling, data, choiceJSON) {
     const row = rowChoices[myRandom(rowChoices.length)];
     const col = colChoices[myRandom(colChoices.length)];
 
-    return [`${col} ${row}`];
+    let text = `${col}`;
+    if(text.length > 0) text += " "
+    text += `${row}`
+
+    return [text];
 }
 
 // find the distance between the topleftmost and bottomrightmost 
