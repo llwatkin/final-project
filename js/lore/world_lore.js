@@ -49,7 +49,7 @@ async function generateHistory(num) {
 }
 
 // set the two richest countries as world powers
-function establishWorldPowers(){
+async function establishWorldPowers(){
     let max1 = { name: null, val: -Infinity};
     let max2 = { name: null, val: -Infinity};
     for(let c in LORE_GLOBS.COUNTRY_STATS){

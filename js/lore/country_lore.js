@@ -18,7 +18,7 @@ async function genMultipleCountries(loreData, num, from = 0) {
 // creates one country 
 async function generateCountry(loreData, i){
     let country = await generateLore(loreData.country);
-    country.name = [`country ${i+1}`];  // TODO: better country names
+    country.name = await generateName();  // TODO: better country names
     country.ID = [i+1];
 
     country.economy_strength = getEconomyStrength(country.resource);
@@ -27,6 +27,26 @@ async function generateCountry(loreData, i){
     country.enemies = new Set();  // "
 
     return country;
+}
+
+async function generateName() {
+    const nameJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/name.json`);
+    let success = false;
+    let name = ""
+
+    while(!success){
+        for(let f in nameJSON){
+            let fixArr = nameJSON[f]
+            let r = Math.floor(Math.random() * fixArr.length)
+            name += fixArr[r];
+        }
+
+        if(!LORE_GLOBS.COUNTRY_STATS[name]){    // make sure name doesnt already exist
+            success = true; // stop loop
+        }
+    }
+
+    return [name];
 }
 
 // determines a country's economy strength by tallying the values of their resources
