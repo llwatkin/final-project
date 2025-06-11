@@ -1,4 +1,4 @@
-Here's an overview of what is in each json file in this filder, and how to use them.
+Here's an overview of what is in each json file in this folder, and how to use them.
 
 ## `_loreKeys.json`
 *Basic templates for world data and and country data.*
@@ -8,7 +8,7 @@ Here's an overview of what is in each json file in this filder, and how to use t
 Add categories to be loaded as properties into `world` and `country` objects. Without any choice artictecture, these properties will remain empty, but you can fill them however you want in the lore generator. 
 
 #### choice handling
-In `lore.js`, the function `generateLore()` checks for choice architeture. Choices are an array of strings, and a `maxPicks` property puts a ceiling (and `minPicks` puts a floor) on how many from that array will be loaded into the property.
+In `lore.js`, the function `generateLore()` checks for choice architecture. Choices are an array of strings, and a `maxPicks` property puts a ceiling (and `minPicks` puts a floor) on how many from that array will be loaded into the property.
 
 #### `choice_control`
 Directs choice selection to a different json file. May also define `location` and `attribute` properties if choice selection depends on another property, either in the `world` or `country` object.
@@ -18,7 +18,7 @@ In `lore.js`, the function `generateLore()` also checks for `special` property, 
 
 >*This can be any gatherer you define, but make sure to add a reference to it to the `SPECIAL` object in `json_utils.js`.*
 
-Likewise, the `process` property redirects choice *selection* to the from the basic choice selecter to a specific process, referenced in `json_utils.js`
+Likewise, the `process` property redirects choice *selection* to the from the basic choice selector to a specific process, referenced in `json_utils.js`
 
 >*Again, this can be any selection process you define, but make sure to add a reference to it to the `PROCESSES` object in `json_utils.js`.*
 
@@ -38,7 +38,7 @@ Likewise, the `process` property redirects choice *selection* to the from the ba
 >- **political_compass**: Assigns country a random cell in the grid defined in `political_compass.json`.
 >- **government**: Uses `political_compass` cell to write out the government type. Values are stored in `government.json`.
 >- **resource**: Stores a list of randomly-selected resources. These are the country's exports, and they affect the country's `economy_strength`.
->- **culture**: Stores a list of randomy-selected cultural touchstones. Doesn't do much right now.
+>- **culture**: Stores a list of randomly-selected cultural touchstones. Doesn't do much right now.
 >- **allies**: Stores a list of IDs to country's allies. Allies are chosen based on compatible ideologies (governments nearby on political compass) and randomly-selected resource agreements.
 >- **enemies**: Stores a list of IDs to country's enemies. Enemies are chosen based on incompatible ideologies (governments far away on political compass) and randomly-selected resource disagreements.
 >- **economy_strength**: Tallies country's resources' values.
@@ -48,7 +48,7 @@ Likewise, the `process` property redirects choice *selection* to the from the ba
 Holds currency choices for each economy type. 
 
 ## `government.json`
-Holds row and column values for political compass cells. Rows are the basic government type (Totalitarianism, Democracy, Anarchism, etc) and columns are modifying adjectives (Tradionalist, Liberal, Anarchistic, etc). 
+Holds row and column values for political compass cells. Rows are the basic government type (Totalitarianism, Democracy, Anarchism, etc) and columns are modifying adjectives (traditionalist, Liberal, Anarchistic, etc). 
 > ***NOTE**: For both rows and columns, smaller values = lower autonomy, larger values = more autonomy.*
 >
 > Consequentially, any cell falling in quadrant one correspond to governments with lower overall freedoms. 

@@ -6,7 +6,7 @@
             "choices": [
                 "prehistory", "stone age", "bronze age", "iron age", "classical era", 
                 "medieval era", "early modern era", "modern era","near future", "future", 
-                "far furture", "very distant furture", "inconceivably distant furture"
+                "far future", "very distant future", "inconceivably distant future"
             ]
         },
         "economy": {
