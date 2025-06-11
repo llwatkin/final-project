@@ -19,6 +19,8 @@ updateNumCountriesButton.addEventListener('click', async function() {
 
 // load new lore base
 document.addEventListener('keydown', async (e) => {
+    /*
+    TODO: FIX
 	if(e.key.toLowerCase() === "r"){
         await genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
@@ -31,6 +33,7 @@ document.addEventListener('keydown', async (e) => {
         init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
         printWorld();
 	}
+        */
 });
 
 async function setup() {

@@ -63,6 +63,28 @@ async function generateLore(data){
     return base;
 }
 
+async function generateName() {
+    const nameJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/name.json`);
+    let success = false;
+    let name = ""
+
+    while(!success){
+        for(let f in nameJSON){
+            let fixArr = nameJSON[f]
+            let r = myRandom(fixArr.length)
+            name += fixArr[r];
+        }
+
+        if( !LORE_GLOBS.COUNTRY_STATS[name] &&
+            LORE_GLOBS.WORLD_STATS.name !== name
+        ){    // make sure name doesnt already exist
+            success = true; // stop loop
+        }
+    }
+
+    return [name];
+}
+
 // LEGACY/DEBUG
 function trimCountries(num){
     // trim the last {num} keys

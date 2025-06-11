@@ -29,26 +29,6 @@ async function generateCountry(loreData, i){
     return country;
 }
 
-async function generateName() {
-    const nameJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/name.json`);
-    let success = false;
-    let name = ""
-
-    while(!success){
-        for(let f in nameJSON){
-            let fixArr = nameJSON[f]
-            let r = myRandom(fixArr.length)
-            name += fixArr[r];
-        }
-
-        if(!LORE_GLOBS.COUNTRY_STATS[name]){    // make sure name doesnt already exist
-            success = true; // stop loop
-        }
-    }
-
-    return [name];
-}
-
 // determines a country's economy strength by tallying the values of their resources
 function getEconomyStrength(resources){
     const ranking = LORE_GLOBS.WORLD_STATS.resource_ranking;
