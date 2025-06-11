@@ -11,7 +11,7 @@ async function genMultipleCountries(loreData, num, from = 0) {
 
     await generateHistory(num);
     LORE_GLOBS.WORLD_STATS.world_powers = await establishWorldPowers();
-    await generateWorryKeys(num);
+    await getWorryKeys(num);
     // DEBUG: console.log(countriestats)
 }
 
@@ -118,11 +118,12 @@ async function addRelationship(A, B, type){
     A.enemies.add(B.ID);    // add A to B enemies
     B.enemies.add(A.ID)     // add B to A enemies 
     
-    await explainRelationship(A, B, type);
+    const newHist = await handleGrammar({"A": A, "B": B}, type, LORE_GLOBS.HISTORY_GRAMS);
+    LORE_GLOBS.WORLD_STATS.history.push(newHist);
 }
 
 // give each country a set of worries
-async function generateWorryKeys() {
+async function getWorryKeys() {
     for(let c in LORE_GLOBS.COUNTRY_STATS){
         const country = LORE_GLOBS.COUNTRY_STATS[c];
         // does country have enemies?
@@ -156,6 +157,11 @@ async function generateWorryKeys() {
         }
 
         // TODO: low-autonomy governments (autocratic, fascist, etc) should be reflected here
+
+        // TEMP DEBUG TEST
+        if(country.worries.length > 0){
+            console.log(country.worries[0],await handleGrammar({"A": country}, country.worries[0], "worry"));
+        }
     }
 }
 

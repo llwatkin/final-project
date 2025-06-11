@@ -1,16 +1,16 @@
-async function explainRelationship(A, B, rel){
-    const historyGrammars = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${LORE_GLOBS.HISTORY_GRAMS}.json`);
+async function handleGrammar(fillers, n, json){
+    const grammar = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`);
     
-    const choices = historyGrammars[rel];
+    const choices = grammar[n];
     let randomIndex = Math.floor(Math.random() * choices.length);
     let pick = choices[randomIndex]
 
-    LORE_GLOBS.WORLD_STATS.history.push(handleCountryGrammar({"A": A, "B": B}, pick))
+    return fillGrammarTemplate(fillers, pick);
 
 }
 
 // fills grammar slots with concrete values
-function handleCountryGrammar(fillers, template){
+function fillGrammarTemplate(fillers, template){
     const slotPattern = /\$(\w.\w+)/;  // looks for words starting with $
 
     while (template.match(slotPattern)) {
