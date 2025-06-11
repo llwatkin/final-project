@@ -1,7 +1,28 @@
-Here's a quick overview of what is in each json file in this filder, and how to use them.
+Here's an overview of what is in each json file in this filder, and how to use them.
 
-### `_loreKeys.json`
+## `_loreKeys.json`
 *Basic templates for world data and and country data.*
+
+### Usage
+#### basic
+Add categories to be loaded as properties into `world` and `country` objects. Without any choice artictecture, these properties will remain empty, but you can fill them however you want in the lore generator. 
+
+#### choice handling
+In `lore.js`, the function `generateLore()` checks for choice architeture. Choices are an array of strings, and a `maxPicks` property puts a ceiling (and `minPicks` puts a floor) on how many from that array will be loaded into the property.
+
+#### `choice_control`
+Directs choice selection to a different json file. May also define `location` and `attribute` properties if choice selection depends on another property, either in the `world` or `country` object.
+
+#### processes, special handling
+In `lore.js`, the function `generateLore()` also checks for `special` property, which directs choice gathering from the random selection a heuristic to handler defined in `json_utils.js`. 
+
+>*This can be any gatherer you define, but make sure to add a reference to it to the `SPECIAL` object in `json_utils.js`.*
+
+Likewise, the `process` property redirects choice *selection* to the from the basic choice selecter to a specific process, referenced in `json_utils.js`
+
+>*Again, this can be any selection process you define, but make sure to add a reference to it to the `PROCESSES` object in `json_utils.js`.*
+
+### Categories
 #### `world`
 >- **name**: Will hold the world's randomly-generated name.
 >- **epoch**: Time period. Doesn't do much right now.
@@ -23,14 +44,25 @@ Here's a quick overview of what is in each json file in this filder, and how to 
 >- **economy_strength**: Tallies country's resources' values.
 >- **worries**: List of Worry objects, which are used to fill the grammars found in `worry.json`. Worries are assigned based on country state (enemies, allies, economy, freedom) and world state (war between world powers).
 
-### `economy.json`
+## `economy.json`
+Holds currency choices for each economy type. 
 
-### `government.json`
+## `government.json`
+Holds row and column values for political compass cells. Rows are the basic government type (Totalitarianism, Democracy, Anarchism, etc) and columns are modifying adjectives (Tradionalist, Liberal, Anarchistic, etc). 
+> ***NOTE**: For both rows and columns, smaller values = lower autonomy, larger values = more autonomy.*
+>
+> Consequentially, any cell falling in quadrant one correspond to governments with lower overall freedoms. 
+> 
+>This is important to preserve for countries' worry generation -- a country will worry about having rigid, overbearing governments.  
 
-### `history_grammars.json`
+## `history_grammars.json`
+Holds grammars for explaining country relationships. Organized by relationship type.
 
-### `name.json`
+## `name.json`
+Holds syllables for name generation, organized by prefix, core (middle), and suffix.
 
-### `political_compass.json`
+## `political_compass.json`
+Defines the grid that will be used in conjunction with `government.json` to assign governments to countries. Rows and cols are [A-H] and [1-8], respectively. Each of these values should have a corresponding array in `government.json`.
 
-### `worry.json`
+## `worry.json`
+Holds grammars for outputting worry messages, organized by worry types.
