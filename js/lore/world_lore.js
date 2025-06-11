@@ -1,4 +1,8 @@
-// creates a new world and fills it with {num} countries
+/**
+ * Creates a new world, generates global stats, ranks resources, and populates with countries.
+ * @param {Object} loreData - Parsed JSON object containing world and country schemas.
+ * @param {number} num - Number of countries to generate within the world.
+ */
 async function generateWorld(loreData, num) {
     resetWorld();
 
@@ -10,8 +14,11 @@ async function generateWorld(loreData, num) {
     await genMultipleCountries(loreData, num);
 }
 
-// randomly ranks the values in the lore key json under country > resource
-//  from low to high value
+/**
+ * Randomly shuffles an array of resources to establish a global ranking (from low to high value).
+ * @param {string[]} arr - Array of resource names to shuffle.
+ * @returns {string[]} A new array with randomly ordered resource values.
+ */
 function randomlyRankResources(arr){
     let result = [...arr];
     for(let i = result.length - 1; i > 0; i--){
@@ -21,25 +28,28 @@ function randomlyRankResources(arr){
     return result;
 }
 
-// populate world history with grammar-generated facts
+/**
+ * Populates the world’s historical record with facts generated from country relationships.
+ * Includes ideological alignments and random resource-based alliances/enmities.
+ * @param {number} num - Number of countries (used to determine relationship scope).
+ */
 async function generateHistory(num) {
     // make relationships between countries
-    // TODO: implement smarter relationship generation (maybe based on governments/ideology)
     LORE_GLOBS.WORLD_STATS.history = [];
     for(let c in LORE_GLOBS.COUNTRY_STATS){
-        // if this country HAS a governmenet....
+        // if this country HAS a government....
         if(LORE_GLOBS.COUNTRY_STATS[c].government[0] !== "none"){
             await getIdeologicalRelationships(
                 LORE_GLOBS.COUNTRY_STATS[c]
             );
-            if(coinflip()){
+            if(coinflip()){ // random allies
                 await getRandomRelationships(
                     LORE_GLOBS.COUNTRY_STATS[c], 
                     myRandom(num),
                     "allies"
                 );
             }
-            if(coinflip()){
+            if(coinflip()){ // random enemies
                 await getRandomRelationships(
                     LORE_GLOBS.COUNTRY_STATS[c], 
                     myRandom(num),
@@ -50,7 +60,10 @@ async function generateHistory(num) {
     }
 }
 
-// set the two richest countries as world powers
+/**
+ * Identifies the two countries with the highest economy scores and designates them as world powers.
+ * @returns {Promise<string[]>} An array of two country names representing the strongest economies.
+ */
 async function establishWorldPowers(){
     let max1 = { name: null, val: -Infinity};
     let max2 = { name: null, val: -Infinity};

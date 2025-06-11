@@ -1,19 +1,31 @@
 // json_utils.js
 // Author(s): Raven Cruz
-// Last Updated: 6/1/2025
+// Last Updated: 6/11/2025
 // helper functions for handling json files
 
-// holds references to processes defined in json file(s)
+/**
+ * Map of choice gathering handlers referenced by JSON configuration files.
+ * Each process returns dynamically calculated choices.
+ * @type {Object<string, function>}
+ */
 const PROCESSES = {
     random_grid: (grid) => random_grid(grid)
 }
 
-// special choice pickers
+/**
+ * Map of special choice selection handlers for transforming data into 
+ * human-readable text.
+ * @type {Object<string, function>}
+ */
 const SPECIAL = {
     grid: (handling, data, choiceJSON) => cellToText(handling, data, choiceJSON)
 }
 
-// generic json getter
+/**
+ * Loads and parses a JSON file from the given path.
+ * @param {string} filePath - Full path to the JSON file.
+ * @returns {Promise<Object|null>} Parsed JSON object, or null if fetch fails.
+ */
 async function _loadJSON(filePath) {
     try {
         const response = await fetch(filePath);
@@ -28,7 +40,14 @@ async function _loadJSON(filePath) {
     }
 }
 
-// loads choices from specified json
+/**
+ * Gets an array of choice strings for a given category, using control logic from the lore JSON schema.
+ * May use attribute-based filters or dynamic processes.
+ * @param {Object} data - The full lore data object (usually a section like `loreData.country`).
+ * @param {string} cat - The category name to fetch choices from (e.g., "government", "currency").
+ * @param {Object} self - The current country object, used for attribute filtering if required.
+ * @returns {Promise<string[]>} Array of choices.
+ */
 async function getChoices(data, cat, self){
     let choices = [];
     if(data[cat].choice_control){
@@ -53,13 +72,23 @@ async function getChoices(data, cat, self){
     return choices;
 }
 
-// gets lore key json
+/**
+ * Fetches the top-level lore keys JSON (e.g., _loreKeys.json).
+ * @param {string} path - Directory path to fetch from.
+ * @returns {Promise<Object>} Parsed JSON object containing lore key schema.
+ */
 async function fetchLoreKeys(path) {
     const response = await fetch(`${path}/_loreKeys.json`);
 	const json = await response.json();
 	return json;
 }
 
+/**
+ * Retrieves valid category choices based on a control attribute from either world or self.
+ * @param {Object} controller - JSON control block with `location` and `attribute` fields.
+ * @param {Object} self - The current country object, if needed.
+ * @returns {Promise<string[]|undefined>} Array of attribute-based keys or undefined on error.
+ */
 async function getChoicesByAttribute(controller, self) {
     let loc;
     if(controller.location === "world"){ loc = LORE_GLOBS.WORLD_STATS; }
@@ -72,27 +101,42 @@ async function getChoicesByAttribute(controller, self) {
     return loc[`${controller.attribute}`]; 
 }
 
+/**
+ * Randomly selects a grid cell from a grid definition and returns its cell ID string (e.g., "C4").
+ * @param {Object} grid - A grid object with `row_vals` and `col_vals`.
+ * @returns {Promise<string[]>} Array with a single grid cell string.
+ */
 async function random_grid(grid) {
     // start by getting grid dims
     const w = grid.row_vals.length;
     const h = grid.col_vals.length;
 
     // choose a row val and a col val
-    const [row, col] = [
-        myRandom(w),
-        myRandom(h),
-    ]
+    const [row, col] = [ myRandom(w), myRandom(h) ]
 
     return [
         `${grid.row_vals[row]}${grid.col_vals[col]}`
     ]
 }
 
+/**
+ * Handles special transformation logic for a given choice control type (e.g., grid-to-text).
+ * @param {Object} handling - Original field definition including `choice_control`.
+ * @param {Object} data - Country or world object with actual values to transform.
+ * @returns {Promise<string[]>} Array with a single transformed string.
+ */
 async function specialHandler(handling, data){
     const choiceJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${handling.choice_control.json}.json`);
     return await SPECIAL[handling.choice_control.special](handling, data, choiceJSON);
 }
 
+/**
+ * Converts a political compass grid cell (e.g. "C4") into descriptive text using external JSON data.
+ * @param {Object} handling - The original field definition.
+ * @param {Object} data - The country or world object containing grid cell data.
+ * @param {Object} choiceJSON - Parsed JSON containing row and column descriptors.
+ * @returns {Promise<string[]>} Array with a single formatted text string (e.g., "Libertarian Rural").
+ */
 async function cellToText(handling, data, choiceJSON) {
     const cell = data[handling.choice_control.attribute][0];
     const x = cell[1];
@@ -111,8 +155,12 @@ async function cellToText(handling, data, choiceJSON) {
     return [text];
 }
 
-// find the distance between the topleftmost and bottomrightmost 
-//      cells in the grid defined in the given json
+/**
+ * Calculates the maximum possible distance between two points on a political grid.
+ * Based on the outermost row/column values.
+ * @param {string} json - Filename (no extension) of the grid definition JSON.
+ * @returns {Promise<number>} Maximum Euclidean distance in grid units.
+ */
 async function getMaxGridDistance(json) {
     const gridJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`);
     const grid = gridJSON.grid;
@@ -126,8 +174,12 @@ async function getMaxGridDistance(json) {
     return await getGridDistance(topLeft, bottomRight);
 }
 
-// convert political_compass cells to euclidian coordinates 
-//  and get the distance bewteen the cells
+/**
+ * Computes the Euclidean distance between two grid cells, using letter-number codes (e.g. "A1", "H6").
+ * @param {string} cell1 - First cell ID.
+ * @param {string} cell2 - Second cell ID.
+ * @returns {Promise<number>} Euclidean distance between the two points.
+ */
 async function getGridDistance(cell1, cell2) {
     const p1 = gridCellToCoords(cell1);
     const p2 = gridCellToCoords(cell2);
@@ -137,7 +189,11 @@ async function getGridDistance(cell1, cell2) {
     return dist;
 }
 
-// cell is cell in grid, form of '{ALPHA}{NUM}'
+/**
+ * Converts a grid cell (e.g., "D3") into {x, y} coordinates.
+ * @param {string} cell - Grid cell code, in the form of a single letter followed by a number.
+ * @returns {{x: number, y: number}} The (x, y) coordinate pair.
+ */
 function gridCellToCoords(cell){
     return {
         x: cell[0].toLowerCase().charCodeAt(0) - ('a'.charCodeAt(0) - 1),  // [A, H] --> [0, 8]

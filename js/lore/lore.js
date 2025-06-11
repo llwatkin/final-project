@@ -1,9 +1,14 @@
 // lore.js
 // Author(s): Raven Cruz
-// Last Updated: 6/1/2025
+// Last Updated: 6/11/2025
 // handler functions for generating world lore
 
-// randomly generates lore using json data
+/**
+ * Generates a structured lore object by sampling from JSON-defined categories.
+ * Each category can define a number of picks, modifiers, and special handlers.
+ * @param {Object} data - The parsed JSON object containing categories and choice metadata.
+ * @returns {Promise<Object>} A generated lore object with category keys and picked values as arrays.
+ */
 async function generateLore(data){
     const base = {};
 
@@ -63,6 +68,11 @@ async function generateLore(data){
     return base;
 }
 
+/**
+ * Generates a unique place name using prefix/core/suffix fragments defined in name.json.
+ * Ensures the generated name does not already exist in COUNTRY_STATS or WORLD_STATS.
+ * @returns {Promise<string[]>} A one-element array containing the generated name.
+ */
 async function generateName() {
     const nameJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/name.json`);
     let success = false;
@@ -85,7 +95,30 @@ async function generateName() {
     return [name];
 }
 
-// LEGACY/DEBUG
+/**
+ * Resets all world-level stats, including powers and shared lore state.
+ * Does not affect LORE_DATA.
+ */
+function resetWorld(){
+    //LORE_GLOBS.LORE_DATA = {}
+    LORE_GLOBS.WORLD_STATS = {}
+    LORE_GLOBS.COUNTRY_STATS = {}
+}
+
+/**
+ * Clears all entries in COUNTRY_STATS without affecting WORLD_STATS.
+ * Useful for refreshing country generation while preserving global context.
+ */
+function resetCountries(){
+    LORE_GLOBS.COUNTRY_STATS = {}
+}
+
+/**
+ * [LEGACY/DEBUG]
+ * Deletes the last `num` countries from GLOBAL.COUNTRY_STATS and cleans up any relationships.
+ * Primarily used for debugging or legacy trimming behavior.
+ * @param {number} num - Number of countries to remove from the end of the COUNTRY_STATS list.
+ */
 function trimCountries(num){
     // trim the last {num} keys
     const trimKeys = Object.keys(GLOBAL.COUNTRY_STATS).slice(-num);
@@ -104,14 +137,4 @@ function trimCountries(num){
 
         delete GLOBAL.COUNTRY_STATS[key];
     }
-}
-
-function resetWorld(){
-    //LORE_GLOBS.LORE_DATA = {}
-    LORE_GLOBS.WORLD_STATS = {}
-    LORE_GLOBS.COUNTRY_STATS = {}
-}
-
-function resetCountries(){
-    LORE_GLOBS.COUNTRY_STATS = {}
 }

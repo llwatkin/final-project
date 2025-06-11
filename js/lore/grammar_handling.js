@@ -1,7 +1,14 @@
-async function handleGrammar(fillers, n, json){
+/**
+ * Loads grammars from a JSON file and returns a filled-in string template based on the given grammar key.
+ * @param {Object} fillers - An object containing arrays of entities (e.g. {"A": [countryA], "B": [countryB]}).
+ * @param {string} key - The grammar key to select from the loaded grammar file.
+ * @param {string} json - The filename (without extension) of the grammar JSON file to load.
+ * @returns {Promise<string>} A single grammar string with all placeholders filled.
+ */
+async function handleGrammar(fillers, key, json){
     const grammar = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`);
     
-    const choices = grammar[n];
+    const choices = grammar[key];
     let randomIndex = myRandom(choices.length);
     let pick = choices[randomIndex]
 
@@ -9,7 +16,14 @@ async function handleGrammar(fillers, n, json){
 
 }
 
-// fills grammar slots with concrete values
+/**
+ * Fills placeholders in a grammar string template using the provided fillers.
+ * Grammar slots follow the format "$A.name", "$B.government", etc.
+ * Randomly selects a value from the appropriate filler field if the property is an array.
+ * @param {Object} fillers - Named entities to use as grammar replacements (e.g., {"A": [countryA], "B": [countryB]}).
+ * @param {string} template - The grammar string containing placeholders to be filled.
+ * @returns {Promise<string>} A fully-resolved string with all grammar slots replaced.
+ */
 async function fillGrammarTemplate(fillers, template){
     const slotPattern = /\$(\w.\w+)/;  // looks for words starting with $
 
@@ -19,9 +33,9 @@ async function fillGrammarTemplate(fillers, template){
         (match) => {
             // match should be in the format {country}.{parameter}, fillers should hold references to
             //      the countries being discussed here.
-            const fillerControl = match.split('.')[0].slice(1);     // remove $
-            const country = randomFromArray(fillers[fillerControl]);                 // A or B
-            const param = match.split('.')[1];                      // what country param?
+            const fillerControl = match.split('.')[0].slice(1);       // remove $
+            const country = randomFromArray(fillers[fillerControl]);  // A or B
+            const param = match.split('.')[1];                        // what country param?
             const property = country[param];
 
             const randomIndex = myRandom(property.length)

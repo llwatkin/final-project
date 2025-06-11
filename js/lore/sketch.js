@@ -1,6 +1,10 @@
 // ./js.lore.sketch.js
 // demo scene for lore generation 
 
+/**
+ * Handles updating the number of countries when the button is clicked.
+ * Adds or removes countries accordingly and re-renders the display.
+ */
 const updateNumCountriesButton = document.getElementById("num-countries-button");
 updateNumCountriesButton.addEventListener('click', async function() {
     const oldNum = LORE_GLOBS.NUM_COUNTRIES;
@@ -17,7 +21,11 @@ updateNumCountriesButton.addEventListener('click', async function() {
     }
 });
 
-// load new lore base
+/**
+ * Key event listener to trigger lore regeneration:
+ * - "r" resets country-level data and regenerates countries using a new seed.
+ * - "w" resets and regenerates the entire world including global stats.
+ */
 document.addEventListener('keydown', async (e) => {
 	if(e.key.toLowerCase() === "r"){
         SEED = random() * 1000;
@@ -36,11 +44,20 @@ document.addEventListener('keydown', async (e) => {
 	}
 });
 
+/**
+ * Initializes the sketch. Fetches lore key data and generates the world.
+ * This function is called at startup.
+ */
 async function setup() {
     LORE_GLOBS.LORE_DATA = await fetchLoreKeys(LORE_GLOBS.JSON_PATH);
     initWorldLore(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES)
 }
 
+/**
+ * Initializes full world generation including global stats and countries.
+ * @param {Object} loreData - The parsed lore schema.
+ * @param {number} num - Number of countries to generate.
+ */
 async function initWorldLore(loreData, num){
     await generateWorld(loreData, num);
 
@@ -48,11 +65,17 @@ async function initWorldLore(loreData, num){
     printCountries();
 }
 
+/**
+ * Clears and renders the current global stats to the DOM.
+ */
 function printWorld(){
     document.getElementById(`world-stats`).innerHTML = "";
     printLore(LORE_GLOBS.WORLD_STATS, "world");
 }
 
+/**
+ * Clears and renders all current countries to the DOM.
+ */
 function printCountries(){
     document.getElementById(`country-stats`).innerHTML = "";
     for(let country in LORE_GLOBS.COUNTRY_STATS){
@@ -60,6 +83,11 @@ function printCountries(){
     }
 }
 
+/**
+ * Renders a single set of stats (world or country) to the appropriate DOM container.
+ * @param {Object} base - The object of stats to print.
+ * @param {string} level - Either "world" or "country" (used for ID and labeling).
+ */
 function printLore(base, level){
     let printTo = document.getElementById(`${level.toLowerCase()}-stats`);
     let printOut = `<h3>${level.toUpperCase()} STATS</h3>`;
