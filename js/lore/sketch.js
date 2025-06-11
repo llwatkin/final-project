@@ -31,7 +31,7 @@ document.addEventListener('keydown', async (e) => {
     }
     if(e.key.toLowerCase() === "w"){
         SEED = random() * 1000;
-        initWorldLore(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
+        await initWorldLore(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
         printWorld();
 	}
 });

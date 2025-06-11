@@ -11,7 +11,7 @@ async function genMultipleCountries(loreData, num, from = 0) {
 
     await generateHistory(num);
     LORE_GLOBS.WORLD_STATS.world_powers = await establishWorldPowers();
-    await getWorryKeys(num);
+    await getWorries(num);
     // DEBUG: console.log(countriestats)
 }
 
@@ -98,26 +98,44 @@ async function addRelationship(A, B, type){
     A.enemies.add(B.ID);    // add A to B enemies
     B.enemies.add(A.ID)     // add B to A enemies 
     
-    const newHist = await handleGrammar({"A": A, "B": B}, type, LORE_GLOBS.HISTORY_GRAMS);
+    const newHist = await handleGrammar({"A": [A], "B": [B]}, type, LORE_GLOBS.HISTORY_GRAMS);
     LORE_GLOBS.WORLD_STATS.history.push(newHist);
 }
 
 // give each country a set of worries
-async function getWorryKeys() {
+async function getWorries() {
     for(let c in LORE_GLOBS.COUNTRY_STATS){
         const country = LORE_GLOBS.COUNTRY_STATS[c];
         // does country have enemies?
         if(country.enemies.size > 0){
-           if(hasPower(country.enemies) === true){
-                country.worries.push("powerful_enemies");
-           } else {
-               country.worries.push("enemies");
-           }
+            const powerfulEnemies = hasPower(country.enemies);
+            if(powerfulEnemies.length > 0){
+                console.log(powerfulEnemies)
+                country.worries.push(
+                    new Worry(
+                        "powerful_enemies", 
+                        {"A": [country], "B": powerfulEnemies}
+                    )
+                );
+            } else {
+                const enemyObjs = country.enemies.forEach(id => getCountryByID(id)); 
+                country.worries.push(
+                    new Worry(
+                        "powerful_enemies", 
+                        {"A": [country], "B": enemyObjs}
+                    )
+                );
+            }
         }
 
         // does country have allies?
         if(country.allies.size === 0){
-           country.worries.push("no_allies");
+           country.worries.push(
+                new Worry(
+                    "no_allies", 
+                    {"A": [country]}
+                )
+           );
         }
 
         // what is country's economy strength?
@@ -128,33 +146,52 @@ async function getWorryKeys() {
 
         let baselineEcon = powerfulCountries[1].economy_strength[0]; // strength of second larges econ
         if(country.economy_strength[0] < baselineEcon*0.75){
-            country.worries.push("weak_economy");
+            country.worries.push(
+                new Worry(
+                    "weak_economy",
+                    {"A": [country]}
+                )
+            );
         }
 
         // war risk?
         if(powerfulCountries[0].enemies.has(powerfulCountries[1].ID)){
-            country.worries.push("war");
+            country.worries.push(
+                new Worry(
+                    "war",
+                    {"A": [powerfulCountries[0]], "B": [powerfulCountries[1]]}
+                )
+            );
         }
 
         // TODO: low-autonomy governments (autocratic, fascist, etc) should be reflected here
 
         // TEMP DEBUG TEST
-        if(country.worries.length > 0){
-            console.log(country.worries[0],await handleGrammar({"A": country}, country.worries[0], "worry"));
-        }
+        let testMessage = await getWorryMessage(country);
+        console.log(testMessage)
     }
+}
+
+async function getWorryMessage(country){
+    const worry = randomFromArray(country.worries)
+    console.log(worry.ID)
+    const msg = await handleGrammar(worry.fillers, worry.ID, "worry");
+    return msg;
 }
 
 // returns whether any of the IDs listed in arr are included in world_powers
 function hasPower(arr){
+    const powf = [];
     let powerfulCountries = [
         LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[0]].ID,
         LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[1]].ID
     ]
     for(let id of arr){
-        if(powerfulCountries.includes(id)){ return true; }
+        if(powerfulCountries.includes(id)){ 
+            powf.push(getCountryByID(id)); 
+        }
     }
-    return false;
+    return powf;
 }
 
 function getCountryByID(id){

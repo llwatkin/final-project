@@ -20,7 +20,7 @@ function fillGrammarTemplate(fillers, template){
             // match should be in the format {country}.{parameter}, fillers should hold references to
             //      the countries being discussed here.
             const fillerControl = match.split('.')[0].slice(1);     // remove $
-            const country = fillers[fillerControl];                 // A or B
+            const country = randomFromArray(fillers[fillerControl]);                 // A or B
             const param = match.split('.')[1];                      // what country param?
             const property = country[param];
 

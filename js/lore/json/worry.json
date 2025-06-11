@@ -1,17 +1,37 @@
 {
     "powerful_enemies": [
-        "powerful_enemies"
+        "$B.name, one of the most powerful countries on the planet, has $A.name in its crosshairs...",
+        "$A.name has caught the attention of $B.name, a global superpower with a long memory.",
+        "Whispers in the halls of $B.name speak of plans against $A.name...",
+        "$A.name may not survive the fury of $B.name, whose strength is feared worldwide.",
+        "$B.name views $A.name as a threat and intends to crush it."
     ],
     "enemies": [
-        "enemies"
+        "Relations have dissolved between $A.name and $B.name!",
+        "$A.name and $B.name are no longer on speaking terms.",
+        "Tensions have boiled over: $A.name and $B.name are now officially enemies.",
+        "$A.name has denounced $B.name over a series of escalating incidents.",
+        "$B.name has severed all diplomatic ties with $A.name."
     ],
     "no_allies": [
-        "no_allies"
+        "It's $A.name, alone against the world...",
+        "$A.name stands isolated, with no friends to call upon.",
+        "No one is willing to support $A.name. It is surrounded and alone.",
+        "$A.name faces growing threats, but has no allies to speak of.",
+        "With every bridge burned, $A.name now walks its path alone."
     ],
     "weak_economy": [
-        "weak_economy"
+        "$A.name's economy is floundering.",
+        "Markets in $A.name have collapsed under pressure.",
+        "$A.name faces rising inflation and shrinking output.",
+        "Economic woes deepen in $A.name as industries falter.",
+        "$A.name struggles to stabilize its failing economy."
     ],
     "war": [
-        "war"
+        "War might break out between $A.name and $B.name any day, now...",
+        "$A.name is preparing for long-range strikes in anticipation of hostilities with $B.name.",
+        "Diplomats scramble as $A.name and $B.name inch toward open war.",
+        "$B.name accuses $A.name of provocation. Conflict seems inevitable.",
+        "A declaration of war from $A.name against $B.name may be imminent."
     ]
 }
