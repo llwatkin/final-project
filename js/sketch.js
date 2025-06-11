@@ -1,6 +1,6 @@
 // sketch.js
 // Author(s): Lyle Watkins, Raven Cruz
-// Last Updated: 6/1/2025
+// Last Updated: 6/11/2025
 
 let canvasContainer;
 let seedDisplay;
@@ -52,10 +52,9 @@ async function setup() {
     generate();
 
     testPeople = new PeopleManager()
-    await initLore();
 }
 
-function generate() {
+async function generate() {
     // Update seed and display
     let seed = seedInput.value;
     noiseSeed(seed);
@@ -64,8 +63,10 @@ function generate() {
     SEED = seed;    // set global
 
     // Create new planet
-    if (planet) planet.clearTerrain();
+    if (planet) planet.terrain.clearTerrain();
     planet = new Planet();
+
+    await initLore();
 }
 
 function draw() {

@@ -105,3 +105,13 @@ function trimCountries(num){
         delete GLOBAL.COUNTRY_STATS[key];
     }
 }
+
+function resetWorld(){
+    //LORE_GLOBS.LORE_DATA = {}
+    LORE_GLOBS.WORLD_STATS = {}
+    LORE_GLOBS.COUNTRY_STATS = {}
+}
+
+function resetCountries(){
+    LORE_GLOBS.COUNTRY_STATS = {}
+}

@@ -19,9 +19,9 @@ updateNumCountriesButton.addEventListener('click', async function() {
 
 // load new lore base
 document.addEventListener('keydown', async (e) => {
-    /*
-    TODO: FIX
 	if(e.key.toLowerCase() === "r"){
+        SEED = random() * 1000;
+        resetCountries();
         await genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
         document.getElementById(`country-stats`).innerHTML = "";
@@ -30,18 +30,18 @@ document.addEventListener('keydown', async (e) => {
         printCountries();
     }
     if(e.key.toLowerCase() === "w"){
-        init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
+        SEED = random() * 1000;
+        initWorldLore(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
         printWorld();
 	}
-        */
 });
 
 async function setup() {
     LORE_GLOBS.LORE_DATA = await fetchLoreKeys(LORE_GLOBS.JSON_PATH);
-    init(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES)
+    initWorldLore(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES)
 }
 
-async function init(loreData, num){
+async function initWorldLore(loreData, num){
     await generateWorld(loreData, num);
 
     printWorld();
@@ -75,22 +75,5 @@ function printLore(base, level){
         printOut += `<p><b>${b}</b>: ${b_items}`;
     }
     //printOut += `<p><b>${pillar.substring(2)}</b>: ${dat[pillar][randomIndex]}</p>`
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
     printTo.innerHTML += printOut;
 }

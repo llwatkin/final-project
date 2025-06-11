@@ -1,5 +1,7 @@
 // creates a new world and fills it with {num} countries
 async function generateWorld(loreData, num) {
+    resetWorld();
+
     LORE_GLOBS.WORLD_STATS = await generateLore(loreData.world);
     LORE_GLOBS.WORLD_STATS.name = await generateName();
 
