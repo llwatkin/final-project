@@ -1,17 +1,30 @@
 {
     "resource_enemies_origin": [
-        "$A.name became enemies with $B.name when $B.name invaded $A.name for $A.resource"
+        "$A.name became enemies with $B.name when $B.name invaded $A.name for $A.resource.",
+        "Tensions exploded after $B.name seized $A.resource from $A.name by force.",
+        "$A.name never forgave $B.name for taking its precious $A.resource.",
+        "The conflict began when $B.name attempted to control $A.name's supply of $A.resource.",
+        "$B.name's incursion into $A.name for $A.resource sparked an enduring enmity."
     ],
     "resource_allies_origin": [
-        "$A.name allied with $B.name when $B.name agreed to give $A.name $B.resource"
+        "$A.name allied with $B.name when $B.name agreed to give $A.name $B.resource.",
+        "$B.name earned $A.name's trust by providing access to valuable $B.resource.",
+        "Trade in $B.resource brought $A.name and $B.name into an unlikely alliance.",
+        "$A.name and $B.name formed a partnership over a shared interest in $B.resource.",
+        "Diplomatic ties between $A.name and $B.name began with a deal over $B.resource."
     ],
     "ideology_enemies_origin": [
-        "$A.name declared $B.name an enemy when $B.name adopted $B.government",
-        "$B.name declared $A.name an enemy when $A.name rejected $B.government"
+        "$A.name declared $B.name an enemy when $B.name adopted $B.government.",
+        "$B.name declared $A.name an enemy when $A.name rejected $B.government.",
+        "The rise of $B.government in $B.name clashed with $A.name's values, igniting hostilities.",
+        "$A.name could not tolerate the spread of $B.government, marking $B.name as a threat.",
+        "$B.name's shift toward $B.government was seen by $A.name as a dangerous provocation."
     ],
     "ideology_allies_origin": [
-        "$A.name and $B.name became allies when $B.name adopted $B.government",
-        "$B.name allied with $A.name when $B.name adopted $B.government"
+        "$A.name and $B.name became allies when $B.name adopted $B.government.",
+        "$B.name allied with $A.name when $B.name adopted $B.government.",
+        "$A.name welcomed $B.name as a partner after its transition to $B.government.",
+        "$B.name's adoption of $B.government aligned it ideologically with $A.name, cementing an alliance.",
+        "$A.name and $B.name bonded over shared values after the rise of $B.government in $B.name."
     ]
 }
-

@@ -110,7 +110,6 @@ async function getWorries() {
         if(country.enemies.size > 0){
             const powerfulEnemies = hasPower(country.enemies);
             if(powerfulEnemies.length > 0){
-                console.log(powerfulEnemies)
                 country.worries.push(
                     new Worry(
                         "powerful_enemies", 
@@ -167,14 +166,16 @@ async function getWorries() {
         // TODO: low-autonomy governments (autocratic, fascist, etc) should be reflected here
 
         // TEMP DEBUG TEST
-        let testMessage = await getWorryMessage(country);
-        console.log(testMessage)
+        console.log(country.name);
+        for(let worry of country.worries){
+            let testMessage = await getWorryMessage(country, worry);
+            console.log(testMessage);
+        }
     }
 }
 
-async function getWorryMessage(country){
-    const worry = randomFromArray(country.worries)
-    console.log(worry.ID)
+async function getWorryMessage(country, worry){
+    if(!worry){ worry = randomFromArray(country.worries); }
     const msg = await handleGrammar(worry.fillers, worry.ID, "worry");
     return msg;
 }
