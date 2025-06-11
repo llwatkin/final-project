@@ -1,7 +1,11 @@
 // deterministic random handling
-function myRandom(max, min = 0){
+function deterministicRandom(){
     randomSeed(SEED);
-    //let r = Math.floor(Math.random() * max);
+    // TODO
+}
+
+// pseudo random
+function myRandom(max, min = 0){
     const r = Math.floor(random() * (max - min)) + min;
     return r;
 }
