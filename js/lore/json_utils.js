@@ -79,8 +79,8 @@ async function random_grid(grid) {
 
     // choose a row val and a col val
     const [row, col] = [
-        Math.floor(Math.random() * w),
-        Math.floor(Math.random() * h),
+        myRandom(w),
+        myRandom(h),
     ]
 
     return [
@@ -101,8 +101,8 @@ async function cellToText(handling, data, choiceJSON) {
     const rowChoices = choiceJSON.rows[x];
     const colChoices = choiceJSON.cols[y];
 
-    const row = rowChoices[Math.floor(Math.random() * rowChoices.length)];
-    const col = colChoices[Math.floor(Math.random() * colChoices.length)];
+    const row = rowChoices[myRandom(rowChoices.length)];
+    const col = colChoices[myRandom(colChoices.length)];
 
     return [`${col} ${row}`];
 }

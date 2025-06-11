@@ -12,7 +12,7 @@ async function generateWorld(loreData, num) {
 function randomlyRankResources(arr){
     let result = [...arr];
     for(let i = result.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i+1));
+        const j = myRandom(i+1);
         [result[i], result[j]] = [result[j], result[i]];
     }
     return result;
@@ -27,20 +27,19 @@ async function generateHistory(num) {
         // if this country HAS a governmenet....
         if(LORE_GLOBS.COUNTRY_STATS[c].government[0] !== "none"){
             await getIdeologicalRelationships(
-                LORE_GLOBS.COUNTRY_STATS[c], 
-                Math.floor(Math.random() * num)
+                LORE_GLOBS.COUNTRY_STATS[c]
             );
-            if(LORE_GLOBS.COUNTRY_STATS[c].allies.size === 0){
+            if(coinflip()){
                 await getRandomRelationships(
                     LORE_GLOBS.COUNTRY_STATS[c], 
-                    Math.floor(Math.random() * num),
+                    myRandom(num),
                     "allies"
                 );
             }
-            if(LORE_GLOBS.COUNTRY_STATS[c].enemies.size === 0){
+            if(coinflip()){
                 await getRandomRelationships(
                     LORE_GLOBS.COUNTRY_STATS[c], 
-                    Math.floor(Math.random() * num),
+                    myRandom(num),
                     "enemies"
                 );
             }

@@ -10,7 +10,7 @@ async function generateLore(data){
     for(let cat in data){
         const maxPicks = data[cat].maxPicks;
         const minPicks = (data[cat].minPicks) ? data[cat].minPicks : 0;
-        const numPicks = Math.ceil(Math.random() * (maxPicks - minPicks)) + minPicks;
+        const numPicks = myRandom(maxPicks, minPicks) + 1;
 
         // create a new set to hold data for this cat(egory)
         base[cat] = new Set();
@@ -39,14 +39,14 @@ async function generateLore(data){
                 if(data[cat].length < numPicks){ numPicks = choices.length; }
 
                 // pick randomly from choices
-                const randomIndex = Math.floor(Math.random() * (choices.length));
+                const randomIndex = myRandom(choices.length);
                 let pick = choices[randomIndex];
 
                 // add a prefix word (modifier) when possible/necessary
                 if(pick && pick !== "none" && data[cat].modifiers){
                     let mods = data[cat].modifiers.values;
 
-                    const randomIndex = Math.floor(Math.random() * (mods.length));
+                    const randomIndex = myRandom(mods.length);
                     const modifier = mods[randomIndex];
 
                     if(modifier.length > 0){ pick = modifier + " " + pick; }

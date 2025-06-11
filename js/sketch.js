@@ -42,6 +42,8 @@ async function setup() {
     seedDisplay.textContent = "Seed: " + str(seed);
     seedInput.value = seed;
 
+    SEED = seed;    // set global
+
     frameRate(60);
     angleMode(DEGREES);
     //debugMode();
@@ -58,6 +60,8 @@ function generate() {
     let seed = seedInput.value;
     noiseSeed(seed);
     seedDisplay.textContent = "Seed: " + str(seed);
+
+    SEED = seed;    // set global
 
     // Create new planet
     if (planet) planet.clearTerrain();

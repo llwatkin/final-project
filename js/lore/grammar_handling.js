@@ -2,7 +2,7 @@ async function handleGrammar(fillers, n, json){
     const grammar = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`);
     
     const choices = grammar[n];
-    let randomIndex = Math.floor(Math.random() * choices.length);
+    let randomIndex = myRandom(choices.length);
     let pick = choices[randomIndex]
 
     return fillGrammarTemplate(fillers, pick);
@@ -24,7 +24,7 @@ function fillGrammarTemplate(fillers, template){
             const param = match.split('.')[1];                      // what country param?
             const property = country[param];
 
-            const randomIndex = Math.floor(Math.random() * property.length)
+            const randomIndex = myRandom(property.length)
             const pick = property[randomIndex];
             return pick
 

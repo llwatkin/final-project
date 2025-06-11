@@ -44,3 +44,5 @@ const CITY_CUBE_SIZE = 5;
 const MAX_CITY_STACKS = 3;
 
 const PEOPLE_SPEED = 0.005;
+
+let SEED = -1;

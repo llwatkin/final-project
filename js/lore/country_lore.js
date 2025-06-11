@@ -37,7 +37,7 @@ async function generateName() {
     while(!success){
         for(let f in nameJSON){
             let fixArr = nameJSON[f]
-            let r = Math.floor(Math.random() * fixArr.length)
+            let r = myRandom(fixArr.length)
             name += fixArr[r];
         }
 
@@ -67,7 +67,7 @@ async function getRandomRelationships(self, num, relationship) {
 
     // array of all countries
     const  cKeys = Object.keys(LORE_GLOBS.COUNTRY_STATS);
-    let randomIndex = Math.floor(Math.random() * cKeys.length);
+    let randomIndex = myRandom(cKeys.length);
 
     for(let i = 0; i < num; i++){
         // pick a random country
@@ -81,7 +81,7 @@ async function getRandomRelationships(self, num, relationship) {
         }   
 
         // update random index for next choice
-        randomIndex = Math.floor(Math.random() * cKeys.length);
+        randomIndex = myRandom(cKeys.length);
     }
 }
 
