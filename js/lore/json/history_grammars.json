@@ -1,10 +1,17 @@
 {
-    "enemy_origin": [
-        "$A.name became enemies with $B.name when $B.name invaded $A.name for $A.resource",
-        "$A.name became enemies with $B.name when $B.name adopted $A.government"
+    "resource_enemies_origin": [
+        "$A.name became enemies with $B.name when $B.name invaded $A.name for $A.resource"
     ],
-    "ally_origin": [
-        "$A.name allied with $B.name when $B.name agreed to give $A.name $B.resource",
-        "$A.name allied with $B.name when $B.name adopted $A.government"
+    "resource_allies_origin": [
+        "$A.name allied with $B.name when $B.name agreed to give $A.name $B.resource"
+    ],
+    "ideology_enemies_origin": [
+        "$A.name declared $B.name an enemy when $B.name adopted $B.government",
+        "$B.name declared $A.name an enemy when $A.name rejected $B.government"
+    ],
+    "ideology_allies_origin": [
+        "$A.name and $B.name became allies when $B.name adopted $B.government",
+        "$B.name allied with $A.name when $B.name adopted $B.government"
     ]
 }
+

@@ -40,28 +40,24 @@ function getEconomyStrength(resources){
     return [result];
 }
 
-// creates up to {num} allyships between {self} country and randomly selected others
-async function getRandomAllies(self, num){
-    const allies = self.allies;
+// creates resource relationships between self and {num} countries
+async function getRandomRelationships(self, num, relationship) {
+    // opposite relationship
+    const oppRelationship = (relationship === "allies") ? "enemies" : "allies";
+
     // array of all countries
     const  cKeys = Object.keys(LORE_GLOBS.COUNTRY_STATS);
     let randomIndex = Math.floor(Math.random() * cKeys.length);
 
     for(let i = 0; i < num; i++){
         // pick a random country
-        let potentialAlly = LORE_GLOBS.COUNTRY_STATS[cKeys[randomIndex]]; 
-        if( potentialAlly.ID !== self.ID &&             // ally is not self
-            potentialAlly.government[0] !== "none" &&   // ally has a governemnt
-            !self.enemies.has(potentialAlly.ID) &&      // ally is not an enemy of self
-            !potentialAlly.enemies.has(self.ID)         // self is not an ally of enemy
+        let country = LORE_GLOBS.COUNTRY_STATS[cKeys[randomIndex]]; 
+        if( country.ID !== self.ID &&               // country is not self
+            country.government[0] !== "none" &&     // country has a governemnt
+            !country[relationship].has(self.ID) &&  // country and self are not already in relationship
+            !country[oppRelationship].has(self.ID)  // country and self are not already in opposite relationship
         ){
-            // add as self's ally
-            allies.add(potentialAlly.ID);
-            // add self to ally's allies 
-            potentialAlly.allies.add(self.ID)    
-            
-            // add allyship origin to history
-            await explainRelationship(potentialAlly, self, "ally_origin");
+            await addRelationship(country, self, `resource_${relationship}_origin`);
         }   
 
         // update random index for next choice
@@ -69,32 +65,40 @@ async function getRandomAllies(self, num){
     }
 }
 
-// creates up to {num} enemyships between {self} country and randomly selected others
-async function getRandomEnemies(self, num){
-    const enemies = self.enemies;
-    // array of all countries
-    const  cKeys = Object.keys(LORE_GLOBS.COUNTRY_STATS); 
-    let randomIndex = Math.floor(Math.random() * cKeys.length);
+async function getIdeologicalRelationships(self){
+    const maxDist = await getMaxGridDistance("political_compass");
 
-    for(let i = 0; i < num; i++){
-        // pick a random country
-        let potentialEnemy = LORE_GLOBS.COUNTRY_STATS[cKeys[randomIndex]]; 
-        if( potentialEnemy.ID !== self.ID &&            // enemy is not self
-            potentialEnemy.government[0] !== "none" &&  // enemy has a governemtn
-            !self.allies.has(potentialEnemy.ID) &&      // enemy is not an ally of self
-            !potentialEnemy.allies.has(self.ID)         // self is not and ally of enemy
-        ){
-            // add as self's enemy
-            enemies.add(potentialEnemy.ID);
-            // add self to enemy's enemies 
-            potentialEnemy.enemies.add(self.ID)  
-            
-            await explainRelationship(potentialEnemy, self, "enemy_origin");
-        }   
+    for(let c in LORE_GLOBS.COUNTRY_STATS){
+        const country = LORE_GLOBS.COUNTRY_STATS[c];
+        if( country.ID === self.ID ||               // country is self
+            country.government[0] === "none" ||     // country has no gov
+            self.allies.has(country.ID) ||          // country is already an ally to self
+            self.enemies.has(country.ID) ||         // country is already an enemy to self
+            country.allies.has(self.ID) ||          // self is already an ally to country
+            country.enemies.has(self.ID)            // self is already an enemy to country
+        ) { continue; }                             // ...then move on to next country
 
-        // update random index for next choice
-        randomIndex = Math.floor(Math.random() * cKeys.length);
+        // how different is self and country politically?
+        let dist = await getGridDistance(
+            self.political_compass[0], 
+            country.political_compass[0]
+        );
+
+        if(dist > maxDist/2){
+            // if distance is more than half of maxDist, then self and country are enemies
+            await addRelationship(self, country, "ideology_enemies_origin");
+        } else if(dist < maxDist/4){
+            // if distance is less than a quarter of maxDist, then self and country are allies
+            await addRelationship(self, country, "ideology_allies_origin");
+        }
     }
+}
+
+async function addRelationship(A, B, type){
+    A.enemies.add(B.ID);    // add A to B enemies
+    B.enemies.add(A.ID)     // add B to A enemies 
+    
+    await explainRelationship(A, B, type);
 }
 
 // give each country a set of worries

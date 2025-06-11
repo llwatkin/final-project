@@ -83,8 +83,6 @@ async function random_grid(grid) {
         Math.floor(Math.random() * h),
     ]
 
-    console.log("RANDO GRID", grid.row_vals[row], grid.col_vals[col]);
-
     return [
         `${grid.row_vals[row]}${grid.col_vals[col]}`
     ]
@@ -96,8 +94,6 @@ async function specialHandler(handling, data){
 }
 
 async function cellToText(handling, data, choiceJSON) {
-    console.log(handling, data, choiceJSON);
-
     const cell = data[handling.choice_control.attribute][0];
     const x = cell[1];
     const y = cell[0];
@@ -109,4 +105,36 @@ async function cellToText(handling, data, choiceJSON) {
     const col = colChoices[Math.floor(Math.random() * colChoices.length)];
 
     return [`${col} ${row}`];
+}
+
+// find the distance between the topleftmost and bottomrightmost 
+//      cells in the grid defined in the given json
+async function getMaxGridDistance(json) {
+    const gridJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`);
+    const grid = gridJSON.grid;
+
+    const maxRow = grid.row_vals.length - 1;
+    const maxCol = grid.col_vals.length - 1;
+
+    const topLeft = `${grid.row_vals[0]}${grid.col_vals[0]}`;
+    const bottomRight = `${grid.row_vals[maxRow]}${grid.col_vals[maxCol]}`;
+
+    return await getGridDistance(topLeft, bottomRight);
+}
+
+// convert political_compass cells to euclidian coordinates 
+//  and get the distance bewteen the cells
+async function getGridDistance(cell1, cell2) {
+    const p1 = {
+        x: cell1[0].toLowerCase().charCodeAt(0) - ('a'.charCodeAt(0) - 1),  // [A, H] --> [0, 8]
+        y: parseInt(cell1[1])              
+    }
+    const p2 = {
+        x: cell2[0].toLowerCase().charCodeAt(0) - ('a'.charCodeAt(0) - 1),  // [A, H] --> [0, 8]
+        y: parseInt(cell2[1])
+    }
+
+    const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+
+    return dist;
 }

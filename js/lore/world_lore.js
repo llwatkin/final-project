@@ -26,16 +26,22 @@ async function generateHistory(num) {
     for(let c in LORE_GLOBS.COUNTRY_STATS){
         // if this country HAS a governmenet....
         if(LORE_GLOBS.COUNTRY_STATS[c].government[0] !== "none"){
+            await getIdeologicalRelationships(
+                LORE_GLOBS.COUNTRY_STATS[c], 
+                Math.floor(Math.random() * num)
+            );
             if(LORE_GLOBS.COUNTRY_STATS[c].allies.size === 0){
-                await getRandomAllies(
+                await getRandomRelationships(
                     LORE_GLOBS.COUNTRY_STATS[c], 
-                    Math.floor(Math.random() * num)
+                    Math.floor(Math.random() * num),
+                    "allies"
                 );
             }
             if(LORE_GLOBS.COUNTRY_STATS[c].enemies.size === 0){
-                await getRandomEnemies(
+                await getRandomRelationships(
                     LORE_GLOBS.COUNTRY_STATS[c], 
-                    Math.floor(Math.random() * num)
+                    Math.floor(Math.random() * num),
+                    "enemies"
                 );
             }
         }
