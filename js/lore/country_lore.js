@@ -1,21 +1,33 @@
 
-// makes lore for {num} countries
+/**
+ * Generates lore for multiple countries, including any stats defined in loreData, 
+ * thier history, and global relationships.
+ * @param {Object} loreData - The base lore schema to use for generation.
+ * @param {number|string} num - Total number of countries to generate.
+ * @param {number|string} [from=0] - Index to start generation from.
+ */
 async function genMultipleCountries(loreData, num, from = 0) {
     num = parseInt(num);
     from = parseInt(from);
 
+    // generate countries
     for(let i = from; i < num; i++){
         let newCountry = await generateCountry(loreData, i);
         LORE_GLOBS.COUNTRY_STATS[newCountry.name] = newCountry;
     }
 
-    await generateHistory(num);
-    LORE_GLOBS.WORLD_STATS.world_powers = await establishWorldPowers();
-    await getWorries(num);
-    // DEBUG: console.log(countriestats)
+    // after all countries have been generated...
+    await generateHistory(num);     // establish international relationships
+    LORE_GLOBS.WORLD_STATS.world_powers = await establishWorldPowers(); // assign world powers
+    await getWorries(num);          // add worry objects to every country
 }
 
-// creates one country 
+/**
+ * Generates a single country's lore data, including name, ID, economy strength, and empty relationship sets.
+ * @param {Object} loreData - The full lore schema.
+ * @param {number} i - The index used to assign this country's ID.
+ * @returns {Promise<Object>} A newly generated country object.
+ */
 async function generateCountry(loreData, i){
     let country = await generateLore(loreData.country);
     country.name = await generateName();  // TODO: better country names
@@ -29,18 +41,31 @@ async function generateCountry(loreData, i){
     return country;
 }
 
-// determines a country's economy strength by tallying the values of their resources
+/**
+ * Calculates a numeric economy strength score for a country based on its resources.
+ * @param {string[]} resources - An array of resource names.
+ * @returns {number[]} A one-element array containing the total strength score.
+ */
 function getEconomyStrength(resources){
     const ranking = LORE_GLOBS.WORLD_STATS.resource_ranking;
     let result = 0;
+
+    // tally resource values (defined by ranking order)
     for(let resource of resources){
         let val = ranking.indexOf(resource) + 1;
         if(val > 0) result += val;
     }
+
     return [result];
 }
 
-// creates resource relationships between self and {num} countries
+/**
+ * Randomly assigns resource-based allies or enemies to the given country.
+ * Will not duplicate or contradict existing relationships.
+ * @param {Object} self - The country being assigned relationships.
+ * @param {number} num - Number of relationships to generate.
+ * @param {string} relationship - Either "allies" or "enemies".
+ */
 async function getRandomRelationships(self, num, relationship) {
     // opposite relationship
     const oppRelationship = (relationship === "allies") ? "enemies" : "allies";
@@ -57,7 +82,7 @@ async function getRandomRelationships(self, num, relationship) {
             !country[relationship].has(self.ID) &&  // country and self are not already in relationship
             !country[oppRelationship].has(self.ID)  // country and self are not already in opposite relationship
         ){
-            await addRelationship(country, self, `resource_${relationship}_origin`);
+            await addRelationship(country, self, `${relationship}`, `resource_${relationship}_origin`);
         }   
 
         // update random index for next choice
@@ -65,6 +90,11 @@ async function getRandomRelationships(self, num, relationship) {
     }
 }
 
+/**
+ * Evaluates ideological similarity between countries to form alliances or rivalries.
+ * Uses distance on a political compass grid to determine alignment.
+ * @param {Object} self - The country undergoing evaluation.
+ */
 async function getIdeologicalRelationships(self){
     const maxDist = await getMaxGridDistance("political_compass");
 
@@ -86,23 +116,33 @@ async function getIdeologicalRelationships(self){
 
         if(dist > maxDist/2){
             // if distance is more than half of maxDist, then self and country are enemies
-            await addRelationship(self, country, "ideology_enemies_origin");
+            await addRelationship(self, country, "enemies", "ideology_enemies_origin");
         } else if(dist < maxDist/4){
             // if distance is less than a quarter of maxDist, then self and country are allies
-            await addRelationship(self, country, "ideology_allies_origin");
+            await addRelationship(self, country, "allies", "ideology_allies_origin");
         }
     }
 }
 
-async function addRelationship(A, B, type){
-    A.enemies.add(B.ID);    // add A to B enemies
-    B.enemies.add(A.ID)     // add B to A enemies 
+/**
+ * Creates a bilateral relationship and logs a corresponding grammar-based history entry.
+ * @param {Object} A - First country (initiator).
+ * @param {Object} B - Second country (target).
+ * @param {string} rel - Type of relationship.
+ * @param {string} type - Type of history grammar template to apply.
+ */
+async function addRelationship(A, B, rel, type){
+    A[rel].add(B.ID);    // add A to B rel (enemies/allies)
+    B[rel].add(A.ID)     // add B to A rel (enemies/allies)
     
+    // generate a new history message and add it to world stats
     const newHist = await handleGrammar({"A": [A], "B": [B]}, type, LORE_GLOBS.HISTORY_GRAMS);
     LORE_GLOBS.WORLD_STATS.history.push(newHist);
 }
 
-// give each country a set of worries
+/**
+ * Populates each country's `worries` list based on its political, military, and economic status.
+ */
 async function getWorries() {
     for(let c in LORE_GLOBS.COUNTRY_STATS){
         const country = LORE_GLOBS.COUNTRY_STATS[c];
@@ -120,7 +160,7 @@ async function getWorries() {
                 const enemyObjs = country.enemies.forEach(id => getCountryByID(id)); 
                 country.worries.push(
                     new Worry(
-                        "powerful_enemies", 
+                        "enemies", 
                         {"A": [country], "B": enemyObjs}
                     )
                 );
@@ -137,12 +177,12 @@ async function getWorries() {
            );
         }
 
-        // what is country's economy strength?
         let powerfulCountries = [
             LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[0]],
             LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[1]]
         ]
 
+        // what is country's economy strength?
         let baselineEcon = powerfulCountries[1].economy_strength[0]; // strength of second larges econ
         if(country.economy_strength[0] < baselineEcon*0.75){
             country.worries.push(
@@ -163,7 +203,7 @@ async function getWorries() {
             );
         }
 
-        // TODO: low-autonomy governments (autocratic, fascist, etc) should be reflected here
+        // low-autonomy government?
         if(await lowAutonomyGovernment(country.political_compass[0])){
             country.worries.push(
                 new Worry(
@@ -173,7 +213,7 @@ async function getWorries() {
             );
         }
 
-        // TEMP DEBUG TEST
+        // TEMP DEBUG TEST (prints worry messages)
         console.log(country.name[0]);
         for(let worry of country.worries){
             let testMessage = await getWorryMessage(country, worry);
@@ -182,27 +222,44 @@ async function getWorries() {
     }
 }
 
+/**
+ * Retrieves and formats a worry message from a Worry object.
+ * Falls back to a random worry from country's worries list, if none is provided.
+ * @param {Object} country - The country experiencing the worry.
+ * @param {Worry} [worry] - Optional specific worry to evaluate.
+ * @returns {Promise<string>} A formatted message string.
+ */
 async function getWorryMessage(country, worry){
     if(!worry){ worry = randomFromArray(country.worries); }
+
     const msg = await handleGrammar(worry.fillers, worry.ID, "worry");
     return msg;
 }
 
-// returns whether any of the IDs listed in arr are included in world_powers
+/**
+ * Determines whether any countries in the given ID array are considered world powers.
+ * @param {number[]} arr - Array of country IDs.
+ * @returns {Object[]} Array of matching country objects that are world powers.
+ */
 function hasPower(arr){
-    const powf = [];
-    let powerfulCountries = [
+    const powf = [];    // powerful countires listed in arr
+    let worldPowers = [
         LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[0]].ID,
         LORE_GLOBS.COUNTRY_STATS[LORE_GLOBS.WORLD_STATS.world_powers[1]].ID
     ]
     for(let id of arr){
-        if(powerfulCountries.includes(id)){ 
-            powf.push(getCountryByID(id)); 
+        if(worldPowers.includes(id)){ 
+            powf.push(getCountryByID(id)); // add country to powf
         }
     }
     return powf;
 }
 
+/**
+ * Retrieves a country object by its numeric ID.
+ * @param {number} id - The ID of the country.
+ * @returns {Object|null} The country object, or null if not found.
+ */
 function getCountryByID(id){
     for(let c in LORE_GLOBS.COUNTRY_STATS){
         const country = LORE_GLOBS.COUNTRY_STATS[c];
@@ -216,6 +273,11 @@ function getCountryByID(id){
     return null;
 }
 
+/**
+ * Determines whether a country has a low-autonomy government based on its political compass position.
+ * @param {string} pc - The country's political compass cell code.
+ * @returns {Promise<boolean>} True if government is low-autonomy (e.g., autocratic).
+ */
 async function lowAutonomyGovernment(pc){
     const gridJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/political_compass.json`);
     const grid = gridJSON.grid;
@@ -223,7 +285,8 @@ async function lowAutonomyGovernment(pc){
     let coords = gridCellToCoords(pc);
 
     if(coords.x < (grid.row_vals.length/4)){ return true; }
-    if(coords.y < (grid.col_vals.length/2)){ return true; }
+    // ignores modifiers
+    // if(coords.y < (grid.col_vals.length/2)){ return true; }
 
     return false;
 }
