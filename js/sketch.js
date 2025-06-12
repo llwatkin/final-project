@@ -25,7 +25,10 @@ function resizeScreen() {
 }
 
 function preload() {
-  myFont = loadFont('../assets/Roboto-Regular.ttf');
+    myFont = loadFont('../assets/Roboto-Regular.ttf');
+
+    LORE_GLOBS.JSON = loadAllJSON();
+    LORE_GLOBS.LORE_DATA = LORE_GLOBS.JSON["_loreKeys"];
 }
 
 async function setup() {
@@ -123,7 +126,6 @@ function mouseWheel(event) {
 }
 
 async function initLore() {
-    LORE_GLOBS.LORE_DATA = await fetchLoreKeys(LORE_GLOBS.JSON_PATH);
     await generateWorld(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
     console.log("world lore: ", LORE_GLOBS.WORLD_STATS);

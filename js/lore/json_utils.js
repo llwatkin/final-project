@@ -48,21 +48,21 @@ async function _loadJSON(filePath) {
  * @param {Object} self - The current country object, used for attribute filtering if required.
  * @returns {Promise<string[]>} Array of choices.
  */
-async function getChoices(data, cat, self){
+function getChoices(data, cat, self){
     let choices = [];
     if(data[cat].choice_control){
         const controller = data[cat].choice_control;
-        const choiceJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${controller.json}.json`);
+        const choiceJSON = LORE_GLOBS.JSON[controller.json];
 
         if(controller.location){
-            let attr_choices = await getChoicesByAttribute(controller, self);
+            let attr_choices = getChoicesByAttribute(controller, self);
             for(const c in attr_choices){
                 choices = choices.concat(choiceJSON[attr_choices[c]]); 
             }
 
         } else if(controller.process){
             const params = choiceJSON[choiceJSON.params];
-            choices = await PROCESSES[controller.process](params);
+            choices = PROCESSES[controller.process](params);
         }
     }
     else if(data[cat].choices){
@@ -72,16 +72,17 @@ async function getChoices(data, cat, self){
     return choices;
 }
 
+
 /**
  * Fetches the top-level lore keys JSON (e.g., _loreKeys.json).
  * @param {string} path - Directory path to fetch from.
  * @returns {Promise<Object>} Parsed JSON object containing lore key schema.
  */
-async function fetchLoreKeys(path) {
-    const response = await fetch(`${path}/_loreKeys.json`);
-	const json = await response.json();
-	return json;
-}
+//async function fetchLoreKeys(path) {
+//    const response = await fetch(`${path}/_loreKeys.json`);
+//	const json = await response.json();
+//	return json;
+//}
 
 /**
  * Retrieves valid category choices based on a control attribute from either world or self.
@@ -89,7 +90,7 @@ async function fetchLoreKeys(path) {
  * @param {Object} self - The current country object, if needed.
  * @returns {Promise<string[]|undefined>} Array of attribute-based keys or undefined on error.
  */
-async function getChoicesByAttribute(controller, self) {
+function getChoicesByAttribute(controller, self) {
     let loc;
     if(controller.location === "world"){ loc = LORE_GLOBS.WORLD_STATS; }
     else if(controller.location === "self"){ loc = self; }
@@ -106,7 +107,7 @@ async function getChoicesByAttribute(controller, self) {
  * @param {Object} grid - A grid object with `row_vals` and `col_vals`.
  * @returns {Promise<string[]>} Array with a single grid cell string.
  */
-async function random_grid(grid) {
+function random_grid(grid) {
     // start by getting grid dims
     const w = grid.row_vals.length;
     const h = grid.col_vals.length;
@@ -125,9 +126,9 @@ async function random_grid(grid) {
  * @param {Object} data - Country or world object with actual values to transform.
  * @returns {Promise<string[]>} Array with a single transformed string.
  */
-async function specialHandler(handling, data){
-    const choiceJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${handling.choice_control.json}.json`);
-    return await SPECIAL[handling.choice_control.special](handling, data, choiceJSON);
+function specialHandler(handling, data){
+    const choiceJSON = LORE_GLOBS.JSON[handling.choice_control.json];
+    return SPECIAL[handling.choice_control.special](handling, data, choiceJSON);
 }
 
 /**
@@ -135,9 +136,9 @@ async function specialHandler(handling, data){
  * @param {Object} handling - The original field definition.
  * @param {Object} data - The country or world object containing grid cell data.
  * @param {Object} choiceJSON - Parsed JSON containing row and column descriptors.
- * @returns {Promise<string[]>} Array with a single formatted text string (e.g., "Libertarian Rural").
+ * @returns {<string[]>} Array with a single formatted text string (e.g., "Libertarian Rural").
  */
-async function cellToText(handling, data, choiceJSON) {
+function cellToText(handling, data, choiceJSON) {
     const cell = data[handling.choice_control.attribute][0];
     const x = cell[1];
     const y = cell[0];
@@ -159,10 +160,10 @@ async function cellToText(handling, data, choiceJSON) {
  * Calculates the maximum possible distance between two points on a political grid.
  * Based on the outermost row/column values.
  * @param {string} json - Filename (no extension) of the grid definition JSON.
- * @returns {Promise<number>} Maximum Euclidean distance in grid units.
+ * @returns {<number>} Maximum Euclidean distance in grid units.
  */
-async function getMaxGridDistance(json) {
-    const gridJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`);
+function getMaxGridDistance(json) {
+    const gridJSON = LORE_GLOBS.JSON[json];
     const grid = gridJSON.grid;
 
     const maxRow = grid.row_vals.length - 1;
@@ -171,16 +172,16 @@ async function getMaxGridDistance(json) {
     const topLeft = `${grid.row_vals[0]}${grid.col_vals[0]}`;
     const bottomRight = `${grid.row_vals[maxRow]}${grid.col_vals[maxCol]}`;
 
-    return await getGridDistance(topLeft, bottomRight);
+    return getGridDistance(topLeft, bottomRight);
 }
 
 /**
  * Computes the Euclidean distance between two grid cells, using letter-number codes (e.g. "A1", "H6").
  * @param {string} cell1 - First cell ID.
  * @param {string} cell2 - Second cell ID.
- * @returns {Promise<number>} Euclidean distance between the two points.
+ * @returns {<number>} Euclidean distance between the two points.
  */
-async function getGridDistance(cell1, cell2) {
+function getGridDistance(cell1, cell2) {
     const p1 = gridCellToCoords(cell1);
     const p2 = gridCellToCoords(cell2);
 
@@ -199,4 +200,12 @@ function gridCellToCoords(cell){
         x: cell[0].toLowerCase().charCodeAt(0) - ('a'.charCodeAt(0) - 1),  // [A, H] --> [0, 8]
         y: parseInt(cell[1])              
     }
+}
+
+function loadAllJSON() {
+    let result = {};
+    for(let json of ALL_JSON){
+        result[json] = loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`); // p5js loadJson
+    }
+    return result;
 }

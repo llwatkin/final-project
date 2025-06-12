@@ -5,14 +5,14 @@
  * @param {string} json - The filename (without extension) of the grammar JSON file to load.
  * @returns {Promise<string>} A single grammar string with all placeholders filled.
  */
-async function handleGrammar(fillers, key, json){
-    const grammar = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`);
+function handleGrammar(fillers, key, json){
+    const grammar = LORE_GLOBS.JSON[json]
     
     const choices = grammar[key];
     let randomIndex = myRandom(choices.length);
     let pick = choices[randomIndex]
 
-    return await fillGrammarTemplate(fillers, pick);
+    return fillGrammarTemplate(fillers, pick);
 }
 
 /**
@@ -23,7 +23,7 @@ async function handleGrammar(fillers, key, json){
  * @param {string} template - The grammar string containing placeholders to be filled.
  * @returns {Promise<string>} A fully-resolved string with all grammar slots replaced.
  */
-async function fillGrammarTemplate(fillers, template){
+function fillGrammarTemplate(fillers, template){
     const slotPattern = /\$(\w.\w+)/;  // looks for words starting with $
 
     while (template.match(slotPattern)) {

@@ -3,6 +3,12 @@
 // Last Updated: 6/11/2025
 
 // TODO: add other json files here to use in .js references to json files
+const JSON_PATH = "/js/lore/json";
+const ALL_JSON = [
+    "_loreKeys", "economy", "government", "history_grammars", "name", 
+    "political_compass", "worry"
+]
+
 /**
  * Global configuration and data containers for procedural lore generation.
  * @namespace
@@ -14,8 +20,9 @@
  * @property {Object<string, Object>} COUNTRY_STATS - Dictionary mapping country names to their generated country objects.
  */
 let LORE_GLOBS = {
-    JSON_PATH: "/js/lore/json",
+    JSON_PATH: JSON_PATH,
     HISTORY_GRAMS: "history_grammars", // name of history json file
+    JSON: {},
     NUM_COUNTRIES: 3,
     LORE_DATA: {},
     WORLD_STATS: {},

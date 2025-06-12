@@ -9,7 +9,7 @@
  * @param {Object} data - The parsed JSON object containing categories and choice metadata.
  * @returns {Promise<Object>} A generated lore object with category keys and picked values as arrays.
  */
-async function generateLore(data){
+function generateLore(data){
     const base = {};
 
     for(let cat in data){
@@ -24,13 +24,13 @@ async function generateLore(data){
         let cc = data[cat].choice_control;
         let sp = cc ? cc.special : undefined;
         if(sp){
-            let picks = await specialHandler(data[cat], base);
+            let picks = specialHandler(data[cat], base);
             picks.forEach(elem => base[cat].add(elem));
         } else {
             // retrieve choices (as defined in json data)
             let choices;
             if(data[cat].length !== 0){ 
-                choices = await getChoices(data, cat, base);
+                choices = getChoices(data, cat, base);
             }
 
             // pick a choice, {num} times
@@ -73,8 +73,8 @@ async function generateLore(data){
  * Ensures the generated name does not already exist in COUNTRY_STATS or WORLD_STATS.
  * @returns {Promise<string[]>} A one-element array containing the generated name.
  */
-async function generateName() {
-    const nameJSON = await _loadJSON(`${LORE_GLOBS.JSON_PATH}/name.json`);
+function generateName() {
+    const nameJSON = LORE_GLOBS.JSON["name"]
     let success = false;
     let name = ""
 
@@ -150,7 +150,7 @@ function trimCountries(num){
  * @function getRandomWorryDialogue
  * @returns {Promise<string>} A formatted dialogue string representing a worry-related message.
  */
-async function getRandomWorryDialogue(){
+function getRandomWorryDialogue(){
     let country = randomFromObject(LORE_GLOBS.COUNTRY_STATS);
 
     // if country has no worries, force a new enemy for a worry
@@ -167,7 +167,7 @@ async function getRandomWorryDialogue(){
         );
     }
     const worry = randomFromArray(country.worries);
-    let dialogue = await getWorryMessage(country, worry);
+    let dialogue = getWorryMessage(country, worry);
     //console.log(dialogue)
     return dialogue;
 }

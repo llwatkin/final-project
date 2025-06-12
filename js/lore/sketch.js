@@ -6,12 +6,12 @@
  * Adds or removes countries accordingly and re-renders the display.
  */
 const updateNumCountriesButton = document.getElementById("num-countries-button");
-updateNumCountriesButton.addEventListener('click', async function() {
+updateNumCountriesButton.addEventListener('click', function() {
     const oldNum = LORE_GLOBS.NUM_COUNTRIES;
     LORE_GLOBS.NUM_COUNTRIES = parseInt(document.getElementById("num-countries").value);
 
     if(oldNum < LORE_GLOBS.NUM_COUNTRIES){
-        await genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES, oldNum);
+        genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES, oldNum);
         printWorld();
         printCountries();
     } else if (oldNum > LORE_GLOBS.NUM_COUNTRIES){
@@ -26,11 +26,11 @@ updateNumCountriesButton.addEventListener('click', async function() {
  * - "r" resets country-level data and regenerates countries using a new seed.
  * - "w" resets and regenerates the entire world including global stats.
  */
-document.addEventListener('keydown', async (e) => {
+document.addEventListener('keydown', (e) => {
 	if(e.key.toLowerCase() === "r"){
         SEED = random() * 1000;
         resetCountries();
-        await genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
+        genMultipleCountries(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
         document.getElementById(`country-stats`).innerHTML = "";
         document.getElementById(`world-stats`).innerHTML = "";
@@ -39,17 +39,22 @@ document.addEventListener('keydown', async (e) => {
     }
     if(e.key.toLowerCase() === "w"){
         SEED = random() * 1000;
-        await initWorldLore(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
+        initWorldLore(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
         printWorld();
 	}
 });
+
+function preload() {
+    LORE_GLOBS.JSON = loadAllJSON();
+    LORE_GLOBS.LORE_DATA = LORE_GLOBS.JSON["_loreKeys"];
+    console.log(LORE_GLOBS)
+}
 
 /**
  * Initializes the sketch. Fetches lore key data and generates the world.
  * This function is called at startup.
  */
-async function setup() {
-    LORE_GLOBS.LORE_DATA = await fetchLoreKeys(LORE_GLOBS.JSON_PATH);
+function setup() {
     initWorldLore(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES)
 }
 
@@ -58,8 +63,8 @@ async function setup() {
  * @param {Object} loreData - The parsed lore schema.
  * @param {number} num - Number of countries to generate.
  */
-async function initWorldLore(loreData, num){
-    await generateWorld(loreData, num);
+function initWorldLore(loreData, num){
+    generateWorld(loreData, num);
 
     printWorld();
     printCountries();

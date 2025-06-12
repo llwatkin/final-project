@@ -3,15 +3,15 @@
  * @param {Object} loreData - Parsed JSON object containing world and country schemas.
  * @param {number} num - Number of countries to generate within the world.
  */
-async function generateWorld(loreData, num) {
+function generateWorld(loreData, num) {
     resetWorld();
 
-    LORE_GLOBS.WORLD_STATS = await generateLore(loreData.world);
-    LORE_GLOBS.WORLD_STATS.name = await generateName();
+    LORE_GLOBS.WORLD_STATS = generateLore(loreData.world);
+    LORE_GLOBS.WORLD_STATS.name = generateName();
 
     LORE_GLOBS.WORLD_STATS.resource_ranking = randomlyRankResources(loreData.country.resource.choices);
 
-    await genMultipleCountries(loreData, num);
+    genMultipleCountries(loreData, num);
 }
 
 /**
@@ -33,24 +33,24 @@ function randomlyRankResources(arr){
  * Includes ideological alignments and random resource-based alliances/enmities.
  * @param {number} num - Number of countries (used to determine relationship scope).
  */
-async function generateHistory(num) {
+function generateHistory(num) {
     // make relationships between countries
     LORE_GLOBS.WORLD_STATS.history = [];
     for(let c in LORE_GLOBS.COUNTRY_STATS){
         // if this country HAS a government....
         if(LORE_GLOBS.COUNTRY_STATS[c].government[0] !== "none"){
-            await getIdeologicalRelationships(
+            getIdeologicalRelationships(
                 LORE_GLOBS.COUNTRY_STATS[c]
             );
             if(coinflip()){ // random allies
-                await getRandomRelationships(
+                getRandomRelationships(
                     LORE_GLOBS.COUNTRY_STATS[c], 
                     myRandom(num),
                     "allies"
                 );
             }
             if(coinflip()){ // random enemies
-                await getRandomRelationships(
+                getRandomRelationships(
                     LORE_GLOBS.COUNTRY_STATS[c], 
                     myRandom(num),
                     "enemies"
@@ -64,7 +64,7 @@ async function generateHistory(num) {
  * Identifies the two countries with the highest economy scores and designates them as world powers.
  * @returns {Promise<string[]>} An array of two country names representing the strongest economies.
  */
-async function establishWorldPowers(){
+function establishWorldPowers(){
     let max1 = { name: null, val: -Infinity};
     let max2 = { name: null, val: -Infinity};
     for(let c in LORE_GLOBS.COUNTRY_STATS){
