@@ -1,5 +1,5 @@
 // sketch.js
-// Author(s): Lyle Watkins, Raven Cruz, Evelyn Marino
+// Author(s): Lyle Watkins, Raven Cruz, Andy Newton, Evelyn Marino
 // Last Updated: 6/11/2025
 
 let canvasContainer;
@@ -11,6 +11,7 @@ let camPos;
 let camDist;
 let zoom = 0;
 let planet;
+let starbox;
 
 let cityIndex = -1;   // -1 = planet view
 
@@ -60,6 +61,7 @@ async function setup() {
     cam = createCamera();
     setCamera(cam);
     generate();
+    starbox = new Stars();
 
     await initLore();
 
@@ -190,6 +192,10 @@ function draw() {
 
 function drawIsometricCity(city) {
     background(0);
+    noStroke();
+    planet.update();
+    planet.draw();
+    starbox.draw();
 
     // zoom
     const Z = 3;

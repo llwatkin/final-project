@@ -1,5 +1,5 @@
 // planet.js - Planet with a sun it orbits and city cube clusters
-// Author(s): Lyle Watkins, Evelyn Marino 
+// Author(s): Lyle Watkins, Evelyn Marino
 // Last Updated: 06/11/2025
 
 class Planet {
@@ -9,11 +9,17 @@ class Planet {
         this.orbitTime = PLANET_ORBIT_TIME; // 2 minute orbit
         this.sunAngle = createVector(1, 0.25, -0.75);
         this.sunAngleXZ = createVector(this.sunAngle.x, this.sunAngle.z);
-        // TODO: randomize colors
-        this.sunColor = color(255, 255, 0);
-        this.oceanColor = color(20, 50, 200);
-        this.terrainColor = color(50, 200, 80);
+
+        // Generate random colors for sun, ocean, and terrain
+        push();
+        colorMode(HSB);
+        this.sunColor = color(random(0, 60), 100, 100);
+        this.oceanColor = color(random(180, 255), 50, 75);
+        this.terrainColor = color(random(50, 150), 75, 75);
+        pop();
+
         this.terrain = new Terrain(this.rad, this.terrainColor, this.oceanColor);
+        // TODO if time: add a texture to the star
 
         // CITY CODE:
         this.numCities = 8; // number of city clusters generated 
@@ -46,9 +52,9 @@ class Planet {
             this.sunAngle.y,
             this.sunAngleXZ.y
         );
-    
+
         this.people.update(this)
-        
+
     }
 
     _generateCities(n) {
@@ -59,50 +65,50 @@ class Planet {
         const MIN_SPH_DIST = PI / 6;
         // Minimum longitude difference
         const MIN_LON_DIST = PI / 6;
-              
+
         while (cities.length < n) {
-          // pick a uniform random spot on the sphere
-          let u     = random(-1, 1),
-              phi   = acos(u),
-              theta = random(0, TWO_PI);
-          let x = this.rad * sin(phi) * cos(theta),
-              y = this.rad * u,
-              z = this.rad * sin(phi) * sin(theta);
-          let candPos = createVector(x, y, z);
-      
-          //sample the density noise at that point
-          let density = noise(
-            candPos.x * CITY_NOISE_SCALE,
-            candPos.y * CITY_NOISE_SCALE,
-            candPos.z * CITY_NOISE_SCALE
-          );
-          if (density < CITY_DENSITY_THRESHOLD) continue;  // too “empty”
-      
-          let lon = atan2(z, x);
-          if (lon < 0) lon += TWO_PI;
-          let ok = true;
-          for (let other of cities) {
-            // circle distance
-            let dp = candPos.copy().normalize()
-                        .dot(other.pos.copy().normalize());
-            dp = constrain(dp, -1, 1);
-            if (acos(dp) < MIN_SPH_DIST) { ok = false; break; }
-            // longitude difference
-            let oLon = atan2(other.pos.z, other.pos.x);
-            if (oLon < 0) oLon += TWO_PI;
-            let dlon = abs(lon - oLon);
-            dlon = min(dlon, TWO_PI - dlon);
-            if (dlon < MIN_LON_DIST) { ok = false; break; }
-          }
-          if (!ok) continue;
-      
-          // accept it
-          cities.push({ pos: candPos, label: `City ${cities.length+1}` });
+            // pick a uniform random spot on the sphere
+            let u = random(-1, 1),
+                phi = acos(u),
+                theta = random(0, TWO_PI);
+            let x = this.rad * sin(phi) * cos(theta),
+                y = this.rad * u,
+                z = this.rad * sin(phi) * sin(theta);
+            let candPos = createVector(x, y, z);
+
+            //sample the density noise at that point
+            let density = noise(
+                candPos.x * CITY_NOISE_SCALE,
+                candPos.y * CITY_NOISE_SCALE,
+                candPos.z * CITY_NOISE_SCALE
+            );
+            if (density < CITY_DENSITY_THRESHOLD) continue;  // too “empty”
+
+            let lon = atan2(z, x);
+            if (lon < 0) lon += TWO_PI;
+            let ok = true;
+            for (let other of cities) {
+                // circle distance
+                let dp = candPos.copy().normalize()
+                    .dot(other.pos.copy().normalize());
+                dp = constrain(dp, -1, 1);
+                if (acos(dp) < MIN_SPH_DIST) { ok = false; break; }
+                // longitude difference
+                let oLon = atan2(other.pos.z, other.pos.x);
+                if (oLon < 0) oLon += TWO_PI;
+                let dlon = abs(lon - oLon);
+                dlon = min(dlon, TWO_PI - dlon);
+                if (dlon < MIN_LON_DIST) { ok = false; break; }
+            }
+            if (!ok) continue;
+
+            // accept it
+            cities.push({ pos: candPos, label: `City ${cities.length + 1}` });
         }
-      
+
         return cities;
-      }
-      
+    }
+
 
     _randomlyRotateCities() {
         let yaw = random(0, TWO_PI);
@@ -241,8 +247,8 @@ class Planet {
 
             // console.log(intersection)
             push()
-        
-            fill(255,255,0,127)
+
+            fill(255, 255, 0, 127)
             noStroke()
             translate(intersection.x, intersection.y, intersection.z)
             sphere(SELECTION_SPHERE_SIZE)
@@ -252,6 +258,7 @@ class Planet {
 
     drawStar() {
         push();
+        noStroke();
         let sunPos = p5.Vector.mult(this.sunAngle, -SUN_DISTANCE);
         translate(sunPos.x, sunPos.y, sunPos.z);
         fill(this.sunColor);

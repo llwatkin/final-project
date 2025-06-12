@@ -1,6 +1,6 @@
 // terrain.js - Icospheric terrain for planet
 // Author(s): Lyle Watkins
-// Last Updated: 06/03/2025
+// Last Updated: 06/11/2025
 
 class Terrain {
 	constructor(rad, terrainColor, oceanColor) {
@@ -17,16 +17,15 @@ class Terrain {
 
 	drawTexture() {
 		this.texture.background(this.oceanColor);
-		this.texture.noStroke();
 
-		let noiseScale = 0.009;
-		let pixelSize = 20;
+		let noiseScale = TEXTURE_NOISE_SCALE;
+		let pixelSize = TEXTURE_PIXEL_SIZE;
 
-		// Iterate from top to bottom.
+		// Iterate from top to bottom
 		for (let y = 0; y < this.texture.height / 2; y += pixelSize) {
-			// Iterate from left to right.
+			// Iterate from left to right
 			for (let x = 0; x < this.texture.width / 2; x += pixelSize) {
-				// Scale the input coordinates.
+				// Scale the input coordinates
 				let nx = noiseScale * x;
 				let ny = noiseScale * y;
 
@@ -36,11 +35,12 @@ class Terrain {
 				// Draw the "pixels"
 				this.terrainColor.setGreen(c * 255);
 				this.texture.fill(this.terrainColor);
-				let adjustment = 0;
+				this.texture.stroke(this.terrainColor);
 				this.texture.rect(x, y, pixelSize, pixelSize);
-				this.texture.rect(x, this.texture.height - y + adjustment, pixelSize, pixelSize);
-				this.texture.rect(this.texture.width - x + adjustment, y, pixelSize, pixelSize);
-				this.texture.rect(this.texture.width - x + adjustment, this.texture.height - y + adjustment, pixelSize, pixelSize);
+				// Mirrored so there are no seams
+				this.texture.rect(x, this.texture.height - y, pixelSize, pixelSize);
+				this.texture.rect(this.texture.width - x, y, pixelSize, pixelSize);
+				this.texture.rect(this.texture.width - x, this.texture.height - y, pixelSize, pixelSize);
 			}
 		}
 	}
@@ -92,7 +92,7 @@ class Terrain {
 	}
 
 	varyTerrain() {
-		let noiseScale = NOISE_SCALE;
+		let noiseScale = TERRAIN_NOISE_SCALE;
 		for (let i = 0; i < this.mesh.vertices.length; i++) {
 			let vert = this.mesh.vertices[i];
 			let variation = this.calculateHeight(vert)
@@ -102,7 +102,7 @@ class Terrain {
 
 	calculateHeight(pos) {
 		return map(
-			noise(NOISE_SCALE * pos.x + 50, NOISE_SCALE * pos.y + 50, NOISE_SCALE * pos.z + 50),
+			noise(TERRAIN_NOISE_SCALE * pos.x + 50, TERRAIN_NOISE_SCALE * pos.y + 50, TERRAIN_NOISE_SCALE * pos.z + 50),
 			0, 1,
 			this.rad - MIN_TERRAIN_MOD,
 			this.rad + MAX_TERRAIN_MOD
