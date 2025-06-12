@@ -1,14 +1,6 @@
 {
     "world": {
         "name": {},
-        "epoch": {
-            "maxPicks": "1",
-            "choices": [
-                "prehistory", "stone age", "bronze age", "iron age", "classical era", 
-                "medieval era", "early modern era", "modern era","near future", "future", 
-                "far future", "very distant future", "inconceivably distant future"
-            ]
-        },
         "economy": {
             "maxPicks": "1",
             "choices": [ 
@@ -51,14 +43,28 @@
             "maxPicks": 3,
             "choices": [
                 "vegetation", "animal", "energy", "population", "oil", "gas", "minerals",
-                "agriculture", "water", "wind", "solar"
+                "agriculture", "water", "wind", "solar", "timber", "stone", "metal", "coal", 
+                "uranium", "sand", "salt", "fish", "livestock", "fungi", "clay", "peat", 
+                "resin", "sunlight", "geothermal", "tide", "insect", "amber", "crystals",
+                "knowledge", "spiritual-power", "labor", "infrastructure", "soup",
+                "obsidian", "ice", "flora", "microbes", "venom", "silk", "honey", "dyes",
+                "heat", "magnetism", "gravity", "quartz", "copper", "iron", "lithium",
+                "relics", "mycelium", "textiles", "spices", "ceramics", "paper", "wool",
+                "data", "codes", "aether", "mana", "dream-essence", "songstones",
+                "nanomatter", "carbon", "plastic", "tech-scrap", "junkmetal", "hydrogen"
             ]
         },
         "culture": {
             "maxPicks": 3,
             "choices": [
                 "music", "holidays", "food", "theater", "film", "tv", "games", "sports",
-                "social", "tradition"
+                "social", "tradition", "dance", "ritual", "fashion", "mythology", 
+                "storytelling", "architecture", "ceremony", "crafts", "literature", 
+                "visual art", "tattoos", "calligraphy", "comedy", "puppetry", "opera", 
+                "folklore", "festivals", "parades", "masks", "philosophy", "etiquette", 
+                "language", "spirituality", "symbolism", "hospitality", "interpersonal",
+                "family structure", "naming", "superstition", "memory sharing", 
+                "virtual ritual", "shared dreams", "cosmic worship"
             ]
         },
         "allies": {},

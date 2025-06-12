@@ -9,7 +9,11 @@
     "Pa", "Pe", "Pi", "Po", "Pra", "Qua", "Ra", "Re", "Ri", "Ro", "Ru",
     "Sa", "Se", "Sha", "Si", "So", "Su", "Ta", "Te", "Tha", "Ti", "To",
     "Tu", "Ul", "Um", "Ur", "Va", "Ve", "Vi", "Vo", "Vu", "Wa", "We",
-    "Xi", "Ya", "Ye", "Yo", "Yu", "Za", "Ze", "Zi", "Zo", "Zy"
+    "Xi", "Ya", "Ye", "Yo", "Yu", "Za", "Ze", "Zi", "Zo", "Zy",
+    "Aq", "Az", "Brae", "Cha", "Cly", "Cro", "Dra", "Eri", "Ezo", "Fae",
+    "Gra", "Gri", "Gwa", "Hael", "Ish", "Jae", "Kael", "Kro", "Lai", "Mae",
+    "Nae", "Nok", "Osh", "Pha", "Quael", "Rha", "Roi", "Ska", "Syi", "Thael",
+    "Tre", "Try", "Uri", "Vael", "Vra", "Wae", "Xe", "Xho", "Yra", "Zha"
   ],
   "core": [
     "ban", "bar", "bek", "bel", "bur", "can", "car", "cel", "chi", "dan",
@@ -22,12 +26,21 @@
     "ril", "ron", "ruk", "sal", "sar", "sel", "sen", "sha", "sin", "sol",
     "sor", "sul", "tak", "tar", "tel", "ten", "tor", "tun", "val", "var",
     "vek", "vel", "vil", "von", "vor", "wak", "wan", "wel", "wil", "wur",
-    "zan", "zar", "zel", "zen", "zor", "zul"
+    "zan", "zar", "zel", "zen", "zor", "zul",
+    "adr", "aka", "arn", "ath", "ava", "aze", "belg", "bor", "cad", "cez",
+    "drae", "dri", "ehl", "fren", "gahn", "gron", "haal", "harn", "iren", "jol",
+    "kaen", "kesh", "laar", "laz", "mael", "mirn", "mord", "nash", "ned", "nih",
+    "orv", "paz", "quel", "rhek", "rhil", "sahn", "shan", "shir", "taes", "thur",
+    "uln", "vad", "vahn", "ver", "vol", "wyn", "xel", "yor", "yrr", "zorv"
   ],
   "suffix": [
     "a", "aan", "ace", "ad", "ai", "al", "an", "ar", "as", "at", "ean",
     "el", "en", "er", "es", "et", "ia", "ian", "ic", "id", "il", "in",
     "ir", "is", "it", "ium", "oa", "oia", "on", "or", "os", "ot", "u",
-    "ua", "ue", "uk", "ul", "um", "un", "ur", "us", "ya", "yn", "ys"
+    "ua", "ue", "uk", "ul", "um", "un", "ur", "us", "ya", "yn", "ys",
+    "ach", "aed", "ahn", "aq", "ath", "az", "e", "eanth", "eid", "eik",
+    "elth", "eyn", "ga", "iel", "iir", "inor", "ith", "iyn", "oan", "ok",
+    "ol", "oq", "oth", "ual", "uar", "uir", "ulth", "una", "urn", "uth",
+    "yad", "yir", "yth", "zan", "ze", "zir", "zor", "zun", "zys", "zai"
   ]
 }

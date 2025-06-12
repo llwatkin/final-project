@@ -1,44 +1,104 @@
 {
-    "powerful_enemies": [
-        "$B.name, one of the most powerful countries on the planet, has $A.name in its crosshairs...",
-        "$A.name has caught the attention of $B.name, a global superpower with a long memory.",
-        "Whispers in the halls of $B.name speak of plans against $A.name...",
-        "$A.name may not survive the fury of $B.name, whose strength is feared worldwide.",
-        "$B.name views $A.name as a threat and intends to crush it."
-    ],
-    "enemies": [
-        "Relations have dissolved between $A.name and $B.name!",
-        "$A.name and $B.name are no longer on speaking terms.",
-        "Tensions have boiled over: $A.name and $B.name are now officially enemies.",
-        "$A.name has denounced $B.name over a series of escalating incidents.",
-        "$B.name has severed all diplomatic ties with $A.name."
-    ],
-    "no_allies": [
-        "It's $A.name, alone against the world...",
-        "$A.name stands isolated, with no friends to call upon.",
-        "No one is willing to support $A.name. It is surrounded and alone.",
-        "$A.name faces growing threats, but has no allies to speak of.",
-        "With every bridge burned, $A.name now walks its path alone."
-    ],
-    "weak_economy": [
-        "$A.name's economy is floundering.",
-        "Markets in $A.name have collapsed under pressure.",
-        "$A.name faces rising inflation and shrinking output.",
-        "Economic woes deepen in $A.name as industries falter.",
-        "$A.name struggles to stabilize its failing economy."
-    ],
-    "war": [
-        "War might break out between $A.name and $B.name any day, now...",
-        "$A.name is preparing for long-range strikes in anticipation of hostilities with $B.name.",
-        "Diplomats scramble as $A.name and $B.name inch toward open war.",
-        "$B.name accuses $A.name of provocation. Conflict seems inevitable.",
-        "A declaration of war from $A.name against $B.name may be imminent."
-    ],
-    "freedom": [
-        "The grip of $A.government tightens in $A.name, stifling all dissent.",
-        "Protests erupt in $A.name against the repressive $A.government regime.",
-        "Calls for reform echo across $A.name, where $A.government shows no sign of loosening control.",
-        "$A.name's adoption of $A.government continues to restrict civil liberties and suppress opposition.",
-        "The world watches as $A.name endures the rule of the deeply unpopular $A.government."
-    ]
+  "powerful_enemies": [
+    "$B.name, one of the most powerful countries on the planet, has $A.name in its crosshairs...",
+    "$A.name has caught the attention of $B.name, a global superpower with a long memory.",
+    "Whispers in the halls of $B.name speak of plans against $A.name...",
+    "$A.name may not survive the fury of $B.name, whose strength is feared worldwide.",
+    "$B.name views $A.name as a threat and intends to crush it.",
+    "$B.name's military dwarfs that of $A.name, and it's mobilizing.",
+    "The intelligence community warns: $B.name is targeting $A.name.",
+    "$A.name's defiance has provoked the ire of mighty $B.name.",
+    "$B.name has labeled $A.name a 'rogue state', a dangerous designation.",
+    "The world trembles as $B.name declares $A.name a strategic enemy.",
+    "$B.name has begun economic and cyber offensives against $A.name.",
+    "Satellite footage confirms $B.name is amassing troops near $A.name's borders.",
+    "The propaganda out of $B.name paints $A.name as a villain to be eliminated.",
+    "$A.name has become the next target in $B.name's grand strategy.",
+    "$B.name is rallying against $A.name."
+  ],
+  "enemies": [
+    "Relations have dissolved between $A.name and $B.name!",
+    "$A.name and $B.name are no longer on speaking terms.",
+    "Tensions have boiled over: $A.name and $B.name are now officially enemies.",
+    "$A.name has denounced $B.name over a series of escalating incidents.",
+    "$B.name has severed all diplomatic ties with $A.name.",
+    "A series of skirmishes have pushed $A.name and $B.name to the brink.",
+    "Hostile rhetoric between $A.name and $B.name is growing louder.",
+    "$A.name accuses $B.name of espionage and subversion.",
+    "$B.name blames $A.name for a recent cyberattack, straining relations further.",
+    "$A.name's sanctions against $B.name triggered swift retaliation.",
+    "$B.name expelled $A.name's diplomats. Relations are at a breaking point.",
+    "Cultural boycotts and travel bans define the new status quo between $A.name and $B.name.",
+    "$A.name issued an ultimatum to $B.name, now ignored.",
+    "A once-fragile peace between $A.name and $B.name has shattered.",
+    "Old wounds have reopened, $A.name and $B.name are enemies once again."
+  ],
+  "no_allies": [
+    "It's $A.name, alone against the world...",
+    "$A.name stands isolated, with no friends to call upon.",
+    "No one is willing to support $A.name. It is surrounded and alone.",
+    "$A.name faces growing threats, but has no allies to speak of.",
+    "With every bridge burned, $A.name now walks its path alone.",
+    "Diplomatic envoys return home empty-handed. $A.name is on its own.",
+    "$A.name's calls for aid go unanswered.",
+    "International summits pass without mention of $A.name.",
+    "Once respected, $A.name is now shunned by the global community.",
+    "Even former partners have turned their backs on $A.name.",
+    "$A.name's neutrality has earned it no favor, and no allies.",
+    "Not even humanitarian appeals sway support for $A.name.",
+    "Isolationism or not, $A.name now faces the consequences of standing alone.",
+    "$A.name's refusal to compromise has left it without allies.",
+    "$A.name finds no banners raised in its defense."
+  ],
+  "weak_economy": [
+    "$A.name's economy is floundering.",
+    "Markets in $A.name have collapsed under pressure.",
+    "$A.name faces rising inflation and shrinking output.",
+    "Economic woes deepen in $A.name as industries falter.",
+    "$A.name struggles to stabilize its failing economy.",
+    "Unemployment surges in $A.name as factories shut down.",
+    "The currency of $A.name continues its steep decline.",
+    "Foreign investors flee $A.name in droves.",
+    "$A.name's national debt spirals out of control.",
+    "Austerity measures grip $A.name, fueling unrest.",
+    "Basic goods are scarce in $A.name's marketplaces.",
+    "$A.name's once-proud financial sector is now in ruins.",
+    "Food prices have doubled in $A.name within weeks.",
+    "The global market has lost confidence in $A.name's leadership.",
+    "$A.name turns to international lenders for an emergency bailout."
+  ],
+  "war": [
+    "War might break out between $A.name and $B.name any day, now...",
+    "$A.name is preparing for long-range strikes in anticipation of hostilities with $B.name.",
+    "Diplomats scramble as $A.name and $B.name inch toward open war.",
+    "$B.name accuses $A.name of provocation. Conflict seems inevitable.",
+    "A declaration of war from $A.name against $B.name may be imminent.",
+    "Troops are mobilizing. $A.name and $B.name may soon be at war.",
+    "$A.name intercepts hostile communications from $B.name.",
+    "Missiles have been placed on alert across both $A.name and $B.name.",
+    "Peace talks have failed. The drums of war beat louder.",
+    "Military drills within both $A.name's and $B.name's borders signal war's approach.",
+    "$B.name's leadership declares $A.name 'a clear and present danger.'",
+    "Civilians in $A.name brace for the worst.",
+    "$B.name's warships are now patrolling waters near $A.name.",
+    "$A.name's conscription age has been lowered. War with $B.name is on the horizon.",
+    "An arms race between $A.name and $B.name is fueling fears of escalation."
+  ],
+  "freedom": [
+    "The grip of $A.government tightens in $A.name, stifling all dissent.",
+    "Protests erupt in $A.name against the repressive $A.government regime.",
+    "Calls for reform echo across $A.name, where $A.government shows no sign of loosening control.",
+    "$A.name's adoption of $A.government continues to restrict civil liberties and suppress opposition.",
+    "The world watches as $A.name endures the rule of the deeply unpopular $A.government.",
+    "Journalists in $A.name are jailed under $A.government's sweeping new laws.",
+    "Censorship in $A.name intensifies under $A.government's regime.",
+    "Political opponents of $A.government disappear without a trace in $A.name.",
+    "Freedom of speech has become a dangerous dream in $A.name.",
+    "$A.name's youth lead underground resistance against $A.government.",
+    "Curfews and checkpoints define daily life in $A.name.",
+    "$A.name's exiles call for international intervention against $A.government.",
+    "Criticism of $A.government is now considered treason in $A.name.",
+    "The people of $A.name risk everything to protest $A.government's policies.",
+    "$A.name's citizens whisper of rebellion as freedoms vanish day by day."
+  ]
 }

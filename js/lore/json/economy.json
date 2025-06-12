@@ -1,16 +1,22 @@
 {
     "physical": [
         "resource", "mineral", "stone", "air", "gem", "soil", 
-        "plant", "animal", "cash", "coin"
+        "plant", "animal", "cash", "coin",
+        "ore", "grain", "salt", "shells", "wood", "bone",
+        "metal", "clay", "brick", "fuel", "ink", "cloth",
+        "spice", "teeth", "seeds", "meat", "ceramic", "feathers"
     ],
     "ephemeral": [
-        "story", "song", "vibes", "smile", "plans", "nothing",
-        "words"
+        "story", "song", "vibes", "smile", "plans", "nothing", "words",
+        "dreams", "secrets", "attention", "reputation", "whispers", "blessings",
+        "time", "luck", "memories", "moods", "affection", "presence", "influence"
     ],
-    "hybrid":[
-        "labor", "art", "favor", "promise"
+    "hybrid": [
+        "labor", "art", "favor", "promise",
+        "craft", "loyalty", "reputation", "trust", "service", "gesture",
+        "performance", "innovation", "vote", "proof", "bond", "token"
     ],
-    "none":[
-        "none"
+    "none": [
+        "none", "abolished", "barter-only", "post-currency", "gift-exchange", "open-ledger"
     ]
 }
