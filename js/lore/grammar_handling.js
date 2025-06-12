@@ -13,7 +13,6 @@ async function handleGrammar(fillers, key, json){
     let pick = choices[randomIndex]
 
     return await fillGrammarTemplate(fillers, pick);
-
 }
 
 /**

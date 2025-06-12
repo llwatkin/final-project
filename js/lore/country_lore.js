@@ -157,7 +157,8 @@ async function getWorries() {
                     )
                 );
             } else {
-                const enemyObjs = country.enemies.forEach(id => getCountryByID(id)); 
+                const enemyObjs = []
+                country.enemies.forEach((id) => enemyObjs.push(getCountryByID(id))); 
                 country.worries.push(
                     new Worry(
                         "enemies", 
@@ -214,11 +215,11 @@ async function getWorries() {
         }
 
         // TEMP DEBUG TEST (prints worry messages)
-        console.log(country.name[0]);
-        for(let worry of country.worries){
-            let testMessage = await getWorryMessage(country, worry);
-            console.log(testMessage);
-        }
+        // console.log(country.name[0]);
+        // for(let worry of country.worries){
+        //     let testMessage = await getWorryMessage(country, worry);
+        //     console.log(testMessage);
+        // }
     }
 }
 
@@ -231,7 +232,6 @@ async function getWorries() {
  */
 async function getWorryMessage(country, worry){
     if(!worry){ worry = randomFromArray(country.worries); }
-
     const msg = await handleGrammar(worry.fillers, worry.ID, "worry");
     return msg;
 }
