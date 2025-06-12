@@ -9,6 +9,6 @@ class Stars {
 
 	draw() {
 		texture(this.imgTexture);
-		box(5000);
+		box(STARBOX_SIZE);
 	}
 }
