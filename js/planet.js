@@ -257,13 +257,17 @@ class Planet {
         // console.log(ray.toString())
         let intersection = raySphereIntersect(createVector(cam.eyeX, cam.eyeY, cam.eyeZ), ray, createVector(0, 0, 0), this.rad)
         if (intersection != null) {
+            let sp = cartesianToSpherical(intersection)
+            sp.r = this.terrain.calculateHeight(intersection)
+            intersection = sphericalToCartesian(sp)
+
             // console.log(intersection)
             push()
         
-            fill(255,255,0)
+            fill(255,255,0,127)
             noStroke()
             translate(intersection.x, intersection.y, intersection.z)
-            sphere(20)
+            sphere(SELECTION_SPHERE_SIZE)
             pop()
         }
     }
