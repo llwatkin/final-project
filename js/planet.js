@@ -9,10 +9,15 @@ class Planet {
         this.orbitTime = PLANET_ORBIT_TIME; // 2 minute orbit
         this.sunAngle = createVector(1, 0.25, -0.75);
         this.sunAngleXZ = createVector(this.sunAngle.x, this.sunAngle.z);
-        // TODO: randomize colors
-        this.sunColor = color(255, 255, 0);
-        this.oceanColor = color(20, 50, 200);
-        this.terrainColor = color(50, 200, 80);
+
+        // Generate random colors for sun, ocean, and terrain
+        push();
+        colorMode(HSB);
+        this.sunColor = color(random(0, 60), 100, 100);
+        this.oceanColor = color(random(180, 255), 50, 75);
+        this.terrainColor = color(random(50, 150), 75, 75);
+        pop();
+
         this.terrain = new Terrain(this.rad, this.terrainColor, this.oceanColor);
 
         // CITY CODE:
