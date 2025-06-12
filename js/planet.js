@@ -31,6 +31,8 @@ class Planet {
             city.green = random(100, 255);
             city.blue = random(100, 255);
         }
+
+        this.people = new PeopleManager(this)
     }
 
     update() {
@@ -41,11 +43,14 @@ class Planet {
             this.sunAngle.y,
             this.sunAngleXZ.y
         );
+    
+        this.people.update(this)
+        
     }
+
     _generateCities(n) {
 
         // Pick N city centers on the sphere
-
         let cities = [];
 
         // Minimum great circle separation
@@ -196,7 +201,6 @@ class Planet {
                 let dj = offset.j;
                 let h = offset.h;       // stack height: 0 or 1
 
-
                 let s = CITY_CUBE_SIZE;
 
                 // The center of each cube needs to be “rad + h*s + s/2” out along n:
@@ -244,6 +248,20 @@ class Planet {
         sphere(this.rad);
         this.terrain.draw();
         pop();
+
+        let ray = screenToRay(cam, [mouseX, mouseY])
+        // console.log(ray.toString())
+        let intersection = raySphereIntersect(createVector(cam.eyeX, cam.eyeY, cam.eyeZ), ray, createVector(0, 0, 0), this.rad)
+        if (intersection != null) {
+            // console.log(intersection)
+            push()
+        
+            fill(255,255,0)
+            noStroke()
+            translate(intersection.x, intersection.y, intersection.z)
+            sphere(20)
+            pop()
+        }
     }
 
     drawStar() {
@@ -260,5 +278,6 @@ class Planet {
         this._drawCityClusters();
         // this.drawDebugVerts();
         this.drawStar();
+        this.people.draw(this)
     }
 }

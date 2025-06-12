@@ -51,14 +51,18 @@ class Terrain {
 		let noiseScale = NOISE_SCALE;
 		for (let i = 0; i < this.mesh.vertices.length; i++) {
 			let vert = this.mesh.vertices[i];
-			let variation = map(
-				noise(noiseScale * i),
-				0, 1,
-				vert.mag() - MIN_TERRAIN_MOD,
-				vert.mag() + MAX_TERRAIN_MOD
-			);
+			let variation = this.calculateHeight(vert)
 			vert.setMag(variation);
 		}
+	}
+
+	calculateHeight(pos) {
+		return map(
+			noise(NOISE_SCALE * pos.x + 50, NOISE_SCALE * pos.y + 50, NOISE_SCALE * pos.z + 50),
+			0, 1,
+			this.rad - MIN_TERRAIN_MOD,
+			this.rad + MAX_TERRAIN_MOD
+		)
 	}
 
 	clearTerrain() {
