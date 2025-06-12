@@ -8,8 +8,10 @@ class Stars {
 	}
 
 	draw() {
+		push();
+		noStroke();
 		texture(this.imgTexture);
 		box(STARBOX_SIZE);
-		//console.log("drawing stars");
+		pop();
 	}
 }
