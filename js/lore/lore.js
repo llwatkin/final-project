@@ -138,3 +138,36 @@ function trimCountries(num){
         delete GLOBAL.COUNTRY_STATS[key];
     }
 }
+
+/**
+ * Generates a worry-based dialogue message for a random country.
+ * 
+ * If the selected country has no existing worries, this function forces the
+ * generation of an enemy relationship and creates a new worry of type "enemies".
+ * It then retrieves a formatted dialogue string based on that worry.
+ * 
+ * @async
+ * @function getRandomWorryDialogue
+ * @returns {Promise<string>} A formatted dialogue string representing a worry-related message.
+ */
+async function getRandomWorryDialogue(){
+    let country = randomFromObject(LORE_GLOBS.COUNTRY_STATS);
+
+    // if country has no worries, force a new enemy for a worry
+    while(country.worries.length === 0){
+        getRandomRelationships(country, 1, "enemies");
+
+        const enemyObjs = []
+        country.enemies.forEach((id) => enemyObjs.push(getCountryByID(id))); 
+        country.worries.push(
+            new Worry(
+                "enemies", 
+                {"A": [country], "B": enemyObjs}
+            )
+        );
+    }
+    const worry = randomFromArray(country.worries);
+    let dialogue = await getWorryMessage(country, worry);
+    //console.log(dialogue)
+    return dialogue;
+}

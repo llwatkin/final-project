@@ -63,6 +63,7 @@ async function setup() {
     overlay.textSize(16);
     overlay.noStroke();
     showTextBox = false;
+    message = "";
 }
 
 async function generate() {
@@ -104,7 +105,7 @@ function draw() {
     overlay.clear();
 
     if (showTextBox) {
-        drawTextBox(overlay, mouseX, mouseY, 200, 100, "Clicked here!");
+        drawTextBox(overlay, mouseX, mouseY, 200, 100, message);
     }
 
     // Draw the overlay as a texture (HUD layer)
@@ -129,11 +130,13 @@ async function initLore() {
     console.log("countries lore: ", LORE_GLOBS.COUNTRY_STATS);
 }
 
-function mousePressed() {
+async function mousePressed() {
     showTextBox = !showTextBox;
+    message = await getRandomWorryDialogue();
 }
 
 function drawTextBox(gfx, x, y, w, h, txt) {
+    push();
     gfx.fill(255);
     gfx.stroke(0);
     gfx.rect(x, y, w, h);
@@ -143,5 +146,7 @@ function drawTextBox(gfx, x, y, w, h, txt) {
     gfx.textAlign(LEFT, TOP);
 
     let padding = 10;
+    gfx.textSize(14);
     gfx.text(txt, x + padding, y + padding, w - 2 * padding, h - 2 * padding);
+    pop();
 }

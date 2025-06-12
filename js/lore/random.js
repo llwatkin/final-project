@@ -42,3 +42,10 @@ function randomFromArray(arr){
 
     return arr[i]
 }
+
+function randomFromObject(obj){
+    const keys = Object.keys(obj);
+    const pick = randomFromArray(keys);
+
+    return obj[pick];
+}
