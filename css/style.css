@@ -17,3 +17,21 @@ body {
     width: 1000px;
     height: 600px;
 }
+.arrow-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.8);
+    border: none;
+    font-size: 2rem;
+    padding: 0.2rem 0.6rem;
+    cursor: pointer;
+    z-index: 10;
+  }
+  #prev-btn {
+    left: 10px;
+  }
+  #next-btn {
+    right: 10px;
+  }
+  
