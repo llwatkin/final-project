@@ -76,10 +76,10 @@
     "Troops are mobilizing. $A.name and $B.name may soon be at war.",
     "$A.name intercepts hostile communications from $B.name.",
     "Missiles have been placed on alert across both $A.name and $B.name.",
-    "Peace talks have failed. The drums of war beat louder.",
+    "Peace talks between $A.name and $B.name have failed. The drums of war beat louder.",
     "Military drills within both $A.name's and $B.name's borders signal war's approach.",
     "$B.name's leadership declares $A.name 'a clear and present danger.'",
-    "Civilians in $A.name brace for the worst.",
+    "Civilians in $A.name and beyond brace for the worst as hostilities grow with $B.name.",
     "$B.name's warships are now patrolling waters near $A.name.",
     "$A.name's conscription age has been lowered. War with $B.name is on the horizon.",
     "An arms race between $A.name and $B.name is fueling fears of escalation."
