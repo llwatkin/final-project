@@ -26,19 +26,19 @@ const SPECIAL = {
  * @param {string} filePath - Full path to the JSON file.
  * @returns {Promise<Object|null>} Parsed JSON object, or null if fetch fails.
  */
-async function _loadJSON(filePath) {
-    try {
-        const response = await fetch(filePath);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Could not load JSON: " + error);
-        return null;
-    }
-}
+//async function _loadJSON(filePath) {
+//    try {
+//        const response = await fetch(filePath);
+//        if (!response.ok) {
+//            throw new Error(`HTTP error! status: ${response.status}`);
+//        }
+//        const data = await response.json();
+//        return data;
+//    } catch (error) {
+//        console.error("Could not load JSON: " + error);
+//        return null;
+//    }
+//}
 
 /**
  * Gets an array of choice strings for a given category, using control logic from the lore JSON schema.

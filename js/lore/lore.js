@@ -146,7 +146,6 @@ function trimCountries(num){
  * generation of an enemy relationship and creates a new worry of type "enemies".
  * It then retrieves a formatted dialogue string based on that worry.
  * 
- * @async
  * @function getRandomWorryDialogue
  * @returns {Promise<string>} A formatted dialogue string representing a worry-related message.
  */
