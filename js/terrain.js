@@ -17,7 +17,6 @@ class Terrain {
 
 	drawTexture() {
 		this.texture.background(this.oceanColor);
-		this.texture.noStroke();
 
 		let noiseScale = TEXTURE_NOISE_SCALE;
 		let pixelSize = TEXTTURE_PIXEL_SIZE;
@@ -36,6 +35,7 @@ class Terrain {
 				// Draw the "pixels"
 				this.terrainColor.setGreen(c * 255);
 				this.texture.fill(this.terrainColor);
+				this.texture.stroke(this.terrainColor);
 				this.texture.rect(x, y, pixelSize, pixelSize);
 				// Mirrored so there are no seams
 				this.texture.rect(x, this.texture.height - y, pixelSize, pixelSize);
