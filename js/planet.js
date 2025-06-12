@@ -1,6 +1,6 @@
 // planet.js - Planet with a sun it orbits and city cube clusters
-// Author(s): Lyle Watkins
-// Last Updated: 06/03/2025
+// Author(s): Lyle Watkins, Evelyn Marino 
+// Last Updated: 06/11/2025
 
 class Planet {
     constructor() {
@@ -16,21 +16,20 @@ class Planet {
         this.terrain = new Terrain(this.rad, this.terrainColor, this.oceanColor);
 
         // CITY CODE:
-        this.numCities = 6; // number of city clusters generated 
+        this.numCities = 8; // number of city clusters generated 
         this.cities = this._generateCities(this.numCities);
         this._randomlyRotateCities();
 
-        // For each city, pre-build a small 3×3 cluster of offsets + random height
         for (let city of this.cities) {
             city.clusterPositions = [];
             for (let di = -1; di <= 1; di++) {
                 for (let dj = -1; dj <= 1; dj++) {
-                    // Randomly make some cubes stack n levels high 
+                    // stack n levels high 
                     let h = floor(random(0, MAX_CITY_STACKS));
                     city.clusterPositions.push({ i: di, j: dj, h: h });
                 }
             }
-            // Each city cluster has a randomized base color 
+            //random color  
             city.red = random(100, 255);
             city.green = random(100, 255);
             city.blue = random(100, 255);
@@ -56,69 +55,50 @@ class Planet {
 
         // Pick N city centers on the sphere
         let cities = [];
-
-        // Minimum great circle separation
-        const MIN_SPH_DIST = PI / 6;
-        // Minimum longitude difference
-        const MIN_LON_DIST = PI / 6;
-
+      
         while (cities.length < n) {
-            // Sample a uniform point on the sphere:
-            let u = random(-1, 1);
-            let phi = acos(u);
-            let theta = random(0, TWO_PI);
-
-            // Convert (phi, theta) to Cartesian on radius=this.rad:
-            let x = this.rad * sin(phi) * cos(theta);
-            let y = this.rad * u;        // because cos(phi) = u
-            let z = this.rad * sin(phi) * sin(theta);
-            let candPos = createVector(x, y, z);
-
-            // Compute candidate’s longitude in [0, TWO_PI):
-            let lon = atan2(z, x);
-            if (lon < 0) lon += TWO_PI;
-
-            // Check against each other city already accepted:
-            let ok = true;
-            for (let other of cities) {
-                // Great-circle distance:
-                let dotProd = candPos
-                    .copy()
-                    .normalize()
-                    .dot(other.pos.copy().normalize());
-                // clamp to [-1, 1] to avoid floating-point errors:
-                dotProd = constrain(dotProd, -1, 1);
-
-                let sphDist = acos(dotProd);
-                if (sphDist < MIN_SPH_DIST) {
-                    ok = false;
-                    break;
-                }
-
-                // Longitude-difference check:
-                let otherLon = atan2(other.pos.z, other.pos.x);
-                if (otherLon < 0) otherLon += TWO_PI;
-
-                let dLon = abs(lon - otherLon);
-                dLon = min(dLon, TWO_PI - dLon);
-                if (dLon < MIN_LON_DIST) {
-                    ok = false;
-                    break;
-                }
-            }
-
-            // If both tests passed accept it:
-            if (ok) {
-                cities.push({
-                    pos: candPos,
-                    label: `City ${cities.length + 1}`
-                });
-            }
-            // Otherwise reject and loop again
+          // pick a uniform random spot on the sphere
+          let u     = random(-1, 1),
+              phi   = acos(u),
+              theta = random(0, TWO_PI);
+          let x = this.rad * sin(phi) * cos(theta),
+              y = this.rad * u,
+              z = this.rad * sin(phi) * sin(theta);
+          let candPos = createVector(x, y, z);
+      
+          //sample the density noise at that point
+          let density = noise(
+            candPos.x * CITY_NOISE_SCALE,
+            candPos.y * CITY_NOISE_SCALE,
+            candPos.z * CITY_NOISE_SCALE
+          );
+          if (density < CITY_DENSITY_THRESHOLD) continue;  // too “empty”
+      
+          let lon = atan2(z, x);
+          if (lon < 0) lon += TWO_PI;
+          let ok = true;
+          for (let other of cities) {
+            // circle distance
+            let dp = candPos.copy().normalize()
+                        .dot(other.pos.copy().normalize());
+            dp = constrain(dp, -1, 1);
+            if (acos(dp) < MIN_SPH_DIST) { ok = false; break; }
+            // longitude difference
+            let oLon = atan2(other.pos.z, other.pos.x);
+            if (oLon < 0) oLon += TWO_PI;
+            let dlon = abs(lon - oLon);
+            dlon = min(dlon, TWO_PI - dlon);
+            if (dlon < MIN_LON_DIST) { ok = false; break; }
+          }
+          if (!ok) continue;
+      
+          // accept it
+          cities.push({ pos: candPos, label: `City ${cities.length+1}` });
         }
-
+      
         return cities;
-    }
+      }
+      
 
     _randomlyRotateCities() {
         let yaw = random(0, TWO_PI);
@@ -132,12 +112,12 @@ class Planet {
             let vy = city.pos.y;
             let vz = city.pos.z;
 
-            // Rotate around Y‐axis by yaw
+
             let x1 = vx * cy + vz * sy;
             let y1 = vy;
             let z1 = -vx * sy + vz * cy;
 
-            // Then rotate around X‐axis by pitch
+
             let x2 = x1;
             let y2 = y1 * cp - z1 * sp;
             let z2 = y1 * sp + z1 * cp;
@@ -181,8 +161,7 @@ class Planet {
             }
         }
     }
-
-    // Draw each city’s 3×3 block of little cubes sticking out on the sphere
+    //little cubes sticking out on the sphere
     _drawCityClusters() {
         const worldUp = createVector(0, 1, 0);
 
@@ -190,37 +169,33 @@ class Planet {
             //  Compute the unit normal at the surface point:
             let n = city.pos.copy().normalize();
 
-            //  Build two tangent vectors (t, b) so that {t, b, n} is orthonormal:
             let up = worldUp.copy();
             if (abs(n.dot(up)) > 0.99) {
-                // If n is nearly parallel to worldUp, pick X-axis as fallback up
+
                 up = createVector(1, 0, 0);
             }
             let t = up.cross(n).normalize();
             let b = n.cross(t).normalize();
 
-            //  For each offset (di, dj, h) in that city’s 3×3 cluster:
             for (let offset of city.clusterPositions) {
                 let di = offset.i;
                 let dj = offset.j;
                 let h = offset.h;       // stack height: 0 or 1
 
                 let s = CITY_CUBE_SIZE;
-
-                // The center of each cube needs to be “rad + h*s + s/2” out along n:
                 let radialDistance = this.rad + h * s + (s / 2);
 
-                // Build worldPos = n*radialDistance + t*(di*s) + b*(dj*s):
+
                 let worldPos = p5.Vector
                     .mult(n, radialDistance)
                     .add(p5.Vector.mult(t, di * s))
                     .add(p5.Vector.mult(b, dj * s));
 
-                // Draw one small cube at worldPos, rotated so (0,1,0) to n:
+
                 push();
                 translate(worldPos.x, worldPos.y, worldPos.z);
 
-                //  Rotate so that local‐up (0,1,0) to n
+
                 let axis = createVector(0, 1, 0).cross(n);
                 let dotA = createVector(0, 1, 0).dot(n);
                 let angle = acos(constrain(dotA, -1, 1));
@@ -228,14 +203,13 @@ class Planet {
                     rotate(angle, axis);
                 }
 
-                //  Draw the filled cube
+                //  filled cube
                 fill(city.red, city.green, city.blue);
                 noStroke();
                 box(s);
 
-                stroke(0);        // black stroke
-                noFill();         // just edges
-                //a tiny scale up prevents z‐fighting so the black edges sit on top
+                stroke(0);        // black 
+                noFill();
                 box(s * 1.01);
 
                 pop();
