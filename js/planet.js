@@ -1,5 +1,5 @@
 // planet.js - Planet with a sun it orbits and city cube clusters
-// Author(s): Lyle Watkins, Evelyn Marino 
+// Author(s): Lyle Watkins, Evelyn Marino
 // Last Updated: 06/11/2025
 
 class Planet {
@@ -9,11 +9,17 @@ class Planet {
         this.orbitTime = PLANET_ORBIT_TIME; // 2 minute orbit
         this.sunAngle = createVector(1, 0.25, -0.75);
         this.sunAngleXZ = createVector(this.sunAngle.x, this.sunAngle.z);
-        // TODO: randomize colors
-        this.sunColor = color(255, 255, 0);
-        this.oceanColor = color(20, 50, 200);
-        this.terrainColor = color(50, 200, 80);
+
+        // Generate random colors for sun, ocean, and terrain
+        push();
+        colorMode(HSB);
+        this.sunColor = color(random(0, 60), 100, 100);
+        this.oceanColor = color(random(180, 255), 50, 75);
+        this.terrainColor = color(random(50, 150), 75, 75);
+        pop();
+
         this.terrain = new Terrain(this.rad, this.terrainColor, this.oceanColor);
+        // TODO if time: add a texture to the star
 
         // CITY CODE:
         this.numCities = 8; // number of city clusters generated 

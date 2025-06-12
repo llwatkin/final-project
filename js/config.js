@@ -1,5 +1,5 @@
 // config.js - Constants for the entire project
-// Last Updated: 5/31/2025
+// Last Updated: 6/11/2025
 
 const CANVAS_WIDTH = 500;
 const CANVAS_HEIGHT = 500;
@@ -10,6 +10,7 @@ const PLANET_ORBIT_TIME = 120; // Seconds it takes to revolve around its sun
 const MAX_CAMERA_DISTANCE = PLANET_RADIUS * 10;
 const MIN_CAMERA_DISTANCE = PLANET_RADIUS * 2.2;
 const SUN_DISTANCE = MAX_CAMERA_DISTANCE * 1.25;
+const STARBOX_SIZE = 5000;
 
 const GOLDEN_RATIO = 1.618;
 const ICOSAHEDRON_FACES =
@@ -36,7 +37,9 @@ const ICOSAHEDRON_FACES =
 		[7, 11, 8]
 	];
 const TERRAIN_FIDELITY = 3; // Number of subdivisions per face of the icosahedron
-const NOISE_SCALE = 0.05;
+const TERRAIN_NOISE_SCALE = 0.2;
+const TEXTURE_NOISE_SCALE = 0.0025;
+const TEXTURE_PIXEL_SIZE = 20;
 const MIN_TERRAIN_MOD = 10;
 const MAX_TERRAIN_MOD = 20;
 
