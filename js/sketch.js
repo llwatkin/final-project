@@ -97,6 +97,7 @@ function generate() {
     // Update seed and display
     let seed = seedInput.value;
     noiseSeed(seed);
+    randomSeed(seed);
     seedDisplay.textContent = "Seed: " + str(seed);
 
     // Create new planet
