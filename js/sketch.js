@@ -29,7 +29,7 @@ function resizeScreen() {
 }
 
 function preload() {
-    myFont = loadFont('../assets/Roboto-Regular.ttf');
+    myFont = loadFont('assets/Roboto-Regular.ttf');
 
     LORE_GLOBS.JSON = loadAllJSON();
     LORE_GLOBS.LORE_DATA = LORE_GLOBS.JSON["_loreKeys"];
