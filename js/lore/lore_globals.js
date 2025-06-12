@@ -23,7 +23,7 @@ let LORE_GLOBS = {
     JSON_PATH: JSON_PATH,
     HISTORY_GRAMS: "history_grammars", // name of history json file
     JSON: {},
-    NUM_COUNTRIES: 3,
+    NUM_COUNTRIES: 5,
     LORE_DATA: {},
     WORLD_STATS: {},
     COUNTRY_STATS: {},

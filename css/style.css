@@ -38,3 +38,8 @@ body {
 #prev-btn { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); }
 #next-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); }
 #tour-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); }
+
+#info-panel {
+  overflow-y: auto;
+  max-height: 550px; 
+}

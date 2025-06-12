@@ -170,3 +170,25 @@ function getRandomWorryDialogue(){
     //console.log(dialogue)
     return dialogue;
 }
+
+/**
+ * Renders a single set of stats (world or country) to the appropriate DOM container.
+ * @param {Object} base - The object of stats to print.
+ * @param {string} level - Either "world" or "country" (used for ID and labeling).
+ */
+function printLore(base, level, attributes) {
+  const title = `${level.toUpperCase()}`;
+
+  let printOut = `<h3>${title}</h3>`;
+
+  if(!attributes) attributes = Object.keys(base);
+  for (let b of attributes) {
+    let b_items = Array.isArray(base[b])
+      ? base[b].join('</p>')
+      : base[b]; // handle string/number fallback
+
+    printOut += `<p><b>${b}</b>: ${b_items}</p>`;
+  }
+
+  return printOut;
+}

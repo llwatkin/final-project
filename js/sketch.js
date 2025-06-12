@@ -45,6 +45,9 @@ function setup() {
         resizeScreen();
     });
 
+    // text box
+    infoPanel = select('#info-panel');
+
     // Set seed and corresponding HTML elements
     let seed = round(random(10000));
     noiseSeed(seed);
@@ -99,14 +102,6 @@ function setup() {
     // hide the arrows until tour mode begins
     prevBtn.hide();
     nextBtn.hide();
-
-    // text box
-    overlay = createGraphics(width, height);
-    overlay.textFont(myFont);
-    overlay.textSize(16);
-    overlay.noStroke();
-    showTextBox = false;
-    message = "";
 }
 
 function generate() {
@@ -123,6 +118,7 @@ function generate() {
     planet = new Planet();
 
     initLore();
+    updateInfoPanel();
 }
 
 function draw() {
@@ -179,18 +175,6 @@ function draw() {
         }
         pop();
     }
-
-    // text box
-    overlay.clear();
-
-    if (showTextBox) {
-        drawTextBox(overlay, mouseX, mouseY, 200, 100, message);
-    }
-
-    // Draw the overlay as a texture (HUD layer)
-    resetMatrix();
-    translate(-width / 2, -height / 2); // from WEBGL center to top-left
-    image(overlay, 0, 0);
 }
 
 function drawIsometricCity(city) {
@@ -259,24 +243,12 @@ function trySelectCity() {
     }
 }
 
-
-function mousePressed() {
-    showTextBox = !showTextBox;
-    message = getRandomWorryDialogue();
-}
-
-function drawTextBox(gfx, x, y, w, h, txt) {
-    push();
-    gfx.fill(255);
-    gfx.stroke(0);
-    gfx.rect(x, y, w, h);
-
-    gfx.fill(0);
-    gfx.noStroke();
-    gfx.textAlign(LEFT, TOP);
-
-    let padding = 10;
-    gfx.textSize(14);
-    gfx.text(txt, x + padding, y + padding, w - 2 * padding, h - 2 * padding);
-    pop();
+function updateInfoPanel() {
+    if (LORE_GLOBS.WORLD_STATS) {
+        infoPanel.html(printLore(LORE_GLOBS.WORLD_STATS, "world", 
+            ["name", "history", "world_powers"]
+        ));
+    } else {
+        infoPanel.html(`<p>No data loaded.</p>`);
+    }
 }

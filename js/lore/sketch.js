@@ -88,25 +88,3 @@ function printCountries(){
     }
 }
 
-/**
- * Renders a single set of stats (world or country) to the appropriate DOM container.
- * @param {Object} base - The object of stats to print.
- * @param {string} level - Either "world" or "country" (used for ID and labeling).
- */
-function printLore(base, level){
-    let printTo = document.getElementById(`${level.toLowerCase()}-stats`);
-    let printOut = `<h3>${level.toUpperCase()} STATS</h3>`;
-
-    for(let b in base){
-        let b_items = "";
-
-        for(let item of base[b]){
-            b_items += `${item}, `
-        }
-        b_items = b_items.slice(0, -2); // remove ", "
-
-        printOut += `<p><b>${b}</b>: ${b_items}`;
-    }
-    //printOut += `<p><b>${pillar.substring(2)}</b>: ${dat[pillar][randomIndex]}</p>`
-    printTo.innerHTML += printOut;
-}
