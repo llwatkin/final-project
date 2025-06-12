@@ -158,7 +158,7 @@ function getWorries() {
                 );
             } else {
                 const enemyObjs = []
-                country.enemies.forEach((id) => enemyObjs.push(getCountryByID(id))); 
+                country.enemies.forEach((id) => enemyObjs.push(getCountryByID(id[0]))); 
                 country.worries.push(
                     new Worry(
                         "enemies", 
@@ -242,7 +242,7 @@ function hasPower(arr){
     ]
     for(let id of arr){
         if(worldPowers.includes(id)){ 
-            powf.push(getCountryByID(id)); // add country to powf
+            powf.push(getCountryByID(id[0])); // add country to powf
         }
     }
     return powf;
@@ -257,7 +257,7 @@ function getCountryByID(id){
     for(let c in LORE_GLOBS.COUNTRY_STATS){
         const country = LORE_GLOBS.COUNTRY_STATS[c];
 
-        if(country.ID === id){
+        if(country.ID[0] === id){
             return country;
         }
     }

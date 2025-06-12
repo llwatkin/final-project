@@ -75,6 +75,7 @@ function setup() {
 
     tourBtn.mousePressed(() => {
         inTour = !inTour;
+        panelUpdated = !panelUpdated;
         if (inTour) {
             // start at the first city
             cityTourIndex = 0;
@@ -93,15 +94,19 @@ function setup() {
     prevBtn.mousePressed(() => {
         cityTourIndex = (cityTourIndex - 1 + planet.cities.length) % planet.cities.length;
         selectedCity = planet.cities[cityTourIndex];
+        panelUpdated = false;
     });
     nextBtn.mousePressed(() => {
         cityTourIndex = (cityTourIndex + 1) % planet.cities.length;
         selectedCity = planet.cities[cityTourIndex];
+        panelUpdated = false;
     });
 
     // hide the arrows until tour mode begins
     prevBtn.hide();
     nextBtn.hide();
+
+    panelUpdated = false;
 }
 
 function generate() {
@@ -118,7 +123,6 @@ function generate() {
     planet = new Planet();
 
     initLore();
-    updateInfoPanel();
 }
 
 function draw() {
@@ -141,6 +145,10 @@ function draw() {
         if (camDist < MAX_CAMERA_DISTANCE && camDist > MIN_CAMERA_DISTANCE) prevCamPos = camPos;
         else cam.setPosition(prevCamPos.x, prevCamPos.y, prevCamPos.z);
 
+        if(!panelUpdated){
+            updateInfoPanel("world", {attributes: ["name", "history", "world_powers"]});
+            panelUpdated = true;
+        }
     } else {
         //CITY CAROUSEL VIEW 
         background(0);
@@ -174,6 +182,20 @@ function draw() {
             pop();
         }
         pop();
+
+        if(!panelUpdated){
+            let id = parseInt(selectedCity.label[selectedCity.label.length-1]);
+            const country = getCountryByID(id);
+            updateInfoPanel("country", {
+                obj: country, 
+                attributes: ["name", "government", "resource", "economy_strength"],
+                process: [
+                    {fn: printRelationships, params: country},
+                    {fn: printWorry, params: country},
+                ]
+            });
+            panelUpdated = true;
+        }
     }
 }
 
@@ -243,11 +265,11 @@ function trySelectCity() {
     }
 }
 
-function updateInfoPanel() {
-    if (LORE_GLOBS.WORLD_STATS) {
-        infoPanel.html(printLore(LORE_GLOBS.WORLD_STATS, "world", 
-            ["name", "history", "world_powers"]
-        ));
+// level is world or country, details is an array of property names to be printed
+function updateInfoPanel(level, details) {
+    const loreBucket = LORE_GLOBS[`${level.toUpperCase()}_STATS`];
+    if (loreBucket) {
+        infoPanel.html(printLore(loreBucket, level, details));
     } else {
         infoPanel.html(`<p>No data loaded.</p>`);
     }

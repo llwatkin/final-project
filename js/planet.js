@@ -22,7 +22,7 @@ class Planet {
         // TODO if time: add a texture to the star
 
         // CITY CODE:
-        this.numCities = 8; // number of city clusters generated 
+        this.numCities =  NUM_CITIES; // number of city clusters generated 
         this.cities = this._generateCities(this.numCities);
         this._randomlyRotateCities();
 

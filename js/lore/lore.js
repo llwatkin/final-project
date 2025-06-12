@@ -149,22 +149,27 @@ function trimCountries(num){
  * @function getRandomWorryDialogue
  * @returns {Promise<string>} A formatted dialogue string representing a worry-related message.
  */
-function getRandomWorryDialogue(){
-    let country = randomFromObject(LORE_GLOBS.COUNTRY_STATS);
+function getRandomWorryDialogue(country, forceWorry = false){
+    if(!country) country = randomFromObject(LORE_GLOBS.COUNTRY_STATS);
 
-    // if country has no worries, force a new enemy for a worry
-    while(country.worries.length === 0){
-        getRandomRelationships(country, 1, "enemies");
+    if(forceWorry){
+        // if country has no worries, force a new enemy for a worry
+        while(country.worries.length === 0){
+            getRandomRelationships(country, 1, "enemies");
 
-        const enemyObjs = []
-        country.enemies.forEach((id) => enemyObjs.push(getCountryByID(id))); 
-        country.worries.push(
-            new Worry(
-                "enemies", 
-                {"A": [country], "B": enemyObjs}
-            )
-        );
+            const enemyObjs = []
+            country.enemies.forEach((id) => enemyObjs.push(getCountryByID(id[0]))); 
+            country.worries.push(
+                new Worry(
+                    "enemies", 
+                    {"A": [country], "B": enemyObjs}
+                )
+            );
+        }
     }
+
+    if(country.worries.length === 0) return "";
+
     const worry = randomFromArray(country.worries);
     let dialogue = getWorryMessage(country, worry);
     //console.log(dialogue)
@@ -176,13 +181,17 @@ function getRandomWorryDialogue(){
  * @param {Object} base - The object of stats to print.
  * @param {string} level - Either "world" or "country" (used for ID and labeling).
  */
-function printLore(base, level, attributes) {
+function printLore(base, level, detail) {
   const title = `${level.toUpperCase()}`;
 
   let printOut = `<h3>${title}</h3>`;
 
-  if(!attributes) attributes = Object.keys(base);
-  for (let b of attributes) {
+  if(!detail){ detail = { attributes: Object.keys(base) }}
+  else if(detail.obj){ 
+    base = detail.obj;
+    if(!detail.attributes){ detail.attributes = Object.keys(base) }
+  }
+  for (let b of detail.attributes) {
     let b_items = Array.isArray(base[b])
       ? base[b].join('</p>')
       : base[b]; // handle string/number fallback
@@ -190,5 +199,43 @@ function printLore(base, level, attributes) {
     printOut += `<p><b>${b}</b>: ${b_items}</p>`;
   }
 
+  if(detail.process){
+    for(let p of detail.process){
+        printOut += `<p>${p.fn(p.params)}</p>`;
+    }
+  }
+
   return printOut;
+}
+
+function printRelationships(self){
+    console.log("print relationships", self);
+    let printOut = "";
+
+    if(self.allies.size > 0){
+        printOut += '<b>allies</b>: '
+
+        for(let allyID of self.allies){
+            printOut += `${getCountryByID(allyID[0]).name}</p>`;
+        }
+    }
+
+    if(self.enemies.size > 0){
+        printOut += '<b>enemies</b>: '
+
+        for(let enemyID of self.enemies){
+            printOut += `${getCountryByID(enemyID[0]).name}</p>`;
+        }
+    }
+
+    return printOut;
+}
+
+function printWorry(self){
+    let printOut = "";
+    let worry = getRandomWorryDialogue(self);
+    if(worry.length > 0){
+        printOut += `<b>worry</b>: ${worry}`
+    }
+    return printOut;
 }
