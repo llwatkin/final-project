@@ -19,7 +19,7 @@ class Terrain {
 		this.texture.background(this.oceanColor);
 
 		let noiseScale = TEXTURE_NOISE_SCALE;
-		let pixelSize = TEXTTURE_PIXEL_SIZE;
+		let pixelSize = TEXTURE_PIXEL_SIZE;
 
 		// Iterate from top to bottom
 		for (let y = 0; y < this.texture.height / 2; y += pixelSize) {
