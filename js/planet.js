@@ -1,6 +1,6 @@
 // planet.js - Planet with a sun it orbits and city cube clusters
-// Author(s): Lyle Watkins
-// Last Updated: 06/03/2025
+// Author(s): Lyle Watkins, Evelyn Marino
+// Last Updated: 06/11/2025
 
 class Planet {
     constructor() {

@@ -1,6 +1,6 @@
 // sketch.js
 // Author(s): Lyle Watkins, Raven Cruz
-// Last Updated: 6/1/2025
+// Last Updated: 6/11/2025
 
 let canvasContainer;
 let seedDisplay;

@@ -1,5 +1,5 @@
 // config.js - Constants for the entire project
-// Last Updated: 5/31/2025
+// Last Updated: 6/11/2025
 
 const CANVAS_WIDTH = 500;
 const CANVAS_HEIGHT = 500;

@@ -1,6 +1,6 @@
 // terrain.js - Icospheric terrain for planet
 // Author(s): Lyle Watkins
-// Last Updated: 06/03/2025
+// Last Updated: 06/11/2025
 
 class Terrain {
 	constructor(rad, terrainColor, oceanColor) {
