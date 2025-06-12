@@ -97,6 +97,13 @@ async function setup() {
     prevBtn.hide();
     nextBtn.hide();
 
+    // text box
+    overlay = createGraphics(width, height);
+    overlay.textFont(myFont);
+    overlay.textSize(16);
+    overlay.noStroke();
+    showTextBox = false;
+    message = "";
 }
 
 function generate() {
@@ -111,7 +118,7 @@ function generate() {
     if (planet) planet.terrain.clearTerrain();
     planet = new Planet();
 
-    await initLore();
+    initLore();
 }
 
 function draw() {
@@ -167,6 +174,18 @@ function draw() {
         }
         pop();
     }
+
+    // text box
+    overlay.clear();
+
+    if (showTextBox) {
+        drawTextBox(overlay, mouseX, mouseY, 200, 100, message);
+    }
+
+    // Draw the overlay as a texture (HUD layer)
+    resetMatrix();
+    translate(-width / 2, -height / 2); // from WEBGL center to top-left
+    image(overlay, 0, 0);
 }
 
 function drawIsometricCity(city) {
