@@ -34,6 +34,8 @@ class Planet {
             city.green = random(100, 255);
             city.blue = random(100, 255);
         }
+
+        this.people = new PeopleManager(this)
     }
 
     update() {
@@ -44,12 +46,20 @@ class Planet {
             this.sunAngle.y,
             this.sunAngleXZ.y
         );
+    
+        this.people.update(this)
+        
     }
+
     _generateCities(n) {
-        const MIN_SPH_DIST = PI/6;
-        const MIN_LON_DIST = PI/6;
+
+        // Pick N city centers on the sphere
         let cities = [];
-      
+        // Minimum great circle separation
+        const MIN_SPH_DIST = PI / 6;
+        // Minimum longitude difference
+        const MIN_LON_DIST = PI / 6;
+              
         while (cities.length < n) {
           // pick a uniform random spot on the sphere
           let u     = random(-1, 1),
@@ -176,7 +186,6 @@ class Planet {
                 let dj = offset.j;
                 let h = offset.h;       // stack height: 0 or 1
 
-
                 let s = CITY_CUBE_SIZE;
                 let radialDistance = this.rad + h * s + (s / 2);
 
@@ -221,6 +230,24 @@ class Planet {
         sphere(this.rad);
         this.terrain.draw();
         pop();
+
+        let ray = screenToRay(cam, [mouseX, mouseY])
+        // console.log(ray.toString())
+        let intersection = raySphereIntersect(createVector(cam.eyeX, cam.eyeY, cam.eyeZ), ray, createVector(0, 0, 0), this.rad)
+        if (intersection != null) {
+            let sp = cartesianToSpherical(intersection)
+            sp.r = this.terrain.calculateHeight(intersection)
+            intersection = sphericalToCartesian(sp)
+
+            // console.log(intersection)
+            push()
+        
+            fill(255,255,0,127)
+            noStroke()
+            translate(intersection.x, intersection.y, intersection.z)
+            sphere(SELECTION_SPHERE_SIZE)
+            pop()
+        }
     }
 
     drawStar() {
@@ -237,5 +264,6 @@ class Planet {
         this._drawCityClusters();
         // this.drawDebugVerts();
         this.drawStar();
+        this.people.draw(this)
     }
 }

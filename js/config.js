@@ -36,7 +36,7 @@ const ICOSAHEDRON_FACES =
 		[7, 11, 8]
 	];
 const TERRAIN_FIDELITY = 3; // Number of subdivisions per face of the icosahedron
-const NOISE_SCALE = 0.2;
+const NOISE_SCALE = 0.05;
 const MIN_TERRAIN_MOD = 10;
 const MAX_TERRAIN_MOD = 20;
 
@@ -44,6 +44,10 @@ const CITY_CUBE_SIZE = 5;
 const MAX_CITY_STACKS = 3;
 
 const PEOPLE_SPEED = 0.005;
+const NUM_PEOPLE = 100;
+const PEOPLE_MIN_MOVE_DIR_TIMER = 100;
+const PEOPLE_MAX_MOVE_DIR_TIMER = 400;
+const SELECTION_SPHERE_SIZE = 5;
 
 const CITY_NOISE_SCALE      = 9.0 ; 
 const CITY_DENSITY_THRESHOLD = 0.5;  
