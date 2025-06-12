@@ -1,5 +1,5 @@
 // sketch.js
-// Author(s): Lyle Watkins, Raven Cruz
+// Author(s): Lyle Watkins, Raven Cruz, Andy Newton, Evelyn Marino
 // Last Updated: 6/11/2025
 
 let canvasContainer;
@@ -11,6 +11,7 @@ let camPos;
 let camDist;
 let zoom = 0;
 let planet;
+let starbox;
 
 let testPeople;
 
@@ -48,6 +49,7 @@ async function setup() {
     cam = createCamera();
     setCamera(cam);
     generate();
+    starbox = new Stars();
 
     testPeople = new PeopleManager()
     await initLore();
@@ -71,6 +73,7 @@ function draw() {
     noStroke();
     planet.update();
     planet.draw();
+    starbox.draw();
 
     testPeople.update()
     testPeople.draw(planet)

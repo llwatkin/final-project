@@ -19,6 +19,7 @@ class Planet {
         pop();
 
         this.terrain = new Terrain(this.rad, this.terrainColor, this.oceanColor);
+        // TODO if time: add a texture to the star
 
         // CITY CODE:
         this.numCities = 6; // number of city clusters generated 

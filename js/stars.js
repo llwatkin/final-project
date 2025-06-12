@@ -3,12 +3,12 @@
 // Last Updated: 06/11/2025
 
 class Stars {
-	// TODO: create a skybox with star textures
 	constructor() {
-
+		this.imgTexture = loadImage("assets/stars.jpg");
 	}
 
 	draw() {
-
+		texture(this.imgTexture);
+		box(5000);
 	}
 }
