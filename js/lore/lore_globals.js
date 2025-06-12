@@ -5,7 +5,7 @@
 // TODO: add other json files here to use in .js references to json files
 const JSON_PATH = "./json";
 const ALL_JSON = [
-    "_loreKeys", "economy", "government", "history_grammars", "name", 
+    "loreKeys", "economy", "government", "history_grammars", "name", 
     "political_compass", "worry"
 ]
 
