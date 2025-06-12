@@ -3,11 +3,46 @@
 // Last Updated: 06/03/2025
 
 class Terrain {
-	constructor(rad) {
+	constructor(rad, terrainColor, oceanColor) {
 		this.rad = rad;
+		this.terrainColor = terrainColor;
+		this.oceanColor = oceanColor;
 		this.debugVerts = [];
-
+		let circumference = 2 * PI * this.rad;
+		this.texture = createGraphics(circumference, circumference);
+		this.mesh = null;
 		this.generateMesh();
+		this.drawTexture();
+	}
+
+	drawTexture() {
+		this.texture.background(this.oceanColor);
+		this.texture.noStroke();
+
+		let noiseScale = 0.009;
+		let pixelSize = 20;
+
+		// Iterate from top to bottom.
+		for (let y = 0; y < this.texture.height / 2; y += pixelSize) {
+			// Iterate from left to right.
+			for (let x = 0; x < this.texture.width / 2; x += pixelSize) {
+				// Scale the input coordinates.
+				let nx = noiseScale * x;
+				let ny = noiseScale * y;
+
+				// Compute the noise value
+				let c = noise(nx, ny);
+
+				// Draw the "pixels"
+				this.terrainColor.setGreen(c * 255);
+				this.texture.fill(this.terrainColor);
+				let adjustment = 0;
+				this.texture.rect(x, y, pixelSize, pixelSize);
+				this.texture.rect(x, this.texture.height - y + adjustment, pixelSize, pixelSize);
+				this.texture.rect(this.texture.width - x + adjustment, y, pixelSize, pixelSize);
+				this.texture.rect(this.texture.width - x + adjustment, this.texture.height - y + adjustment, pixelSize, pixelSize);
+			}
+		}
 	}
 
 	generateMesh() {
@@ -45,20 +80,33 @@ class Terrain {
 
 		// This makes the lighting work
 		this.mesh.computeNormals(FLAT);
+
+		// Add uvs
+		for (let vert of this.mesh.vertexNormals) {
+			let abs_vert = createVector(abs(vert.x), abs(vert.y), abs(vert.z));
+			let u = (atan2(abs_vert.y, abs_vert.x) / PI) / 2.5;
+			let v = (asin(abs_vert.z) / HALF_PI) / 2.5;
+			let uv = createVector(u, v).normalize();
+			this.mesh.uvs.push([uv.x, uv.y]);
+		}
 	}
 
 	varyTerrain() {
 		let noiseScale = NOISE_SCALE;
 		for (let i = 0; i < this.mesh.vertices.length; i++) {
 			let vert = this.mesh.vertices[i];
-			let variation = map(
-				noise(noiseScale * i),
-				0, 1,
-				vert.mag() - MIN_TERRAIN_MOD,
-				vert.mag() + MAX_TERRAIN_MOD
-			);
+			let variation = this.calculateHeight(vert)
 			vert.setMag(variation);
 		}
+	}
+
+	calculateHeight(pos) {
+		return map(
+			noise(NOISE_SCALE * pos.x + 50, NOISE_SCALE * pos.y + 50, NOISE_SCALE * pos.z + 50),
+			0, 1,
+			this.rad - MIN_TERRAIN_MOD,
+			this.rad + MAX_TERRAIN_MOD
+		)
 	}
 
 	clearTerrain() {
@@ -146,7 +194,7 @@ class Terrain {
 	}
 
 	draw() {
-		fill(50, 200, 80);
+		texture(this.texture);
 		model(this.mesh);
 	}
 }
