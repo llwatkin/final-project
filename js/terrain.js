@@ -102,7 +102,7 @@ class Terrain {
 
 	calculateHeight(pos) {
 		return map(
-			noise(NOISE_SCALE * pos.x + 50, NOISE_SCALE * pos.y + 50, NOISE_SCALE * pos.z + 50),
+			noise(TERRAIN_NOISE_SCALE * pos.x + 50, TERRAIN_NOISE_SCALE * pos.y + 50, TERRAIN_NOISE_SCALE * pos.z + 50),
 			0, 1,
 			this.rad - MIN_TERRAIN_MOD,
 			this.rad + MAX_TERRAIN_MOD
