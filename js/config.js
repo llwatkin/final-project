@@ -44,3 +44,6 @@ const CITY_CUBE_SIZE = 5;
 const MAX_CITY_STACKS = 3;
 
 const PEOPLE_SPEED = 0.005;
+
+const CITY_NOISE_SCALE      = 9.0 ; 
+const CITY_DENSITY_THRESHOLD = 0.5;  

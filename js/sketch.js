@@ -1,5 +1,5 @@
 // sketch.js
-// Author(s): Lyle Watkins, Raven Cruz
+// Author(s): Lyle Watkins, Raven Cruz, Evelyn Marino
 // Last Updated: 6/1/2025
 
 let canvasContainer;
@@ -12,7 +12,11 @@ let camDist;
 let zoom = 0;
 let planet;
 
+let cityIndex = -1;   // -1 = planet view
+
 let testPeople;
+let inTour = false;
+let cityTourIndex = 0;
 
 function resizeScreen() {
     let container_rect = canvasContainer[0].getBoundingClientRect();
@@ -51,6 +55,41 @@ async function setup() {
 
     testPeople = new PeopleManager()
     await initLore();
+
+    const tourBtn = select('#tour-btn');
+    const prevBtn = select('#prev-btn');
+    const nextBtn = select('#next-btn');
+
+    tourBtn.mousePressed(() => {
+        inTour = !inTour;
+        if (inTour) {
+            // start at the first city
+            cityTourIndex = 0;
+            selectedCity = planet.cities[0];
+            tourBtn.html('Exit Tour');
+            prevBtn.show();
+            nextBtn.show();
+        } else {
+            selectedCity = null;
+            tourBtn.html('Tour Planet');
+            prevBtn.hide();
+            nextBtn.hide();
+        }
+    });
+
+    prevBtn.mousePressed(() => {
+        cityTourIndex = (cityTourIndex - 1 + planet.cities.length) % planet.cities.length;
+        selectedCity = planet.cities[cityTourIndex];
+    });
+    nextBtn.mousePressed(() => {
+        cityTourIndex = (cityTourIndex + 1) % planet.cities.length;
+        selectedCity = planet.cities[cityTourIndex];
+    });
+
+    // hide the arrows until tour mode begins
+    prevBtn.hide();
+    nextBtn.hide();
+
 }
 
 function generate() {
@@ -65,25 +104,82 @@ function generate() {
 }
 
 function draw() {
-    orbitControl();
-    cam.lookAt(0, 0, 0); // Disables movement with the right-click drag
-    background(0);
-    noStroke();
-    planet.update();
-    planet.draw();
+    clear();    // reset WebGL
+    if (!inTour) {
+        // PLANET VIEW
+        background(0);
+        orbitControl();
+        cam.lookAt(0, 0, 0);
+        planet.update();
+        planet.draw();
+        testPeople.update();
+        testPeople.draw(planet);
+        stroke(255);
+    } else {
+        //CITY CAROUSEL VIEW 
+        background(0);
+        orbitControl();
+        cam.lookAt(0, 0, 0);
+        perspective();
+        scale(3);
 
-    testPeople.update()
-    testPeople.draw(planet)
+        
+        push();
+        rotateX(-PI / 6);
+        rotateY(PI / 4);
 
-    // Update camera
-    // There's kind of a jumping effect, but I don't think its too big a deal
-    camPos = createVector(cam.eyeX, cam.eyeY, cam.eyeZ);
-    camDist = camPos.mag();
-    if (camDist < MAX_CAMERA_DISTANCE && camDist > MIN_CAMERA_DISTANCE) prevCamPos = camPos;
-    else cam.setPosition(prevCamPos.x, prevCamPos.y, prevCamPos.z);
+   
+        translate(-CITY_CUBE_SIZE, 0, -CITY_CUBE_SIZE);
 
-    stroke(255); // Debug stroke
+        for (let o of selectedCity.clusterPositions) {
+            push();
+            translate(o.i * CITY_CUBE_SIZE,
+                -(o.h * CITY_CUBE_SIZE + CITY_CUBE_SIZE / 2),
+                o.j * CITY_CUBE_SIZE);
+            fill(selectedCity.red, selectedCity.green, selectedCity.blue);
+            stroke(0);
+            box(CITY_CUBE_SIZE);
+            pop();
+        }
+        pop();
+    }
 }
+
+function drawIsometricCity(city) {
+    background(0);
+
+    // zoom
+    const Z = 3;
+    ortho(-width / Z / 2, width / Z / 2, -height / Z / 2, height / Z / 2, -1000, 1000);
+
+    // lighting so theres shading
+    ambientLight(50);
+    directionalLight(255, 255, 255, 0.5, -1, 0.5);
+
+
+    push();
+    rotateX(-PI / 6);
+    rotateY(PI / 4);
+
+
+    scale(2.5);
+
+    //center cluster
+    const s = CITY_CUBE_SIZE;
+    translate(-s, 0, -s);
+
+    //  draw each cube with box()
+    for (let o of city.clusterPositions) {
+        push();
+        translate(o.i * s, -(o.h * s + s / 2), o.j * s);
+        fill(city.red, city.green, city.blue);
+        nostroke();
+        box(s);
+        pop();
+    }
+    pop();
+}
+
 
 function mouseWheel(event) {
     // The default Z limits of orbit control are 80-8000, so I changed this (new values in the config)
@@ -99,4 +195,15 @@ async function initLore() {
 
     console.log("world lore: ", LORE_GLOBS.WORLD_STATS);
     console.log("countries lore: ", LORE_GLOBS.COUNTRY_STATS);
+}
+function trySelectCity() {
+    for (let i = 0; i < planet.cities.length; i++) {
+        let c = planet.cities[i];
+        let sx = screenX(c.pos.x, c.pos.y, c.pos.z);
+        let sy = screenY(c.pos.x, c.pos.y, c.pos.z);
+        if (dist(mouseX, mouseY, sx, sy) < CITY_CLICK_RADIUS) {
+            cityIndex = i;
+            return;
+        }
+    }
 }
