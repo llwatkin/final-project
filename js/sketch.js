@@ -24,6 +24,10 @@ function resizeScreen() {
     resizeCanvas(container_width, container_height);
 }
 
+function preload() {
+  myFont = loadFont('../assets/Roboto-Regular.ttf');
+}
+
 async function setup() {
     // Set up canvas
     canvasContainer = $("#canvas-container");
@@ -52,6 +56,13 @@ async function setup() {
     generate();
 
     testPeople = new PeopleManager()
+
+    // text box
+    overlay = createGraphics(width, height);
+    overlay.textFont(myFont);
+    overlay.textSize(16);
+    overlay.noStroke();
+    showTextBox = false;
 }
 
 async function generate() {
@@ -88,6 +99,18 @@ function draw() {
     else cam.setPosition(prevCamPos.x, prevCamPos.y, prevCamPos.z);
 
     stroke(255); // Debug stroke
+
+    // text box
+    overlay.clear();
+
+    if (showTextBox) {
+        drawTextBox(overlay, mouseX, mouseY, 200, 100, "Clicked here!");
+    }
+
+    // Draw the overlay as a texture (HUD layer)
+    resetMatrix();
+    translate(-width / 2, -height / 2); // from WEBGL center to top-left
+    image(overlay, 0, 0);
 }
 
 function mouseWheel(event) {
@@ -104,4 +127,21 @@ async function initLore() {
 
     console.log("world lore: ", LORE_GLOBS.WORLD_STATS);
     console.log("countries lore: ", LORE_GLOBS.COUNTRY_STATS);
+}
+
+function mousePressed() {
+    showTextBox = !showTextBox;
+}
+
+function drawTextBox(gfx, x, y, w, h, txt) {
+    gfx.fill(255);
+    gfx.stroke(0);
+    gfx.rect(x, y, w, h);
+
+    gfx.fill(0);
+    gfx.noStroke();
+    gfx.textAlign(LEFT, TOP);
+
+    let padding = 10;
+    gfx.text(txt, x + padding, y + padding, w - 2 * padding, h - 2 * padding);
 }
