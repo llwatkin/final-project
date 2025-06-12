@@ -10,5 +10,6 @@ class Stars {
 	draw() {
 		texture(this.imgTexture);
 		box(STARBOX_SIZE);
+		console.log("drawing stars");
 	}
 }

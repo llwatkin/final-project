@@ -48,6 +48,7 @@ async function setup() {
     // Set seed and corresponding HTML elements
     let seed = round(random(10000));
     noiseSeed(seed);
+    randomSeed(seed);
     seedDisplay = document.getElementById("seed-display");
     seedInput = document.getElementById("seed-input");
     seedDisplay.textContent = "Seed: " + str(seed);
@@ -112,6 +113,7 @@ function generate() {
     // Update seed and display
     let seed = seedInput.value;
     noiseSeed(seed);
+    randomSeed(seed);
     seedDisplay.textContent = "Seed: " + str(seed);
 
     SEED = seed;    // set global
@@ -130,9 +132,10 @@ function draw() {
         background(0);
         orbitControl();
         cam.lookAt(0, 0, 0);
-        
+
         planet.update();
         planet.draw();
+        starbox.draw();
         stroke(255);
 
         // Update camera
@@ -156,12 +159,12 @@ function draw() {
         camDist = camPos.mag();
         if (camDist < MAX_CAMERA_DISTANCE && camDist > MIN_CAMERA_DISTANCE) prevCamPos = camPos;
         else cam.setPosition(prevCamPos.x, prevCamPos.y, prevCamPos.z);
-            
+
         push();
         rotateX(-PI / 6);
         rotateY(PI / 4);
 
-   
+
         translate(-CITY_CUBE_SIZE, 0, -CITY_CUBE_SIZE);
 
         for (let o of selectedCity.clusterPositions) {

@@ -38,6 +38,7 @@ const ICOSAHEDRON_FACES =
 	];
 const TERRAIN_FIDELITY = 3; // Number of subdivisions per face of the icosahedron
 const TERRAIN_NOISE_SCALE = 0.2;
+const PEOPLE_NOISE_SCALE = 0.05;
 const TEXTURE_NOISE_SCALE = 0.0025;
 const TEXTURE_PIXEL_SIZE = 20;
 const MIN_TERRAIN_MOD = 10;
