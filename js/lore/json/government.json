@@ -1,0 +1,22 @@
+{
+    "rows": {
+        "1": ["Totalitarianism", "Autocracy", "Authoritarianism", "Despotism", "Dictatorship"],
+        "2": ["Monarchy", "Plutocracy", "Theocracy", "Military-Junta"],
+        "3": ["Oligarchy", "Technocracy", "Stratocracy"],
+        "4": ["Illiberal-Democracy", "Unitarism", "Managed-Democracy"],
+        "5": ["Liberal-Democracy", "Parliamentarism"],
+        "6": ["Democracy", "Republic", "Democracy", "Federalism"],
+        "7": ["Mutualism", "Syndicalism", "Libertarianism"],
+        "8": ["Anarchism", "Anarcho-Communism", "Anarcho-Syndicalism", "Anarcho-Capitalism"]
+    },
+    "cols": {
+        "A": ["", "Ultra-traditionalist", "Mythocentric", "Fundamentalist", "Totalist"],
+        "B": ["", "Theocratic", "Ritualistic", "Clerical", "Hierarchical"],
+        "C": ["", "Militaristic", "Nationalist", "Disciplinarian", "Authoritarian"],
+        "D": ["", "Ideological", "Meritocratic", "Technocratic", "Conformist"],
+        "E": ["", "Liberal", "Humanist", "Rationalist", "Civic-minded", "Constitutional"],
+        "F": ["", "Progressive", "Cosmopolitan", "Individualist", "Expressivist", "Secular"],
+        "G": ["", "Communitarian", "Egalitarian", "Mutualist", "Decentralist", "Representative"],
+        "H": ["", "Anarchistic", "Primitivist", "Voluntarist", "Participatory"]
+    }
+}

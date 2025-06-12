@@ -1,170 +1,65 @@
 // lore.js
 // Author(s): Raven Cruz
-// Last Updated: 6/1/2025
+// Last Updated: 6/11/2025
 // handler functions for generating world lore
 
-// creates a new world and fills it with {num} countries
-async function generateWorld(loreData, num) {
-    LORE_GLOBS.WORLD_STATS = await generateLore(loreData.world);
-
-    LORE_GLOBS.WORLD_STATS.resource_ranking = randomlyRankResources(loreData.country.resource.choices);
-
-    await genMultipleCountries(loreData, num);
-}
-
-// makes lore for {num} countries
-async function genMultipleCountries(loreData, num, from = 0) {
-    num = parseInt(num);
-    from = parseInt(from);
-
-    for(let i = from; i < num; i++){
-        let newCountry = await generateCountry(loreData, i);
-        LORE_GLOBS.COUNTRY_STATS[newCountry.name] = newCountry;
-    }
-
-    generateHistory(num);
-    // DEBUG: console.log(countriestats)
-}
-
-// populate world history with grammar-generated facts
-async function generateHistory(num) {
-    // make relationships between countries
-    // TODO: implement smarter relationship generation (maybe based on governments/ideology)
-    LORE_GLOBS.WORLD_STATS.history = [];
-    for(let c in LORE_GLOBS.COUNTRY_STATS){
-        // if this country HAS a governmenet....
-        if(LORE_GLOBS.COUNTRY_STATS[c].government[0] !== "none"){
-            if(LORE_GLOBS.COUNTRY_STATS[c].allies.size === 0){
-                await getRandomAllies(
-                    LORE_GLOBS.COUNTRY_STATS[c], 
-                    Math.floor(Math.random() * num)
-                );
-            }
-            if(LORE_GLOBS.COUNTRY_STATS[c].enemies.size === 0){
-                await getRandomEnemies(
-                    LORE_GLOBS.COUNTRY_STATS[c], 
-                    Math.floor(Math.random() * num)
-                );
-            }
-        }
-    }
-}
-
-// creates up to {num} allyships between {self} country and randomly selected others
-async function getRandomAllies(self, num){
-    const allies = self.allies;
-    // array of all countries
-    const  cKeys = Object.keys(LORE_GLOBS.COUNTRY_STATS);
-    let randomIndex = Math.floor(Math.random() * cKeys.length);
-
-    for(let i = 0; i < num; i++){
-        // pick a random country
-        let potentialAlly = LORE_GLOBS.COUNTRY_STATS[cKeys[randomIndex]]; 
-        if( potentialAlly.ID !== self.ID &&             // ally is not self
-            potentialAlly.government[0] !== "none" &&   // ally has a governemnt
-            !self.enemies.has(potentialAlly.ID) &&      // ally is not an enemy of self
-            !potentialAlly.enemies.has(self.ID)         // self is not an ally of enemy
-        ){
-            // add as self's ally
-            allies.add(potentialAlly.ID);
-            // add self to ally's allies 
-            potentialAlly.allies.add(self.ID)    
-            
-            // add allyship origin to history
-            await explainRelationship(potentialAlly, self, "ally_origin");
-        }   
-
-        // update random index for next choice
-        randomIndex = Math.floor(Math.random() * cKeys.length);
-    }
-}
-
-// creates up to {num} enemyships between {self} country and randomly selected others
-async function getRandomEnemies(self, num){
-    const enemies = self.enemies;
-    // array of all countries
-    const  cKeys = Object.keys(LORE_GLOBS.COUNTRY_STATS); 
-    let randomIndex = Math.floor(Math.random() * cKeys.length);
-
-    for(let i = 0; i < num; i++){
-        // pick a random country
-        let potentialEnemy = LORE_GLOBS.COUNTRY_STATS[cKeys[randomIndex]]; 
-        if( potentialEnemy.ID !== self.ID &&            // enemy is not self
-            potentialEnemy.government[0] !== "none" &&  // enemy has a governemtn
-            !self.allies.has(potentialEnemy.ID) &&      // enemy is not an ally of self
-            !potentialEnemy.allies.has(self.ID)         // self is not and ally of enemy
-        ){
-            // add as self's enemy
-            enemies.add(potentialEnemy.ID);
-            // add self to enemy's enemies 
-            potentialEnemy.enemies.add(self.ID)  
-            
-            await explainRelationship(potentialEnemy, self, "enemy_origin");
-        }   
-
-        // update random index for next choice
-        randomIndex = Math.floor(Math.random() * cKeys.length);
-    }
-}
-
-// creates one country 
-async function generateCountry(loreData, i){
-    let country = await generateLore(loreData.country);
-    country.name = [`country ${i+1}`];  // TODO: better country names
-    country.ID = [i+1];
-
-    country.economy_strength = getEconomyStrength(country.resource);
-
-    country.allies = new Set();   // empty set for now, will define after all countries have been initialized
-    country.enemies = new Set();  // "
-
-    return country;
-}
-
-// randomly generates lore using json data
-async function generateLore(data){
+/**
+ * Generates a structured lore object by sampling from JSON-defined categories.
+ * Each category can define a number of picks, modifiers, and special handlers.
+ * @param {Object} data - The parsed JSON object containing categories and choice metadata.
+ * @returns {Promise<Object>} A generated lore object with category keys and picked values as arrays.
+ */
+function generateLore(data){
     const base = {};
 
     for(let cat in data){
         const maxPicks = data[cat].maxPicks;
         const minPicks = (data[cat].minPicks) ? data[cat].minPicks : 0;
-        const numPicks = Math.ceil(Math.random() * (maxPicks - minPicks)) + minPicks;
+        const numPicks = myRandom(maxPicks, minPicks) + 1;
 
         // create a new set to hold data for this cat(egory)
         base[cat] = new Set();
 
-        // retrieve choices (as defined in json data)
-        let choices;
-        if(data[cat].length !== 0){ 
-            choices = await getChoices(data, cat, base);
-        }
-
-        // pick a choice, {num} times
-        for(let i = 0; i < numPicks; i++){
-            if(choices === null){
-                console.error(`ERROR: unable to load choices for {${cat}}`);
-                break;
+        // check for special handler in choice control
+        let cc = data[cat].choice_control;
+        let sp = cc ? cc.special : undefined;
+        if(sp){
+            let picks = specialHandler(data[cat], base);
+            picks.forEach(elem => base[cat].add(elem));
+        } else {
+            // retrieve choices (as defined in json data)
+            let choices;
+            if(data[cat].length !== 0){ 
+                choices = getChoices(data, cat, base);
             }
 
-            // cap numPicks to possible choices (as defined in json data)
-            if(data[cat].length < numPicks){ numPicks = choices.length; }
+            // pick a choice, {num} times
+            for(let i = 0; i < numPicks; i++){
+                if(choices === null){
+                    console.error(`ERROR: unable to load choices for {${cat}}`);
+                    break;
+                }
 
-            // pick randomly from choices
-            const randomIndex = Math.floor(Math.random() * (choices.length));
-            let pick = choices[randomIndex];
+                // cap numPicks to possible choices (as defined in json data)
+                if(data[cat].length < numPicks){ numPicks = choices.length; }
 
-            // add a prefix word (modifier) when possible/necessary
-            if(pick && pick !== "none" && data[cat].modifiers){
-                let mods = data[cat].modifiers.values;
+                // pick randomly from choices
+                const randomIndex = myRandom(choices.length);
+                let pick = choices[randomIndex];
 
-                const randomIndex = Math.floor(Math.random() * (mods.length));
-                const modifier = mods[randomIndex];
+                // add a prefix word (modifier) when possible/necessary
+                if(pick && pick !== "none" && data[cat].modifiers){
+                    let mods = data[cat].modifiers.values;
 
-                if(modifier.length > 0){ pick = modifier + " " + pick; }
+                    const randomIndex = myRandom(mods.length);
+                    const modifier = mods[randomIndex];
+
+                    if(modifier.length > 0){ pick = modifier + " " + pick; }
+                }
+
+                // add picked choice to set
+                base[cat].add(pick);
             }
-
-            // add picked choice to set
-            base[cat].add(pick);
         }
         base[cat] = [...base[cat]]; // convert set to an array
     }
@@ -173,29 +68,57 @@ async function generateLore(data){
     return base;
 }
 
-// randomly ranks the values in the lore key json under country > resource
-//  from low to high value
-function randomlyRankResources(arr){
-    let result = [...arr];
-    for(let i = result.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i+1));
-        [result[i], result[j]] = [result[j], result[i]];
+/**
+ * Generates a unique place name using prefix/core/suffix fragments defined in name.json.
+ * Ensures the generated name does not already exist in COUNTRY_STATS or WORLD_STATS.
+ * @returns {Promise<string[]>} A one-element array containing the generated name.
+ */
+function generateName() {
+    const nameJSON = LORE_GLOBS.JSON["name"]
+    let success = false;
+    let name = ""
+
+    while(!success){
+        for(let f in nameJSON){
+            let fixArr = nameJSON[f]
+            let r = myRandom(fixArr.length)
+            name += fixArr[r];
+        }
+
+        if( !LORE_GLOBS.COUNTRY_STATS[name] &&
+            LORE_GLOBS.WORLD_STATS.name !== name
+        ){    // make sure name doesnt already exist
+            success = true; // stop loop
+        }
     }
-    return result;
+
+    return [name];
 }
 
-// determines a country's economy strength by tallying the values of their resources
-function getEconomyStrength(resources){
-    const ranking = LORE_GLOBS.WORLD_STATS.resource_ranking;
-    let result = 0;
-    for(let resource of resources){
-        let val = ranking.indexOf(resource) + 1;
-        if(val > 0) result += val;
-    }
-    return [result];
+/**
+ * Resets all world-level stats, including powers and shared lore state.
+ * Does not affect LORE_DATA.
+ */
+function resetWorld(){
+    //LORE_GLOBS.LORE_DATA = {}
+    LORE_GLOBS.WORLD_STATS = {}
+    LORE_GLOBS.COUNTRY_STATS = {}
 }
 
-// LEGACY/DEBUG
+/**
+ * Clears all entries in COUNTRY_STATS without affecting WORLD_STATS.
+ * Useful for refreshing country generation while preserving global context.
+ */
+function resetCountries(){
+    LORE_GLOBS.COUNTRY_STATS = {}
+}
+
+/**
+ * [LEGACY/DEBUG]
+ * Deletes the last `num` countries from GLOBAL.COUNTRY_STATS and cleans up any relationships.
+ * Primarily used for debugging or legacy trimming behavior.
+ * @param {number} num - Number of countries to remove from the end of the COUNTRY_STATS list.
+ */
 function trimCountries(num){
     // trim the last {num} keys
     const trimKeys = Object.keys(GLOBAL.COUNTRY_STATS).slice(-num);
@@ -214,4 +137,36 @@ function trimCountries(num){
 
         delete GLOBAL.COUNTRY_STATS[key];
     }
+}
+
+/**
+ * Generates a worry-based dialogue message for a random country.
+ * 
+ * If the selected country has no existing worries, this function forces the
+ * generation of an enemy relationship and creates a new worry of type "enemies".
+ * It then retrieves a formatted dialogue string based on that worry.
+ * 
+ * @function getRandomWorryDialogue
+ * @returns {Promise<string>} A formatted dialogue string representing a worry-related message.
+ */
+function getRandomWorryDialogue(){
+    let country = randomFromObject(LORE_GLOBS.COUNTRY_STATS);
+
+    // if country has no worries, force a new enemy for a worry
+    while(country.worries.length === 0){
+        getRandomRelationships(country, 1, "enemies");
+
+        const enemyObjs = []
+        country.enemies.forEach((id) => enemyObjs.push(getCountryByID(id))); 
+        country.worries.push(
+            new Worry(
+                "enemies", 
+                {"A": [country], "B": enemyObjs}
+            )
+        );
+    }
+    const worry = randomFromArray(country.worries);
+    let dialogue = getWorryMessage(country, worry);
+    //console.log(dialogue)
+    return dialogue;
 }

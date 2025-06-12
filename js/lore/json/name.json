@@ -1,0 +1,46 @@
+{
+  "prefix": [
+    "Al", "An", "Ar", "As", "Ba", "Be", "Bel", "Ber", "Bo", "Bra",
+    "Ca", "Cal", "Car", "Ce", "Chi", "Co", "Cy", "Da", "Del", "Do",
+    "Ea", "El", "Em", "Es", "Eth", "Fa", "Fi", "For", "Ga", "Ge",
+    "Ha", "Ho", "Hu", "Il", "Ir", "Is", "Ja", "Jo", "Ju", "Ka", "Ke",
+    "Ko", "Ku", "La", "Le", "Lo", "Lu", "Ma", "Me", "Mi", "Mo", "Mu",
+    "Na", "Ne", "Ni", "No", "Nu", "Ob", "Oc", "Om", "Op", "Or", "Os",
+    "Pa", "Pe", "Pi", "Po", "Pra", "Qua", "Ra", "Re", "Ri", "Ro", "Ru",
+    "Sa", "Se", "Sha", "Si", "So", "Su", "Ta", "Te", "Tha", "Ti", "To",
+    "Tu", "Ul", "Um", "Ur", "Va", "Ve", "Vi", "Vo", "Vu", "Wa", "We",
+    "Xi", "Ya", "Ye", "Yo", "Yu", "Za", "Ze", "Zi", "Zo", "Zy",
+    "Aq", "Az", "Brae", "Cha", "Cly", "Cro", "Dra", "Eri", "Ezo", "Fae",
+    "Gra", "Gri", "Gwa", "Hael", "Ish", "Jae", "Kael", "Kro", "Lai", "Mae",
+    "Nae", "Nok", "Osh", "Pha", "Quael", "Rha", "Roi", "Ska", "Syi", "Thael",
+    "Tre", "Try", "Uri", "Vael", "Vra", "Wae", "Xe", "Xho", "Yra", "Zha"
+  ],
+  "core": [
+    "ban", "bar", "bek", "bel", "bur", "can", "car", "cel", "chi", "dan",
+    "dar", "del", "din", "dor", "dra", "duk", "dur", "dzan", "fel", "fon",
+    "gal", "gar", "gen", "gor", "gul", "han", "hel", "hin", "hor", "ian",
+    "jin", "jor", "kar", "kas", "kaz", "ken", "kol", "kor", "kun", "lan",
+    "lek", "lim", "lin", "lok", "lom", "lor", "luk", "lur", "mak", "man",
+    "mar", "mel", "mir", "mon", "mun", "nal", "nar", "nek", "nor", "num",
+    "pal", "pan", "par", "pel", "pon", "rak", "ral", "ram", "ren", "rik",
+    "ril", "ron", "ruk", "sal", "sar", "sel", "sen", "sha", "sin", "sol",
+    "sor", "sul", "tak", "tar", "tel", "ten", "tor", "tun", "val", "var",
+    "vek", "vel", "vil", "von", "vor", "wak", "wan", "wel", "wil", "wur",
+    "zan", "zar", "zel", "zen", "zor", "zul",
+    "adr", "aka", "arn", "ath", "ava", "aze", "belg", "bor", "cad", "cez",
+    "drae", "dri", "ehl", "fren", "gahn", "gron", "haal", "harn", "iren", "jol",
+    "kaen", "kesh", "laar", "laz", "mael", "mirn", "mord", "nash", "ned", "nih",
+    "orv", "paz", "quel", "rhek", "rhil", "sahn", "shan", "shir", "taes", "thur",
+    "uln", "vad", "vahn", "ver", "vol", "wyn", "xel", "yor", "yrr", "zorv"
+  ],
+  "suffix": [
+    "a", "aan", "ace", "ad", "ai", "al", "an", "ar", "as", "at", "ean",
+    "el", "en", "er", "es", "et", "ia", "ian", "ic", "id", "il", "in",
+    "ir", "is", "it", "ium", "oa", "oia", "on", "or", "os", "ot", "u",
+    "ua", "ue", "uk", "ul", "um", "un", "ur", "us", "ya", "yn", "ys",
+    "ach", "aed", "ahn", "aq", "ath", "az", "e", "eanth", "eid", "eik",
+    "elth", "eyn", "ga", "iel", "iir", "inor", "ith", "iyn", "oan", "ok",
+    "ol", "oq", "oth", "ual", "uar", "uir", "ulth", "una", "urn", "uth",
+    "yad", "yir", "yth", "zan", "ze", "zir", "zor", "zun", "zys", "zai"
+  ]
+}

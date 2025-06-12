@@ -48,6 +48,8 @@ const CITY_CUBE_SIZE = 5;
 const MAX_CITY_STACKS = 3;
 
 const PEOPLE_SPEED = 0.005;
+
+let SEED = -1;
 const NUM_PEOPLE = 100;
 const PEOPLE_MIN_MOVE_DIR_TIMER = 100;
 const PEOPLE_MAX_MOVE_DIR_TIMER = 400;

@@ -1,14 +1,6 @@
 {
     "world": {
         "name": {},
-        "epoch": {
-            "maxPicks": "1",
-            "choices": [
-                "prehistory", "stone age", "bronze age", "iron age", "classical era", 
-                "medieval era", "early modern era", "modern era","near future", "future", 
-                "far furture", "very distant furture", "inconceivably distant furture"
-            ]
-        },
         "economy": {
             "maxPicks": "1",
             "choices": [ 
@@ -16,7 +8,8 @@
             ]
         },
         "resource_ranking": [],
-        "history": []
+        "history": [],
+        "world_powers": []
     },
     "country": {
         "name": {},
@@ -29,44 +22,54 @@
                 "json": "economy"
             }
         },
-        "government": {
+        "political_compass": {
+            "minPicks": 2,
+            "maxPicks": 2,
+            "choice_control": {
+                "process": "random_grid",
+                "json": "political_compass"
+            }
+        },
+        "government":{
             "maxPicks": 1,
-            "choices": [
-                "none", "democracy", "dictatorship","anarchy","communism","monarchy",
-                "authoritarianism","oligarchy","aristocracy","republic","presidency",
-                "plutocracy","theocracy","electocracy","parliament","socialism",
-                "autocracy","confederation","corporatocracy","argatocracy","fascism"
-            ], 
-            "modifiers": {
-                "values": [
-                    "", "total", "partial", "democratic","anarchist","communist","monarchical",
-                    "authoritarian","oligarchical","aristocratic","republican","presidential",
-                    "plutocratic","theocratic","electocratic","parliamentary","socialist",
-                    "autocratic","corporate","argatocratic","fascist"
-                ]
+            "choice_control": {
+                "location": "self",
+                "attribute":"political_compass",
+                "json": "government",
+                "special": "grid"
             }
         },
         "resource": {
             "maxPicks": 3,
             "choices": [
                 "vegetation", "animal", "energy", "population", "oil", "gas", "minerals",
-                "agriculture", "water", "wind", "solar"
+                "agriculture", "water", "wind", "solar", "timber", "stone", "metal", "coal", 
+                "uranium", "sand", "salt", "fish", "livestock", "fungi", "clay", "peat", 
+                "resin", "sunlight", "geothermal", "tide", "insect", "amber", "crystals",
+                "knowledge", "spiritual-power", "labor", "infrastructure", "soup",
+                "obsidian", "ice", "flora", "microbes", "venom", "silk", "honey", "dyes",
+                "heat", "magnetism", "gravity", "quartz", "copper", "iron", "lithium",
+                "relics", "mycelium", "textiles", "spices", "ceramics", "paper", "wool",
+                "data", "codes", "aether", "mana", "dream-essence", "songstones",
+                "nanomatter", "carbon", "plastic", "tech-scrap", "junkmetal", "hydrogen"
             ]
         },
         "culture": {
             "maxPicks": 3,
             "choices": [
                 "music", "holidays", "food", "theater", "film", "tv", "games", "sports",
-                "social", "tradition"
+                "social", "tradition", "dance", "ritual", "fashion", "mythology", 
+                "storytelling", "architecture", "ceremony", "crafts", "literature", 
+                "visual art", "tattoos", "calligraphy", "comedy", "puppetry", "opera", 
+                "folklore", "festivals", "parades", "masks", "philosophy", "etiquette", 
+                "language", "spirituality", "symbolism", "hospitality", "interpersonal",
+                "family structure", "naming", "superstition", "memory sharing", 
+                "virtual ritual", "shared dreams", "cosmic worship"
             ]
         },
         "allies": {},
         "enemies": {},
-        "economy_strength": {
-
-        }
+        "economy_strength": {},
+        "worries": {}
     }
 }
-
-
-

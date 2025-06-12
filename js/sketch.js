@@ -28,7 +28,14 @@ function resizeScreen() {
     resizeCanvas(container_width, container_height);
 }
 
-async function setup() {
+function preload() {
+    myFont = loadFont('../assets/Roboto-Regular.ttf');
+
+    LORE_GLOBS.JSON = loadAllJSON();
+    LORE_GLOBS.LORE_DATA = LORE_GLOBS.JSON["_loreKeys"];
+}
+
+function setup() {
     // Set up canvas
     canvasContainer = $("#canvas-container");
     let canvas = createCanvas(canvasContainer.width(), canvasContainer.height(), WEBGL);
@@ -47,6 +54,8 @@ async function setup() {
     seedDisplay.textContent = "Seed: " + str(seed);
     seedInput.value = seed;
 
+    SEED = seed;    // set global
+
     frameRate(60);
     angleMode(DEGREES);
     //debugMode();
@@ -55,7 +64,7 @@ async function setup() {
     generate();
     starbox = new Stars();
 
-    await initLore();
+    initLore();
 
     const tourBtn = select('#tour-btn');
     const prevBtn = select('#prev-btn');
@@ -91,6 +100,13 @@ async function setup() {
     prevBtn.hide();
     nextBtn.hide();
 
+    // text box
+    overlay = createGraphics(width, height);
+    overlay.textFont(myFont);
+    overlay.textSize(16);
+    overlay.noStroke();
+    showTextBox = false;
+    message = "";
 }
 
 function generate() {
@@ -100,9 +116,13 @@ function generate() {
     randomSeed(seed);
     seedDisplay.textContent = "Seed: " + str(seed);
 
+    SEED = seed;    // set global
+
     // Create new planet
     if (planet) planet.terrain.clearTerrain();
     planet = new Planet();
+
+    initLore();
 }
 
 function draw() {
@@ -159,6 +179,18 @@ function draw() {
         }
         pop();
     }
+
+    // text box
+    overlay.clear();
+
+    if (showTextBox) {
+        drawTextBox(overlay, mouseX, mouseY, 200, 100, message);
+    }
+
+    // Draw the overlay as a texture (HUD layer)
+    resetMatrix();
+    translate(-width / 2, -height / 2); // from WEBGL center to top-left
+    image(overlay, 0, 0);
 }
 
 function drawIsometricCity(city) {
@@ -209,9 +241,8 @@ function mouseWheel(event) {
     //console.log(zoom);
 }
 
-async function initLore() {
-    LORE_GLOBS.LORE_DATA = await fetchLoreKeys(LORE_GLOBS.JSON_PATH);
-    await generateWorld(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
+function initLore() {
+    generateWorld(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
     console.log("world lore: ", LORE_GLOBS.WORLD_STATS);
     console.log("countries lore: ", LORE_GLOBS.COUNTRY_STATS);
@@ -226,4 +257,26 @@ function trySelectCity() {
             return;
         }
     }
+}
+
+
+function mousePressed() {
+    showTextBox = !showTextBox;
+    message = getRandomWorryDialogue();
+}
+
+function drawTextBox(gfx, x, y, w, h, txt) {
+    push();
+    gfx.fill(255);
+    gfx.stroke(0);
+    gfx.rect(x, y, w, h);
+
+    gfx.fill(0);
+    gfx.noStroke();
+    gfx.textAlign(LEFT, TOP);
+
+    let padding = 10;
+    gfx.textSize(14);
+    gfx.text(txt, x + padding, y + padding, w - 2 * padding, h - 2 * padding);
+    pop();
 }
