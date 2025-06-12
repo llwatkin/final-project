@@ -14,7 +14,6 @@ let planet;
 
 let cityIndex = -1;   // -1 = planet view
 
-let testPeople;
 let inTour = false;
 let cityTourIndex = 0;
 
@@ -109,11 +108,18 @@ function draw() {
         background(0);
         orbitControl();
         cam.lookAt(0, 0, 0);
+        
         planet.update();
         planet.draw();
-        testPeople.update();
-        testPeople.draw(planet);
         stroke(255);
+
+        // Update camera
+        // There's kind of a jumping effect, but I don't think its too big a deal
+        camPos = createVector(cam.eyeX, cam.eyeY, cam.eyeZ);
+        camDist = camPos.mag();
+        if (camDist < MAX_CAMERA_DISTANCE && camDist > MIN_CAMERA_DISTANCE) prevCamPos = camPos;
+        else cam.setPosition(prevCamPos.x, prevCamPos.y, prevCamPos.z);
+
     } else {
         //CITY CAROUSEL VIEW 
         background(0);

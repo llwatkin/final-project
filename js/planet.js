@@ -55,7 +55,11 @@ class Planet {
 
         // Pick N city centers on the sphere
         let cities = [];
-      
+        // Minimum great circle separation
+        const MIN_SPH_DIST = PI / 6;
+        // Minimum longitude difference
+        const MIN_LON_DIST = PI / 6;
+              
         while (cities.length < n) {
           // pick a uniform random spot on the sphere
           let u     = random(-1, 1),
