@@ -232,6 +232,8 @@ class Planet {
         noStroke();
         ambientLight(50);
         directionalLight(color(255), this.sunAngle); // Sun
+        this.people.draw(this);
+        this._drawCityClusters();
         fill(this.oceanColor);
         sphere(this.rad);
         this.terrain.draw();
@@ -268,9 +270,7 @@ class Planet {
 
     draw() {
         this.drawPlanet();
-        this._drawCityClusters();
         // this.drawDebugVerts();
         this.drawStar();
-        this.people.draw(this)
     }
 }
