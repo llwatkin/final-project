@@ -9,7 +9,11 @@ class Planet {
         this.orbitTime = PLANET_ORBIT_TIME; // 2 minute orbit
         this.sunAngle = createVector(1, 0.25, -0.75);
         this.sunAngleXZ = createVector(this.sunAngle.x, this.sunAngle.z);
-        this.terrain = new Terrain(this.rad);
+        // TODO: randomize colors
+        this.sunColor = color(255, 255, 0);
+        this.oceanColor = color(20, 50, 200);
+        this.terrainColor = color(50, 200, 80);
+        this.terrain = new Terrain(this.rad, this.terrainColor, this.oceanColor);
 
         // CITY CODE:
         this.numCities = 6; // number of city clusters generated 
@@ -240,7 +244,7 @@ class Planet {
         noStroke();
         ambientLight(50);
         directionalLight(color(255), this.sunAngle); // Sun
-        fill(20, 50, 200);
+        fill(this.oceanColor);
         sphere(this.rad);
         this.terrain.draw();
         pop();
@@ -250,7 +254,7 @@ class Planet {
         push();
         let sunPos = p5.Vector.mult(this.sunAngle, -SUN_DISTANCE);
         translate(sunPos.x, sunPos.y, sunPos.z);
-        fill(255, 255, 0);
+        fill(this.sunColor);
         sphere();
         pop();
     }
