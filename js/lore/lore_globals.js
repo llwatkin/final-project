@@ -3,7 +3,7 @@
 // Last Updated: 6/11/2025
 
 // TODO: add other json files here to use in .js references to json files
-const JSON_PATH = "js/lore/json";
+const JSON_PATH = "./json";
 const ALL_JSON = [
     "_loreKeys", "economy", "government", "history_grammars", "name", 
     "political_compass", "worry"
