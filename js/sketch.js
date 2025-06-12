@@ -115,6 +115,7 @@ function draw() {
 
         planet.update();
         planet.draw();
+        starbox.draw();
         stroke(255);
 
         // Update camera
