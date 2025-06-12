@@ -46,7 +46,7 @@ document.addEventListener('keydown', (e) => {
 
 function preload() {
     LORE_GLOBS.JSON = loadAllJSON();
-    LORE_GLOBS.LORE_DATA = LORE_GLOBS.JSON["_loreKeys"];
+    LORE_GLOBS.LORE_DATA = LORE_GLOBS.JSON["loreKeys"];
     console.log(LORE_GLOBS)
 }
 

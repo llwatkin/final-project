@@ -204,8 +204,13 @@ function gridCellToCoords(cell){
 
 function loadAllJSON() {
     let result = {};
-    for(let json of ALL_JSON){
-        result[json] = loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`); // p5js loadJson
+    for (let json of ALL_JSON) {
+        try {
+            result[json] = loadJSON(`${LORE_GLOBS.JSON_PATH}/${json}.json`);
+            console.log(`Loaded ${json}.json`);
+        } catch (e) {
+            console.error(`Failed to load ${json}.json`, e);
+        }
     }
     return result;
 }
