@@ -35,7 +35,7 @@ function preload() {
     LORE_GLOBS.LORE_DATA = LORE_GLOBS.JSON["_loreKeys"];
 }
 
-async function setup() {
+function setup() {
     // Set up canvas
     canvasContainer = $("#canvas-container");
     let canvas = createCanvas(canvasContainer.width(), canvasContainer.height(), WEBGL);
@@ -64,7 +64,7 @@ async function setup() {
     generate();
     starbox = new Stars();
 
-    await initLore();
+    initLore();
 
     const tourBtn = select('#tour-btn');
     const prevBtn = select('#prev-btn');
@@ -241,8 +241,8 @@ function mouseWheel(event) {
     //console.log(zoom);
 }
 
-async function initLore() {
-    await generateWorld(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
+function initLore() {
+    generateWorld(LORE_GLOBS.LORE_DATA, LORE_GLOBS.NUM_COUNTRIES);
 
     console.log("world lore: ", LORE_GLOBS.WORLD_STATS);
     console.log("countries lore: ", LORE_GLOBS.COUNTRY_STATS);
@@ -260,9 +260,9 @@ function trySelectCity() {
 }
 
 
-async function mousePressed() {
+function mousePressed() {
     showTextBox = !showTextBox;
-    message = await getRandomWorryDialogue();
+    message = getRandomWorryDialogue();
 }
 
 function drawTextBox(gfx, x, y, w, h, txt) {
